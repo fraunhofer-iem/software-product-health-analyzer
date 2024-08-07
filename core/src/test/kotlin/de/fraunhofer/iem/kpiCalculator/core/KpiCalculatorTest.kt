@@ -59,7 +59,7 @@ class KpiCalculatorTest {
         val hierarchy = KpiHierarchy.create(root)
 
         val res = KpiCalculator.calculateKpis(hierarchy, rawValueKpis)
-        val result = res.kpiResult
+        val result = res.rootNode.kpiResult
 
         if (result is KpiCalculationResult.Success) {
             assertEquals(90, result.score)
@@ -107,7 +107,7 @@ class KpiCalculatorTest {
         val hierarchy = KpiHierarchy.create(root)
 
         val res = KpiCalculator.calculateKpis(hierarchy, rawValueKpis)
-        val result = res.kpiResult
+        val result = res.rootNode.kpiResult
 
         println(res)
         if (result is KpiCalculationResult.Incomplete) {
