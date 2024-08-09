@@ -89,9 +89,6 @@ object DefaultHierarchy {
             children = listOf()
         )
 
-        //XXX: this is different as for all other KPIs as we don't know how many children there will be
-        // there is one child for every found vulnerability. This needs to be kept in mind during
-        // mapping of hierarchy to data.
         val maxDepVulnerability = KpiNode(
             kpiId = KpiId.MAXIMAL_VULNERABILITY,
             strategyType = KpiStrategyId.MAXIMUM_STRATEGY,

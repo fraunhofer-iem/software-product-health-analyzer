@@ -2,7 +2,7 @@ package de.fraunhofer.iem.kpiCalculator.core.strategy
 
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 
-object RatioKPICalculationStrategy : KpiCalculationStrategy {
+internal object RatioKPICalculationStrategy : KpiCalculationStrategy {
     /**
      * Returns smallerValue / biggerValue, regardless in which order the values are given.
      */

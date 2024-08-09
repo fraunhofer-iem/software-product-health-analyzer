@@ -3,13 +3,11 @@ package de.fraunhofer.iem.kpiCalculator.adapter.cve
 import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.model.adapter.ErrorType
-import de.fraunhofer.iem.kpiCalculator.model.adapter.VulnerabilityDto
+import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 
 object CveAdapter : KpiAdapter<VulnerabilityDto> {
-    override val kpiId: KpiId
-        get() = KpiId.VULNERABILITY_SCORE
 
     override fun transformDataToKpi(data: List<VulnerabilityDto>): List<AdapterResult> {
         return data
@@ -17,7 +15,7 @@ object CveAdapter : KpiAdapter<VulnerabilityDto> {
                 return@map if (isValid(it)) {
                     AdapterResult.Success(
                         RawValueKpi(
-                            kind = kpiId,
+                            kind = KpiId.VULNERABILITY_SCORE,
                             score = (it.severity * 10).toInt()
                         )
                     )
