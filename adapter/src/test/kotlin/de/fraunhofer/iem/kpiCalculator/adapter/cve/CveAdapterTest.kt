@@ -2,7 +2,7 @@ package de.fraunhofer.iem.kpiCalculator.adapter.cve
 
 import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.model.adapter.ErrorType
-import de.fraunhofer.iem.kpiCalculator.model.adapter.VulnerabilityDto
+import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
 import org.junit.jupiter.api.Test
 import kotlin.test.fail
 

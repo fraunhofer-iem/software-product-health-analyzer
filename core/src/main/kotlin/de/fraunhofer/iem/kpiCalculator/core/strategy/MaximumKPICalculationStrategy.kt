@@ -2,7 +2,7 @@ package de.fraunhofer.iem.kpiCalculator.core.strategy
 
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 
-object MaximumKPICalculationStrategy : KpiCalculationStrategy {
+internal object MaximumKPICalculationStrategy : KpiCalculationStrategy {
     override fun calculateKpi(
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
