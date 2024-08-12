@@ -1,6 +1,6 @@
-package de.fraunhofer.iem.kpiCalculator.adapter.occmd
+package de.fraunhofer.iem.kpiCalculator.adapter.tools.occmd
 
-import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
+import de.fraunhofer.iem.kpiCalculator.adapter.kpis.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.model.adapter.occmd.Checks
 import de.fraunhofer.iem.kpiCalculator.model.adapter.occmd.OccmdDto

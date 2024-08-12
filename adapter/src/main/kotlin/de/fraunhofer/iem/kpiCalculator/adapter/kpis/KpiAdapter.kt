@@ -1,7 +1,6 @@
-package de.fraunhofer.iem.kpiCalculator.adapter
+package de.fraunhofer.iem.kpiCalculator.adapter.kpis
 
 import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
-
 
 interface KpiAdapter<T> {
     fun transformDataToKpi(data: List<T>): List<AdapterResult>

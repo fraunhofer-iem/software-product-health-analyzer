@@ -1,4 +1,4 @@
-package de.fraunhofer.iem.kpiCalculator.adapter.cve
+package de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve
 
 import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.model.adapter.ErrorType

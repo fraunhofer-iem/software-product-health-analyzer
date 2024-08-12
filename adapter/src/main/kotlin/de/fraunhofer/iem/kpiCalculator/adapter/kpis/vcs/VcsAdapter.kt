@@ -1,6 +1,6 @@
-package de.fraunhofer.iem.kpiCalculator.adapter.vcs
+package de.fraunhofer.iem.kpiCalculator.adapter.kpis.vcs
 
-import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
+import de.fraunhofer.iem.kpiCalculator.adapter.kpis.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.model.adapter.ErrorType
 import de.fraunhofer.iem.kpiCalculator.model.adapter.vcs.RepositoryDetailsDto
