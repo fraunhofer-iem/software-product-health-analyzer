@@ -1,8 +1,8 @@
 package de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve
 
-import de.fraunhofer.iem.kpiCalculator.adapter.kpis.KpiAdapter
-import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
-import de.fraunhofer.iem.kpiCalculator.model.adapter.ErrorType
+import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
+import de.fraunhofer.iem.kpiCalculator.adapter.ErrorType
+import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
