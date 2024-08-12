@@ -1,15 +1,15 @@
-package de.fraunhofer.iem.kpiCalculator.adapter.vcs
+package de.fraunhofer.iem.kpiCalculator.adapter.kpis.vcs
 
+import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
+import de.fraunhofer.iem.kpiCalculator.adapter.ErrorType
 import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
-import de.fraunhofer.iem.kpiCalculator.model.adapter.AdapterResult
-import de.fraunhofer.iem.kpiCalculator.model.adapter.ErrorType
 import de.fraunhofer.iem.kpiCalculator.model.adapter.vcs.RepositoryDetailsDto
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 
 object VcsAdapter : KpiAdapter<RepositoryDetailsDto> {
 
-    override fun transformDataToKpi(data: List<RepositoryDetailsDto>): List<AdapterResult> {
+    override fun transformDataToKpi(data: Collection<RepositoryDetailsDto>): Collection<AdapterResult> {
 
         if (data.size != 1) {
             return listOf(
