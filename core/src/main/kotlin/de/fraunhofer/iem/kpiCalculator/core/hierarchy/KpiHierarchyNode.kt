@@ -116,8 +116,8 @@ internal class KpiHierarchyNode(
         private fun from(node: KpiNode, parent: KpiHierarchyNode? = null): KpiHierarchyNode {
 
             val calcNode =
-                KpiHierarchyNode(kpiId = node.kpiId, parent = parent, kpiStrategyId = node.strategyType)
-            val children = node.children.map { child ->
+                KpiHierarchyNode(kpiId = node.kpiId, parent = parent, kpiStrategyId = node.kpiStrategyId)
+            val children = node.edges.map { child ->
                 KpiHierarchyEdge(
                     to = from(child.target, calcNode),
                     from = calcNode,

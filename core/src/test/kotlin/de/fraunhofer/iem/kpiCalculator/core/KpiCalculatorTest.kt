@@ -39,18 +39,18 @@ class KpiCalculatorTest {
         )
 
         val root = KpiNode(
-            kpiId = KpiId.ROOT, strategyType = KpiStrategyId.AGGREGATION_STRATEGY, children = listOf(
+            kpiId = KpiId.ROOT, kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY, edges = listOf(
                 KpiEdge(
                     target =
                     KpiNode(
                         kpiId = KpiId.MAXIMAL_VULNERABILITY,
-                        strategyType = KpiStrategyId.MAXIMUM_STRATEGY,
-                        children = listOf(
+                        kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                        edges = listOf(
                             KpiEdge(
                                 target = KpiNode(
                                     kpiId = KpiId.VULNERABILITY_SCORE,
-                                    strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                                    children = emptyList()
+                                    kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                    edges = emptyList()
                                 ), weight = 1.0
                             )
                         )
@@ -79,25 +79,25 @@ class KpiCalculatorTest {
         )
 
         val root = KpiNode(
-            kpiId = KpiId.ROOT, strategyType = KpiStrategyId.AGGREGATION_STRATEGY, children = listOf(
+            kpiId = KpiId.ROOT, kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY, edges = listOf(
                 KpiEdge(
                     target =
                     KpiNode(
                         kpiId = KpiId.SECURITY,
-                        strategyType = KpiStrategyId.MAXIMUM_STRATEGY,
-                        children = listOf(
+                        kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                        edges = listOf(
                             KpiEdge(
                                 target = KpiNode(
                                     kpiId = KpiId.VULNERABILITY_SCORE,
-                                    strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                                    children = emptyList()
+                                    kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                    edges = emptyList()
                                 ), weight = 0.5
                             ),
                             KpiEdge(
                                 target = KpiNode(
                                     kpiId = KpiId.SAST_USAGE,
-                                    strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                                    children = emptyList()
+                                    kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                    edges = emptyList()
                                 ),
                                 weight = 0.5
                             )
@@ -126,12 +126,12 @@ class KpiCalculatorTest {
         )
 
         val root = KpiNode(
-            kpiId = KpiId.ROOT, strategyType = KpiStrategyId.AGGREGATION_STRATEGY, children = listOf(
+            kpiId = KpiId.ROOT, kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY, edges = listOf(
                 KpiEdge(
                     target = KpiNode(
                         kpiId = KpiId.VULNERABILITY_SCORE,
-                        strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                        children = listOf()
+                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                        edges = listOf()
                     ),
                     weight = 1.0
                 ),
@@ -157,20 +157,20 @@ class KpiCalculatorTest {
         )
 
         val root = KpiNode(
-            kpiId = KpiId.ROOT, strategyType = KpiStrategyId.AGGREGATION_STRATEGY, children = listOf(
+            kpiId = KpiId.ROOT, kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY, edges = listOf(
                 KpiEdge(
                     target = KpiNode(
                         kpiId = KpiId.VULNERABILITY_SCORE,
-                        strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                        children = listOf()
+                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                        edges = listOf()
                     ),
                     weight = 0.5
                 ),
                 KpiEdge(
                     target = KpiNode(
                         kpiId = KpiId.SAST_USAGE,
-                        strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                        children = listOf()
+                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                        edges = listOf()
                     ),
                     weight = 0.5
                 )
@@ -202,17 +202,17 @@ class KpiCalculatorTest {
         )
 
         val root = KpiNode(
-            kpiId = KpiId.ROOT, strategyType = KpiStrategyId.AGGREGATION_STRATEGY, children = listOf(
+            kpiId = KpiId.ROOT, kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY, edges = listOf(
                 KpiEdge(
                     target = KpiNode(
                         kpiId = KpiId.MAXIMAL_VULNERABILITY,
-                        strategyType = KpiStrategyId.MAXIMUM_STRATEGY,
-                        children = listOf(
+                        kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                        edges = listOf(
                             KpiEdge(
                                 target = KpiNode(
                                     kpiId = KpiId.VULNERABILITY_SCORE,
-                                    strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                                    children = listOf()
+                                    kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                    edges = listOf()
                                 ),
                                 weight = 1.0
                             ),
@@ -223,8 +223,8 @@ class KpiCalculatorTest {
                 KpiEdge(
                     target = KpiNode(
                         kpiId = KpiId.SAST_USAGE,
-                        strategyType = KpiStrategyId.RAW_VALUE_STRATEGY,
-                        children = listOf()
+                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                        edges = listOf()
                     ),
                     weight = 0.5
                 )

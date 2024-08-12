@@ -31,7 +31,7 @@ class KpiHierarchyTest {
                     weight = 0.3
                 ),
             )
-            val root = KpiNode(kpiId = KpiId.ROOT, strategyType = KpiStrategyId.AGGREGATION_STRATEGY, childNodes)
+            val root = KpiNode(kpiId = KpiId.ROOT, kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY, childNodes)
             val hierarchy = KpiHierarchy.create(root)
 
             val json = Json {
