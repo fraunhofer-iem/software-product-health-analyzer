@@ -9,7 +9,7 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 
 object OccmdAdapter : KpiAdapter<OccmdDto> {
 
-    override fun transformDataToKpi(data: List<OccmdDto>): List<AdapterResult> {
+    override fun transformDataToKpi(data: Collection<OccmdDto>): Collection<AdapterResult> {
 
         return data.mapNotNull {
             return@mapNotNull when (Checks.fromString(it.check)) {

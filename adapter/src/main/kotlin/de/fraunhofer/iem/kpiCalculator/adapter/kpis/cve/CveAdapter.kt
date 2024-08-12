@@ -9,7 +9,7 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 
 object CveAdapter : KpiAdapter<VulnerabilityDto> {
 
-    override fun transformDataToKpi(data: List<VulnerabilityDto>): List<AdapterResult> {
+    override fun transformDataToKpi(data: Collection<VulnerabilityDto>): Collection<AdapterResult> {
         return data
             .map {
                 return@map if (isValid(it)) {
