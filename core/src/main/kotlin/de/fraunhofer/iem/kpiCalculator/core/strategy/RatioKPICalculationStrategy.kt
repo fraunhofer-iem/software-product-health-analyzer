@@ -71,7 +71,7 @@ internal object RatioKPICalculationStrategy : KpiCalculationStrategy {
      * False implies, that a valid node must contain two or more children.
      * @return if the given node is valid.
      */
-    override fun internalIsValid(node: KpiNode, isLeaf: Boolean, strict: Boolean): Boolean {
+    override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
 
         if (strict) {
             return node.edges.size == 2

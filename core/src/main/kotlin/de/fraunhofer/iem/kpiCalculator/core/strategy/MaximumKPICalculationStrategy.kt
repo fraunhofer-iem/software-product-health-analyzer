@@ -33,7 +33,7 @@ internal object MaximumKPICalculationStrategy : KpiCalculationStrategy {
         return KpiCalculationResult.Success(score = max)
     }
 
-    override fun internalIsValid(node: KpiNode, isLeaf: Boolean, strict: Boolean): Boolean {
+    override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
         TODO("Not yet implemented")
     }
 }
