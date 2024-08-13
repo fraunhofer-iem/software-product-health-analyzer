@@ -1,6 +1,6 @@
 package de.fraunhofer.iem.kpiCalculator.core
 
-import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiCalculationNode
+import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
@@ -9,8 +9,8 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiResultHierarchy
 
 private data class TreeUpdate(
-    val parent: KpiCalculationNode,
-    val currentNode: KpiCalculationNode,
+    val parent: KpiHierarchyNode,
+    val currentNode: KpiHierarchyNode,
     val rawValueKpis: List<RawValueKpi>
 )
 
@@ -22,13 +22,13 @@ object KpiCalculator {
         val connectedHierarchyRoot = connectKpiHierarchyToRawValues(root, rawValueKpis)
         depthFirstTraversal(connectedHierarchyRoot) { it.calculateKpi() }
 
-        return KpiResultHierarchy.create(KpiCalculationNode.to(connectedHierarchyRoot))
+        return KpiResultHierarchy.create(KpiHierarchyNode.to(connectedHierarchyRoot))
     }
 
     private fun depthFirstTraversal(
-        node: KpiCalculationNode,
-        seen: MutableSet<KpiCalculationNode> = mutableSetOf(),
-        action: (node: KpiCalculationNode) -> Unit
+        node: KpiHierarchyNode,
+        seen: MutableSet<KpiHierarchyNode> = mutableSetOf(),
+        action: (node: KpiHierarchyNode) -> Unit
     ) {
         if (seen.contains(node)) {
             return
@@ -46,7 +46,7 @@ object KpiCalculator {
     private fun connectKpiHierarchyToRawValues(
         node: KpiNode,
         rawValueKpis: List<RawValueKpi>
-    ): KpiCalculationNode {
+    ): KpiHierarchyNode {
 
         val kindToValues = mutableMapOf<KpiId, MutableList<RawValueKpi>>()
         KpiId.entries.forEach { kindToValues[it] = mutableListOf() }
@@ -55,7 +55,7 @@ object KpiCalculator {
             kindToValues[it.kind]!!.add(it)
         }
 
-        val calculationRoot = KpiCalculationNode.from(node)
+        val calculationRoot = KpiHierarchyNode.from(node)
         val updates: MutableList<TreeUpdate> = mutableListOf()
 
         depthFirstTraversal(
@@ -76,9 +76,9 @@ object KpiCalculator {
                 parent.removeChild(currentNode)
 
                 val rawValueNodes = correspondingRawValue.map { rawValue ->
-                    val newNode = KpiCalculationNode(
+                    val newNode = KpiHierarchyNode(
                         kpiId = rawValue.kind,
-                        calculationStrategy = KpiStrategyId.RAW_VALUE_STRATEGY,
+                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                         parent = parent
                     )
                     newNode.setResult(rawValue.score)

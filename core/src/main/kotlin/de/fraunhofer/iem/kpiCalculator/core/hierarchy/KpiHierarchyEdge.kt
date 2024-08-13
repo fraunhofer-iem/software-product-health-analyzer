@@ -1,8 +1,8 @@
 package de.fraunhofer.iem.kpiCalculator.core.hierarchy
 
 internal data class KpiHierarchyEdge(
-    val from: KpiCalculationNode,
-    val to: KpiCalculationNode,
+    val from: KpiHierarchyNode,
+    val to: KpiHierarchyNode,
     val plannedWeight: Double,
     val actualWeight: Double = plannedWeight,
 )

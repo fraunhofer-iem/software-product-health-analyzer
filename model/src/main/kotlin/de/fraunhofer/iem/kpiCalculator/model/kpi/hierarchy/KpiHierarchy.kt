@@ -17,7 +17,7 @@ data class KpiHierarchy private constructor(val rootNode: KpiNode, val schemaVer
 }
 
 @Serializable
-data class KpiNode(val kpiId: KpiId, val strategyType: KpiStrategyId, val children: List<KpiEdge>)
+data class KpiNode(val kpiId: KpiId, val kpiStrategyId: KpiStrategyId, val edges: List<KpiEdge>)
 
 @Serializable
 data class KpiEdge(val target: KpiNode, val weight: Double)
