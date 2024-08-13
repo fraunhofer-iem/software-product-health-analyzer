@@ -4,7 +4,7 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
-internal object RatioKPICalculationStrategy : KpiCalculationStrategy {
+internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override val kpiStrategyId: KpiStrategyId
         get() = KpiStrategyId.RATIO_STRATEGY
@@ -12,7 +12,7 @@ internal object RatioKPICalculationStrategy : KpiCalculationStrategy {
     /**
      * Returns smallerValue / biggerValue, regardless in which order the values are given.
      */
-    override fun calculateKpi(
+    override fun internalCalculateKpi(
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
         additionalWeight: Double,

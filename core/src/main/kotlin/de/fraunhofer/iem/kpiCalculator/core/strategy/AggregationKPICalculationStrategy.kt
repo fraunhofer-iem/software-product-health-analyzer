@@ -5,7 +5,7 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
 
-internal object AggregationKPICalculationStrategy : KpiCalculationStrategy {
+internal object AggregationKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override val kpiStrategyId: KpiStrategyId
         get() = KpiStrategyId.AGGREGATION_STRATEGY
@@ -18,7 +18,7 @@ internal object AggregationKPICalculationStrategy : KpiCalculationStrategy {
      * The method returns the KPIs value as well as the updated
      * KPIHierarchyEdgeDtos with the actual used weight.
      */
-    override fun calculateKpi(
+    override fun internalCalculateKpi(
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
         additionalWeight: Double,

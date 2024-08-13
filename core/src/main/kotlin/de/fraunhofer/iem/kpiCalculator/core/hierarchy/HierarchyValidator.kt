@@ -17,9 +17,6 @@ object HierarchyValidator {
             }
         }
 
-
-
         return true
     }
-
 }
