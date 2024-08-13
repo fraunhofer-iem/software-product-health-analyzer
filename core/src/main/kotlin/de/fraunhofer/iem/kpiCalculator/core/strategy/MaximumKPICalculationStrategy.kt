@@ -1,8 +1,14 @@
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
+import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
 internal object MaximumKPICalculationStrategy : KpiCalculationStrategy {
+
+    override val kpiStrategyId: KpiStrategyId
+        get() = KpiStrategyId.MAXIMUM_STRATEGY
+
     override fun calculateKpi(
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
@@ -25,5 +31,9 @@ internal object MaximumKPICalculationStrategy : KpiCalculationStrategy {
         }
 
         return KpiCalculationResult.Success(score = max)
+    }
+
+    override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
+        TODO("Not yet implemented")
     }
 }
