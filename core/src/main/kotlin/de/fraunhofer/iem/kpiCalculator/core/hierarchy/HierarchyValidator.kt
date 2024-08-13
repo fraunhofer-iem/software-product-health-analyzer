@@ -3,6 +3,7 @@ package de.fraunhofer.iem.kpiCalculator.core.hierarchy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiHierarchy
 
 object HierarchyValidator {
+    //TODO: return type will most likely be changed to a complex type comparably to KpiCalculationResult
     fun isValid(kpiHierarchy: KpiHierarchy, strict: Boolean = false): Boolean {
         // TODO: check the schema version and build a schema specific validation if necessary
 
@@ -19,4 +20,5 @@ object HierarchyValidator {
 
         return true
     }
+
 }
