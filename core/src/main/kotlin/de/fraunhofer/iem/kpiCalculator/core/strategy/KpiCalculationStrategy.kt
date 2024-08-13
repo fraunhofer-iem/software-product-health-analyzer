@@ -77,7 +77,7 @@ interface KpiCalculationStrategy {
     /**
      * Validates whether the given KPI node's structure is valid for its strategy.
      * If the given node's strategy does not match the kpiStrategyId, we return true.
-     *
+     * If the given node's edges are empty, we return true.
      *
      * @param node KPI node to validate.
      * @param strict validation mode, true implies that a valid node must exactly match our expectations.
@@ -88,14 +88,18 @@ interface KpiCalculationStrategy {
      *
      * @return if the given node is valid.
      */
-    fun isValid(node: KpiNode, isLeaf: Boolean, strict: Boolean): Boolean {
+    fun isValid(node: KpiNode, strict: Boolean): Boolean {
         if (node.kpiStrategyId != kpiStrategyId) {
             return true
         }
 
-        return internalIsValid(node, isLeaf, strict)
+        if (node.edges.isEmpty()) {
+            return true
+        }
+
+        return internalIsValid(node, strict)
     }
 
     // TODO: figure out how to explicitly enforce the desired call hierarchy
-    fun internalIsValid(node: KpiNode, isLeaf: Boolean, strict: Boolean): Boolean
+    fun internalIsValid(node: KpiNode, strict: Boolean): Boolean
 }
