@@ -1,9 +1,15 @@
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
+import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
 
 internal object AggregationKPICalculationStrategy : KpiCalculationStrategy {
+
+    override val kpiStrategyId: KpiStrategyId
+        get() = KpiStrategyId.AGGREGATION_STRATEGY
+
     /**
      * This function calculates the aggregate sum of all given children.
      * If a child is empty it is removed from the calculation and its
@@ -37,5 +43,9 @@ internal object AggregationKPICalculationStrategy : KpiCalculationStrategy {
         }
 
         return KpiCalculationResult.Success(score = aggregation)
+    }
+
+    override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
+        TODO("Not yet implemented")
     }
 }
