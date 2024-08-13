@@ -1,8 +1,12 @@
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
+import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
 interface KpiCalculationStrategy {
+
+    val kpiStrategyId: KpiStrategyId
 
     fun calculateKpi(
         childScores: List<Pair<KpiCalculationResult, Double>>,
@@ -35,7 +39,7 @@ interface KpiCalculationStrategy {
         val failed = childScores
             .filter {
                 it.first is KpiCalculationResult.Error
-                    || (it.first is KpiCalculationResult.Empty)
+                        || (it.first is KpiCalculationResult.Empty)
             }
 
         val missingEdgeWeights = failed.sumOf { it.second }
@@ -69,4 +73,29 @@ interface KpiCalculationStrategy {
         additionalWeight: Double,
         hasIncompleteResults: Boolean
     ): KpiCalculationResult
+
+    /**
+     * Validates whether the given KPI node's structure is valid for its strategy.
+     * If the given node's strategy does not match the kpiStrategyId, we return true.
+     *
+     *
+     * @param node KPI node to validate.
+     * @param strict validation mode, true implies that a valid node must exactly match our expectations.
+     * False implies, that a node is considered valid if it can be used for further calculation, but it
+     * might result in inconsistent results. E.g., we expect two children but receive three, not strict
+     * mode allows this, but it is not well-defined which of the three nodes will be used during
+     * KPI calculation.
+     *
+     * @return if the given node is valid.
+     */
+    fun isValid(node: KpiNode, isLeaf: Boolean, strict: Boolean): Boolean {
+        if (node.kpiStrategyId != kpiStrategyId) {
+            return true
+        }
+
+        return internalIsValid(node, isLeaf, strict)
+    }
+
+    // TODO: figure out how to explicitly enforce the desired call hierarchy
+    fun internalIsValid(node: KpiNode, isLeaf: Boolean, strict: Boolean): Boolean
 }
