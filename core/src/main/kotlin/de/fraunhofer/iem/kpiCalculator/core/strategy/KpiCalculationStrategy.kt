@@ -52,34 +52,9 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
             return KpiCalculationResult.Empty()
         }
 
-        val incompleteResults = if (!strict) {
-            childScores.mapNotNull {
-                val res = it.first
-                if (res is KpiCalculationResult.Incomplete) {
-                    Pair(KpiCalculationResult.Success(score = res.score), it.second)
-                } else {
-                    null
-                }
-            }
-        } else {
-            emptyList()
-        }
+        val (successScores, failed, missingEdgeWeights, hasIncompleteResults) = processChildScores(childScores, strict)
 
-        @Suppress("UNCHECKED_CAST")
-        val successScores = listOf(
-            childScores.filter { it.first is KpiCalculationResult.Success },
-            incompleteResults
-        ).flatten() as List<Pair<KpiCalculationResult.Success, Double>>
-
-        val failed = childScores
-            .filter {
-                return@filter (it.first is KpiCalculationResult.Error) ||
-                        (it.first is KpiCalculationResult.Empty) ||
-                        (strict && it.first is KpiCalculationResult.Incomplete)
-            }
-
-        val missingEdgeWeights = failed.sumOf { it.second }
-
+        // distributes weights of incomplete edges evenly between existing edges
         val additionalWeight =
             if (missingEdgeWeights == 0.0)
                 0.0
@@ -98,9 +73,85 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
             successScores = successScores,
             failed = failed,
             additionalWeight = additionalWeight,
-            hasIncompleteResults = incompleteResults.isNotEmpty() || failed.isNotEmpty()
+            hasIncompleteResults = hasIncompleteResults
         )
+    }
 
+    private data class SeparatedKpiResults(
+        val successScores: List<Pair<KpiCalculationResult.Success, Double>>,
+        val failedScores: List<Pair<KpiCalculationResult, Double>>,
+        val missingEdgeWeights: Double,
+        val hasIncompleteResults: Boolean
+    )
+
+    /**
+     * Sorts the given childScores into separate lists for Success and Failed results.
+     * The sorting of Incomplete results depends on the strict mode.
+     *
+     * In strict mode, we consider Incomplete results as failed, and they are not
+     * considered in the KPI calculation.
+     * In not strict mode, we cast Incomplete results to Success results and use
+     * them for further calculation.
+     *
+     * @param childScores the KPI results and their planned edge weights.
+     * @param strict mode which influences the separation.
+     *
+     * @return SeparatedKpiResults, which contain a List of success and failed scores,
+     * missingEdgeWeights (the sum of all failed node's edge weights),
+     * hasIncompleteResults (indicates whether the original childScores contained an
+     * Incomplete result)
+     */
+    private fun processChildScores(
+        childScores: Collection<Pair<KpiCalculationResult, Double>>,
+        strict: Boolean
+    ): SeparatedKpiResults {
+
+        val successScores = mutableListOf<Pair<KpiCalculationResult.Success, Double>>()
+        val failedScores = mutableListOf<Pair<KpiCalculationResult, Double>>()
+        var missingEdgeWeight = 0.0
+        var hasIncompleteResults = false
+
+        childScores.forEach { childScore ->
+
+            // we need to extract the pair into a single variable to enable
+            // smart type casting in the following
+            when (val calcResult = childScore.first) {
+                is KpiCalculationResult.Success -> {
+                    // type erasure can't handle parameterized types so smart
+                    // casting won't work
+                    @Suppress("UNCHECKED_CAST")
+                    successScores.add(childScore as Pair<KpiCalculationResult.Success, Double>)
+                }
+
+                is KpiCalculationResult.Incomplete -> {
+                    if (strict) {
+                        failedScores.add(childScore)
+                        missingEdgeWeight += childScore.second
+                    } else {
+                        successScores.add(
+                            Pair(
+                                KpiCalculationResult.Success(score = calcResult.score),
+                                childScore.second
+                            )
+                        )
+                    }
+                    hasIncompleteResults = true
+                }
+
+                is KpiCalculationResult.Empty, is KpiCalculationResult.Error -> {
+                    failedScores.add(childScore)
+                    missingEdgeWeight += childScore.second
+                    hasIncompleteResults = true
+                }
+            }
+        }
+
+        return SeparatedKpiResults(
+            successScores = successScores,
+            failedScores = failedScores,
+            missingEdgeWeights = missingEdgeWeight,
+            hasIncompleteResults = hasIncompleteResults
+        )
     }
 
     protected abstract fun internalCalculateKpi(
