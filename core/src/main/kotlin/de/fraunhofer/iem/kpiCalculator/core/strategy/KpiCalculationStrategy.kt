@@ -73,8 +73,9 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
 
         val failed = childScores
             .filter {
-                it.first is KpiCalculationResult.Error
-                        || (it.first is KpiCalculationResult.Empty)
+                return@filter (it.first is KpiCalculationResult.Error) ||
+                        (it.first is KpiCalculationResult.Empty) ||
+                        (strict && it.first is KpiCalculationResult.Incomplete)
             }
 
         val missingEdgeWeights = failed.sumOf { it.second }
