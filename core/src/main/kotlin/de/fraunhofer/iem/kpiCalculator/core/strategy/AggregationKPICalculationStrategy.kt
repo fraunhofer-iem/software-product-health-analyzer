@@ -12,7 +12,9 @@ package de.fraunhofer.iem.kpiCalculator.core.strategy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
+import io.github.oshai.kotlinlogging.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 
 internal object AggregationKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
@@ -54,7 +56,18 @@ internal object AggregationKPICalculationStrategy : BaseKpiCalculationStrategy()
         return KpiCalculationResult.Success(score = aggregation)
     }
 
+    /**
+     * There is no validity requirement for this strategy.
+     */
     override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
-        TODO("Not yet implemented")
+
+        if (node.edges.size == 1) {
+            logger.warn {
+                "Maximum KPI calculation strategy for node $node is planned" +
+                        "for a single child."
+            }
+        }
+
+        return true
     }
 }
