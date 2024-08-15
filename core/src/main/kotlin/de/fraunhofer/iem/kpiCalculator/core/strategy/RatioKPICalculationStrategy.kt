@@ -12,6 +12,9 @@ package de.fraunhofer.iem.kpiCalculator.core.strategy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
+import io.github.oshai.kotlinlogging.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
@@ -64,6 +67,7 @@ internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
                 )
             }
         } catch (e: Exception) {
+            logger.error { "Error " }
             KpiCalculationResult.Error(e.message ?: e.toString())
         }
     }
@@ -87,7 +91,13 @@ internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
         }
 
         if (node.edges.size > 2) {
-            // TODO: log a warning here
+            logger.warn {
+                "Ratio KPI calculation strategy for node $node has more than two children." +
+                        "This is allowed in relaxed mode, however it is not defined, which" +
+                        "children are selected for calculation. This can lead to" +
+                        "ambiguous results."
+            }
+
             return true
         }
 
