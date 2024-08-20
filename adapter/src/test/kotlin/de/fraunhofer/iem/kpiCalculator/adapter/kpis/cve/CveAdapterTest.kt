@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2024 Fraunhofer IEM. All rights reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ * SPDX-License-Identifier: MIT
+ * License-Filename: LICENSE
+ */
+
 package de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve
 
 import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
@@ -19,12 +28,12 @@ class CveAdapterTest {
                 severity = 0.1
             )
         )
-        when (validKpi) {
+        when (val kpi = validKpi.first()) {
             is AdapterResult.Success -> {
-                assert(validKpi.rawValueKpi.score in (0..100))
+                assert(kpi.rawValueKpi.score in (0..100))
             }
 
-            is AdapterResult.Error -> {
+            else -> {
                 fail()
             }
         }
