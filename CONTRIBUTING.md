@@ -16,23 +16,22 @@ We are happy to accept your pull request. Here's a quick guide:
 1. For non-trivial changes, reuse an existing issue or create a new one.
 2. Fork the repo, and clone it locally and create a new branch (`git checkout -b mybranch`).
     * Name the branch so that it clearly communicates your intentions.
-    * You may use prefixes such as `feature/myfeature` or `bugfix/myfix`
-3. Make and commit your changes to your branch. Please follow our [Commit Message guideline]()
-4. If applicable, add new tests corresponding to your changes. Ensure all tests are passing
+    * You may use prefixes such as `feature/myfeature` or `bugfix/myfix`.
+3. Make and commit your changes to your branch. Please follow our [Commit Message guideline](#commit-messages).
+4. If applicable, add new tests corresponding to your changes. Ensure all tests are passing.
 5. Create your pull request (PR) against the `main` branch.
 
 At this point you're waiting on us. We like to at least comment on, if not
 accept, pull requests within a few days. We may suggest some changes or improvements or alternatives.
 
 Some things that will increase the chance that your pull request is accepted:
-
-* Follow the [Kotlin style guide](https://kotlinlang.org/docs/coding-conventions.html)
-* Make sure the tests pass
+* Follow the [Kotlin style guide](https://kotlinlang.org/docs/coding-conventions.html).
+* Make sure the tests pass.
 * Update the documentation: code comments, example code, guides. Basically, update everything affected by your
   contribution.
 * Include any information that would be relevant to reproducing bugs, use cases for new features, etc.
-* Associate your commits with your GitHub
-  user: https://help.github.com/articles/why-are-my-commits-linked-to-the-wrong-user/
+* Associate your commits with your [GitHub
+  user](https://help.github.com/articles/why-are-my-commits-linked-to-the-wrong-user/).
 
 # Commit Messages
 
@@ -69,18 +68,9 @@ important for the maintainers and the community.
 
 ## File Headers
 
-The following file header is the used for files in this repo. Please use it for new files.
+Please use the following file header for new source code files.
 
 ```kotlin
-// Copyright (c) Fraunhofer IEM and contributors. All rights reserved.
+// Copyright (c) Fraunhofer IEM. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 ```
-
-## Contributor License Agreement
-
-Before we can merge your PR, you must agree to our [Contribution License Agreement (CLA)](). This is a one-time
-requirement for this project. You don't have to do this up-front. You can simply clone, fork, and submit your
-pull-request as usual. A CLA bit will provide a prompt to sign the CLA through a commont on your PR.
-
-*Read more about a [Contribution License Agreements (CLA)](https://en.wikipedia.org/wiki/Contributor_License_Agreement)
-on Wikipedia.*
