@@ -10,7 +10,8 @@
 package de.fraunhofer.iem.kpiCalculator.adapter.tools
 
 enum class SupportedTool {
-    Occmd;
+    Occmd,
+    Trivy;
 
     companion object{
         fun fromName(name: String) : SupportedTool{
