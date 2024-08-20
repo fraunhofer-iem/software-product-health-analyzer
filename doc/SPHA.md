@@ -11,7 +11,7 @@ This document is meant to give a general overview of the library's functionality
 
 A tool adapter transforms the given tool results into *RawValueKPIs*. This functionality is
 defined by the `interface KpiAdapter<T>`. We support two kind of adapters *tools* and *kpis*.
-*Tool* adapter take a tool result as an input and transform it into, possibly multiple, KPIs.
+*Tool* adapters take a tool's result as an input and transform it into, possibly multiple, KPIs.
 A *tool* adapter might use one or multiple *kpi* adapter to do this transformation.<p>
 The reasoning behind this design is, that one tool might produce multiple different KPIs.
 E.g., the OSS review toolkit (ORT) produces information about vulnerabilities, licences,
@@ -26,7 +26,7 @@ It is implemented as a graph in which each node defines a `KpiId`, which is used
 which KPI belongs to the node, as well as a list of children. Further, the node stores a `StrategyId`,
 which relates to a `CalculationStrategy`. The `CalculationStrategy` defines how each node processes the data stored in
 its children. The `KpiId` has no influence on the semantic processing of the KPI hierarchy. For more information
-regarding the calculation see ![Kpi Calculation](#kpi-calculation).
+regarding the calculation see [Kpi Calculation](#kpi-calculation).
 
 Additionally, we define a `KpiResultHierarchy`, which stores the same information as the regular `KpiHierarchy` as well
 as a `KpiCalculationResult`.
