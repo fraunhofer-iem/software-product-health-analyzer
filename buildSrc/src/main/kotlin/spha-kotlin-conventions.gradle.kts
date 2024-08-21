@@ -40,6 +40,8 @@ tasks.test {
 }
 
 dependencies {
+    implementation(libs.bundles.logging)
+    testImplementation(libs.slf4j.logger)
     testImplementation(libs.kotlin.test)
 }
 
