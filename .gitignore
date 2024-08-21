@@ -146,5 +146,4 @@ gradle-app.setting
 
 # Ignore gradle files
 gradle/**
-gradlew*
 .DS_STORE
