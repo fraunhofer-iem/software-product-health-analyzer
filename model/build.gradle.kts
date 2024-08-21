@@ -8,29 +8,18 @@
  */
 
 plugins {
-    alias(libs.plugins.kotlin)
+    id("spha-kotlin-conventions")
     alias(libs.plugins.serialization)
 }
 
-group = "de.fraunhofer.iem.kpiCalculator"
-version = "0.0.2-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
+
+group = "de.fraunhofer.iem.kpiCalculator"
 
 dependencies {
     implementation(libs.kotlin.serialization.json)
-    testImplementation(libs.kotlin.test)
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-
-kotlin {
-    compilerOptions {
-        jvmToolchain(21)
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
-    }
 }
