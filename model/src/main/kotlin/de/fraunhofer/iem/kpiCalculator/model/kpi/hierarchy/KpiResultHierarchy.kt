@@ -13,6 +13,7 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import kotlinx.serialization.Serializable
 
+@ConsistentCopyVisibility
 @Serializable
 data class KpiResultHierarchy private constructor(val rootNode: KpiResultNode, val schemaVersion: String) {
     companion object {
