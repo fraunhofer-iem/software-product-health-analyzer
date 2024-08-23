@@ -52,7 +52,7 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
 
     abstract val kpiStrategyId: KpiStrategyId
 
-    override fun calculateKpi(
+    final override fun calculateKpi(
         childScores: Collection<Pair<KpiCalculationResult, Double>>,
         strict: Boolean
     ): KpiCalculationResult {
@@ -170,7 +170,7 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
         hasIncompleteResults: Boolean
     ): KpiCalculationResult
 
-    override fun isValid(node: KpiNode, strict: Boolean): Boolean {
+    final override fun isValid(node: KpiNode, strict: Boolean): Boolean {
         if (node.kpiStrategyId != kpiStrategyId) {
             return true
         }
