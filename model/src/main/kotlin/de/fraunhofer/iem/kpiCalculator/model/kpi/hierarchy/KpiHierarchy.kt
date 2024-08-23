@@ -18,6 +18,7 @@ val SCHEMA_VERSIONS: Array<String> = arrayOf(
 ).sortedArray()
 
 //XXX: add Hierarchy Validator
+@ConsistentCopyVisibility
 @Serializable
 data class KpiHierarchy private constructor(val rootNode: KpiNode, val schemaVersion: String) {
     companion object {
