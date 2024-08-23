@@ -147,3 +147,6 @@ gradle-app.setting
 # Ignore gradle files
 gradle/**
 .DS_STORE
+
+# Ignore kotlin files
+.kotlin
