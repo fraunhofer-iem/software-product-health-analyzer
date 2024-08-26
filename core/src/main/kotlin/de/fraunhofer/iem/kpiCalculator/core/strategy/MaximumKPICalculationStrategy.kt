@@ -52,7 +52,7 @@ internal object MaximumKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
         if (node.edges.size == 1) {
             logger.warn {
-                "Maximum KPI calculation strategy for node $node is planned" +
+                "Maximum KPI calculation strategy for node $node is planned " +
                         "for a single child."
             }
         }
