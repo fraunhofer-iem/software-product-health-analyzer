@@ -34,7 +34,7 @@ data class Result(
 @Serializable
 data class TrivyVulnerabilityDto(
     // NB: Because the names of its inner elements are not fixed, this needs to be a JsonObject.
-    // This way we can iterate over those it when required. Their type is always CVSSData.
+    // This way we can iterate over those when required. Their type is always CVSSData.
     val CVSS: JsonObject?,
     val VulnerabilityID: String,
     val PkgID: String
