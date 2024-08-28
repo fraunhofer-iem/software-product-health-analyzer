@@ -5,6 +5,7 @@ kotlinPlugin = "2.0.20"
 kotlinLogging = "7.0.0"
 slf4jApi = "2.0.16"
 junit = "5.11.0"
+mockk = "1.13.12"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -15,6 +16,7 @@ slf4j-logger = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jApi" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
 
 test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 
 [plugins]

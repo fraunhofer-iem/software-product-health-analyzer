@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2024 Fraunhofer IEM. All rights reserved.
+ *
+ * Licensed under the MIT license. See LICENSE file in the project root for details.
+ *
+ * SPDX-License-Identifier: MIT
+ * License-Filename: LICENSE
+ */
+
 package de.fraunhofer.iem.kpiCalculator.adapter.tools.trivy
 
 import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
@@ -58,7 +67,7 @@ object TrivyAdapter : KpiAdapter<TrivyDto> {
                     jsonParser.decodeFromJsonElement<CVSSData>(it)
                 }
                 val score = getHighestCvssScore(cvssData)
-                VulnerabilityDto(it.VulnerabilityID, it.PkgName, score)
+                VulnerabilityDto(it.VulnerabilityID, it.PkgID, score)
             }
     }
 

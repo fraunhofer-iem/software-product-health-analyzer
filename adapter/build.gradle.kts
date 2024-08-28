@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     
     testImplementation(libs.test.junit5.params)
+    testImplementation(libs.test.mockk)
 }

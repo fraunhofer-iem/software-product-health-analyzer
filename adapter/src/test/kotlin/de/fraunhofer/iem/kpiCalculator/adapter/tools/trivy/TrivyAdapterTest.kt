@@ -1,5 +1,10 @@
 package de.fraunhofer.iem.kpiCalculator.adapter.tools.trivy
 
+import de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve.CveAdapter
+import de.fraunhofer.iem.kpiCalculator.model.adapter.trivy.TrivyDto
+import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
+import io.mockk.mockkObject
+import io.mockk.verify
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -8,6 +13,7 @@ import java.nio.file.Files
 import kotlin.io.path.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TrivyAdapterTest {
 
@@ -39,6 +45,12 @@ class TrivyAdapterTest {
         Files.newInputStream(Path("src/test/resources/trivy-result-v2.json")).use {
             val dto = assertDoesNotThrow { TrivyAdapter.dtoFromJson(it) }
             assertEquals(1, dto.Vulnerabilities.count())
+
+            val vuln = dto.Vulnerabilities.first()
+            assertEquals("CVE-2011-3374", vuln.cveIdentifier)
+            assertEquals("apt@2.6.1", vuln.packageName)
+            assertEquals(4.3, vuln.severity)
+
         }
     }
 
@@ -47,7 +59,22 @@ class TrivyAdapterTest {
         Files.newInputStream(Path("src/test/resources/trivy-result-v1.json")).use {
             val dto = assertDoesNotThrow { TrivyAdapter.dtoFromJson(it) }
             assertEquals(2, dto.Vulnerabilities.count())
+
+            assertTrue { dto.Vulnerabilities.all { it.cveIdentifier == "CVE-2005-2541" } }
+            assertEquals("tar@1.34+dfsg-1.2", dto.Vulnerabilities.first().packageName)
+            assertEquals(10.0, dto.Vulnerabilities.first().severity)
         }
     }
 
+    @Test
+    fun testDto2Kpi_VerifyCveAdapterGetsCalled() {
+        mockkObject(CveAdapter)
+        val vulns = listOf(
+            VulnerabilityDto("CVE-1", "A", 1.0),
+            VulnerabilityDto("CVE-2", "B", 2.0),
+            VulnerabilityDto("CVE-3", "C", 1.3),
+        )
+        TrivyAdapter.transformDataToKpi(listOf(TrivyDto(vulns)))
+        verify { CveAdapter.transformDataToKpi(vulns) }
+    }
 }
