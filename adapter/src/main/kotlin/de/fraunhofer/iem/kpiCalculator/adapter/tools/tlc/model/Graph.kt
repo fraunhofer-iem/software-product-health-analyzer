@@ -36,7 +36,7 @@ internal class Graph(
                 }
 
                 val targetNode = dependencyGraphDto.nodes[edge.to]
-                nodeToChild[fromNode]?.add(targetNode)
+                nodeToChild[fromNode]!!.add(targetNode)
             }
 
             fun transformNode(node: DependencyNodeDto, visited: MutableSet<DependencyNodeDto>): Node {
