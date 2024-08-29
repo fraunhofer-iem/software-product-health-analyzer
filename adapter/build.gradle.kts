@@ -9,14 +9,13 @@
 
 plugins {
     id("spha-kotlin-conventions")
-    alias(libs.plugins.serialization)
+    id("spha-serialization-conventions")
 }
 
 group = "de.fraunhofer.iem.kpiCalculator"
 
 dependencies {
     implementation(project(":model"))
-    implementation(libs.kotlin.serialization.json)
     
     testImplementation(libs.test.junit5.params)
     testImplementation(libs.test.mockk)
