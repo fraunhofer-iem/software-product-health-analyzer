@@ -19,7 +19,11 @@ data class TlcDto(
 )
 
 @Serializable
-data class RepositoryInfoDto(val url: String, val revision: String, val projects: List<ProjectInfoDto>)
+data class RepositoryInfoDto(
+    val url: String,
+    val revision: String,
+    val projects: List<ProjectInfoDto>
+)
 
 @Serializable
 data class ProjectInfoDto(
