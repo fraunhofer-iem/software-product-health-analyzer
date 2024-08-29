@@ -14,12 +14,15 @@ import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve.CveAdapter
 import de.fraunhofer.iem.kpiCalculator.model.adapter.trivy.*
 import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.*
 import java.io.InputStream
 import kotlin.math.max
 
 object TrivyAdapter : KpiAdapter<TrivyDto> {
+
+    private val logger = KotlinLogging.logger {}
 
     private val jsonParser = Json {
         ignoreUnknownKeys = true
@@ -48,25 +51,38 @@ object TrivyAdapter : KpiAdapter<TrivyDto> {
     }
 
     private fun parseV1(json: JsonArray) : TrivyDto {
+        logger.info { "Processing Trivy result from version 0.19.0 or earlier." }
         val v1dto = jsonParser.decodeFromJsonElement<List<TrivyDtoV1>>(json)
         val vulnerabilities = createVulnerabilitiesDto(v1dto.flatMap { it.Vulnerabilities })
         return TrivyDto(vulnerabilities)
     }
 
     private fun parseV2(json: JsonObject): TrivyDto {
+        logger.info { "Processing Trivy result of SchemaVersion: 2" }
         val v2dto = jsonParser.decodeFromJsonElement<TrivyDtoV2>(json)
         val vulnerabilities = createVulnerabilitiesDto(v2dto.Results.flatMap { it.Vulnerabilities })
         return TrivyDto(vulnerabilities)
     }
 
-    private fun createVulnerabilitiesDto(vulnerabilities: Collection<TrivyVulnerabilityDto>) : Collection<VulnerabilityDto>{
+    /***
+     * Transforms a collection of Trivy-specific vulnerabilities into the generalized vulnerability format.
+     * Trivy allows to annotate multiple CVSS scores to a vulnerability entry (e.g, CVSS2 or CVSS3 or even vendor specific).
+     * This transformation always selects the highest available score for each vulnerability.
+     */
+    private fun createVulnerabilitiesDto(vulnerabilities: Collection<TrivyVulnerabilityDto>) : Collection<VulnerabilityDto> {
         return vulnerabilities
-            .filter { it.CVSS != null }
-            .map {
+            .mapNotNull {
+                if (it.CVSS == null) {
+                    logger.debug { "Reported vulnerability '${it.VulnerabilityID}' does not have a score. Skipping!" }
+                    return@mapNotNull null
+                }
+
                 val cvssData = it.CVSS!!.values.map {
                     jsonParser.decodeFromJsonElement<CVSSData>(it)
                 }
+
                 val score = getHighestCvssScore(cvssData)
+                logger.trace { "Selected CVSS score $score for vulnerability '${it.VulnerabilityID}'" }
                 VulnerabilityDto(it.VulnerabilityID, it.PkgID, score)
             }
     }
