@@ -14,7 +14,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProjectDto(
     val artifacts: List<ArtifactDto> = listOf(), // Stores all components and their related metadata
-    val graphs: List<ScopeToVersionToGraph>, // Maps the graphs' scope to multiple versions of the original dependency graph
     val graph: List<ScopeToGraph>, // Maps the graphs' scope to the dependency graph extracted from the project
     val ecosystem: String, // Used to identify the appropriate APIs to call for additional information
     val version: String = "",
@@ -55,7 +54,6 @@ data class DependencyGraphDto(
     val nodes: List<DependencyNodeDto> = listOf(),
     val edges: List<DependencyEdge> = listOf(),
     val directDependencyIndices: List<Int> = listOf(), // Idx of the nodes' which are direct dependencies of this graph
-    val metadata: GraphMetadata? = null
 )
 
 @Serializable
