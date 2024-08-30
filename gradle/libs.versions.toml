@@ -1,11 +1,12 @@
 [versions]
 kotlin = "2.0.20"
-kotlinxSerialization = "1.7.1"
+kotlinxSerialization = "1.7.2"
 kotlinPlugin = "2.0.20"
 kotlinLogging = "7.0.0"
 slf4jApi = "2.0.16"
 junit = "5.11.0"
 mockk = "1.13.12"
+semver = "2.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -14,7 +15,7 @@ kotlin-loggin = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
 slf4j-logger = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jApi" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPlugin" }
-
+semver = { module = "io.github.z4kn4fein:semver", version.ref = "semver" }
 test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 

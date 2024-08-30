@@ -16,6 +16,7 @@ group = "de.fraunhofer.iem.kpiCalculator"
 
 dependencies {
     implementation(project(":model"))
+    implementation(libs.semver)
     implementation(libs.kotlin.serialization.json)
 
     testImplementation(libs.test.junit5.params)
