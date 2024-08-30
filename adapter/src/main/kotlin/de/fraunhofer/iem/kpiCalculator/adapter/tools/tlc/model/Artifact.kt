@@ -17,6 +17,7 @@ internal data class Artifact(
     val versions: List<ArtifactVersion> = listOf(),
 )
 
+@ConsistentCopyVisibility
 internal data class ArtifactVersion private constructor(
     val versionNumber: String,
     val releaseDate: Long,
@@ -40,7 +41,7 @@ internal data class ArtifactVersion private constructor(
             )
         }
 
-        private fun validateAndHarmonizeVersionString(version: String): String {
+        fun validateAndHarmonizeVersionString(version: String): String {
             return version.toVersion(strict = false).toString()
         }
     }

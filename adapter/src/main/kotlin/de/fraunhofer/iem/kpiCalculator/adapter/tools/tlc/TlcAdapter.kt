@@ -32,7 +32,7 @@ object TlcAdapter : KpiAdapter<TlcDto> {
         return data.flatMap { tlcDto ->
             tlcDto.projectDtos.flatMap {
                 val project = Project.from(it)
-                project.graph.mapNotNull { (scope, graph) ->
+                project.graph.map { (scope, graph) ->
 
                     val techLag =
                         getTechLagForGraph(
@@ -59,10 +59,10 @@ object TlcAdapter : KpiAdapter<TlcDto> {
                             )
                         }
 
-                        AdapterResult.Success(rawValueKpi)
+                        return@map AdapterResult.Success(rawValueKpi)
                     }
 
-                    AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)
+                    return@map AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)
                 }
             }
         }

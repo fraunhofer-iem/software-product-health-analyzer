@@ -51,7 +51,7 @@ internal class Graph(
                     return Node(
                         children = listOf(),
                         artifactIdx = node.artifactIdx,
-                        usedVersion = node.usedVersion
+                        version = node.usedVersion
                     )
                 }
 
@@ -63,7 +63,7 @@ internal class Graph(
 
                 return Node(
                     children = children,
-                    usedVersion = node.usedVersion,
+                    version = node.usedVersion,
                     artifactIdx = node.artifactIdx,
                 )
             }
@@ -81,7 +81,8 @@ internal class Graph(
 class Node(
     val children: List<Node> = listOf(),
     val artifactIdx: Int,
-    val usedVersion: String
+    version: String,
+    val usedVersion: String = ArtifactVersion.validateAndHarmonizeVersionString(version)
 ) {
     fun size(): Int {
         return children.size + children.sumOf { it.size() }
