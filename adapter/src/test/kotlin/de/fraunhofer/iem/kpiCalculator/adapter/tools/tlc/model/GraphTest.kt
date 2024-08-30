@@ -13,7 +13,7 @@ class GraphTest {
         return (0..count).map {
             DependencyNodeDto(
                 artifactIdx = it,
-                usedVersion = ""
+                usedVersion = "1.0.0"
             )
         }
     }
