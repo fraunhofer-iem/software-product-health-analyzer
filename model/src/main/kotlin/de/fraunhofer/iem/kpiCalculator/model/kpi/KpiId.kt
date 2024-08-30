@@ -21,6 +21,8 @@ enum class KpiId {
     SAST_USAGE,
     COMMENTS_IN_CODE,
     DOCUMENTATION_INFRASTRUCTURE,
+    LIB_DAYS_DEV,
+    LIB_DAYS_PROD,
 
     // Calculated KPIs
     SIGNED_COMMITS_RATIO,

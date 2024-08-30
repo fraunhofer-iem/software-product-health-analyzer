@@ -12,6 +12,10 @@ package de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc.model
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.DependencyGraphDto
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.DependencyNodeDto
 
+internal enum class Version {
+    Patch, Minor, Major
+}
+
 internal class Graph(
     val directDependencies: List<Node>,
 ) {
