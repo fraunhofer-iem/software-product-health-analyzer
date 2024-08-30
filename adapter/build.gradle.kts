@@ -21,4 +21,5 @@ dependencies {
 
     testImplementation(libs.test.junit5.params)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.kotlinx.date)
 }
