@@ -9,10 +9,16 @@
 
 package de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc.model
 
+data class ReleaseDistance(
+    val patch: Int,
+    val minor: Int,
+    val major: Int
+)
+
 data class TechnicalLag(
     val version: String,
     val libDays: Long,
-    val releaseDistance: Triple<Int, Int, Int>,
+    val releaseDistance: ReleaseDistance,
     val releaseFrequency: ReleaseFrequency,
     val numberOfMissedReleases: Int
 ) {
@@ -20,7 +26,7 @@ data class TechnicalLag(
         return "Technical Lag: libDays: $libDays, " +
                 "target version: $version," +
                 " # missed releases: $numberOfMissedReleases, " +
-                "Version distance ${releaseDistance.first}.${releaseDistance.second}.${releaseDistance.third} " +
+                "Version distance ${releaseDistance.major}.${releaseDistance.minor}.${releaseDistance.patch} " +
                 "Release frequency: $releaseFrequency"
     }
 }
