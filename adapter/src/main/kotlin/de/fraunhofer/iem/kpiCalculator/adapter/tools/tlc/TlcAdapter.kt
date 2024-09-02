@@ -19,6 +19,10 @@ import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDefaultConfig
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDto
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import java.io.InputStream
 
 sealed class TechLagResult {
     data class Success(val libyear: Long) : TechLagResult()
@@ -26,6 +30,16 @@ sealed class TechLagResult {
 }
 
 object TlcAdapter {
+
+    private val jsonParser = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    fun dtoFromJson(jsonData: InputStream): TlcDto {
+        return jsonParser.decodeFromStream<TlcDto>(jsonData)
+    }
 
     fun transformDataToKpi(
         data: Collection<TlcDto>,
