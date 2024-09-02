@@ -11,10 +11,11 @@ package de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc
 
 import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.adapter.ErrorType
-import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc.model.Project
 import de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc.model.Version
 import de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc.util.TechLagHelper.getTechLagForGraph
+import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcConfig
+import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDefaultConfig
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDto
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
@@ -24,8 +25,13 @@ sealed class TechLagResult {
     data class Empty(val reason: String) : TechLagResult()
 }
 
-object TlcAdapter : KpiAdapter<TlcDto> {
-    override fun transformDataToKpi(data: Collection<TlcDto>): Collection<AdapterResult> {
+object TlcAdapter {
+
+    fun transformDataToKpi(
+        data: Collection<TlcDto>,
+        config: TlcConfig = TlcDefaultConfig.get()
+    ): Collection<AdapterResult> {
+
         return data.flatMap { tlcDto ->
             tlcDto.projectDtos.flatMap {
                 val project = Project.from(it)
@@ -40,7 +46,7 @@ object TlcAdapter : KpiAdapter<TlcDto> {
 
                     if (techLag is TechLagResult.Success) {
 
-                        val libyearScore = getLibyearScore(techLag.libyear)
+                        val libyearScore = getLibyearScore(techLag.libyear, config)
 
                         val rawValueKpi = if (
                             isProductionScope(ecosystem = project.ecosystem, scope = scope)
@@ -65,16 +71,21 @@ object TlcAdapter : KpiAdapter<TlcDto> {
         }
     }
 
-    private fun getLibyearScore(libyear: Long): Int {
-        // NB: these values need to be sanity checked
-        // TODO: libyear thresholds should live in a config file
-        return when (libyear) {
-            in Int.MIN_VALUE..30 -> 100
-            in 31..90 -> 75
-            in 91..180 -> 50
-            in 181..360 -> 25
-            else -> 0
+    private fun getLibyearScore(libyear: Long, config: TlcConfig): Int {
+
+        if (libyear < 0L) {
+            return 100
         }
+
+        val sortedThresholds = config.thresholds.sortedBy { it.range.from }
+
+        sortedThresholds.forEach { threshold ->
+            if (libyear > threshold.range.from && libyear < threshold.range.to) {
+                return threshold.score
+            }
+        }
+
+        return 0
     }
 
     private fun isProductionScope(scope: String, ecosystem: String): Boolean {
@@ -83,5 +94,4 @@ object TlcAdapter : KpiAdapter<TlcDto> {
             else -> true
         }
     }
-
 }
