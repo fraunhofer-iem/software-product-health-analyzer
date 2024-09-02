@@ -129,7 +129,7 @@ class TlcAdapterTest {
         usedVersion: String
     ) {
 
-        val target = TlcAdapter.getTargetVersion(
+        val target = ArtifactVersion.getTargetVersion(
             usedVersion = usedVersion,
             updateType = targetVersion,
             versions = versions

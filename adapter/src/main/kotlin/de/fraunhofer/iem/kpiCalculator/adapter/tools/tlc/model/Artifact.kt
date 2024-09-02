@@ -21,8 +21,7 @@ internal data class Artifact(
 
 private val logger = KotlinLogging.logger {}
 
-@ConsistentCopyVisibility
-internal data class ArtifactVersion private constructor(
+internal class ArtifactVersion private constructor(
     val versionNumber: String,
     val releaseDate: Long,
     val isDefault: Boolean = false
@@ -52,6 +51,54 @@ internal data class ArtifactVersion private constructor(
 
         fun validateAndHarmonizeVersionString(version: String): String {
             return version.toVersion(strict = false).toString()
+        }
+
+        /**
+         * If the used version is stable all pre-release versions are ignored.
+         * If the used version is pre-release, pre-release versions are
+         * also considered.
+         *
+         * @param usedVersion version currently in use
+         * @param updateType do we try to update to the largest
+         * patch, minor or major version
+         * @param versions all available versions for the artifact
+         *
+         * @return highest applicable version
+         */
+        fun getTargetVersion(
+            usedVersion: String,
+            updateType: Version,
+            versions: List<ArtifactVersion>,
+        ): ArtifactVersion? {
+
+            val semvers = versions.map { it.semver }
+            val current = usedVersion.toVersion(strict = false)
+
+            val filteredVersions = if (current.isStable) {
+                semvers.filter { it.isStable && !it.isPreRelease }
+            } else {
+                if (current.isPreRelease) {
+                    semvers
+                } else {
+                    semvers.filter { !it.isPreRelease }
+                }
+            }
+
+            val highestVersion = when (updateType) {
+                Version.Minor -> {
+                    filteredVersions.filter { it.major == current.major }
+                }
+
+                Version.Major -> {
+                    filteredVersions
+                }
+
+                Version.Patch -> {
+                    filteredVersions.filter { it.major == current.major && it.minor == current.minor }
+                }
+            }.max()
+
+            return versions.find { it.versionNumber == highestVersion.toString() }
         }
     }
 }
