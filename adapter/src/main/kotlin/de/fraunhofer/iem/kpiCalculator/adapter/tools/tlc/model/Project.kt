@@ -27,7 +27,7 @@ internal data class Project(
                     Artifact(
                         artifactId = it.artifactId,
                         groupId = it.groupId,
-                        versions = it.versions.map { version ->
+                        versions = it.versions.mapNotNull { version ->
                             ArtifactVersion.create(
                                 versionNumber = version.versionNumber,
                                 isDefault = version.isDefault,
