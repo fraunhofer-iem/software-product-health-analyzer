@@ -22,10 +22,12 @@ class CveAdapterTest {
         val adapter = CveAdapter
         // valid input
         val validKpi = adapter.transformDataToKpi(
-            VulnerabilityDto(
-                cveIdentifier = "not blank",
-                packageName = "not blank",
-                severity = 0.1
+            listOf(
+                VulnerabilityDto(
+                    cveIdentifier = "not blank",
+                    packageName = "not blank",
+                    severity = 0.1
+                )
             )
         )
         when (val kpi = validKpi.first()) {

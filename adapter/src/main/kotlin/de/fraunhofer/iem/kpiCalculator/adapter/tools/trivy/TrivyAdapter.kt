@@ -10,7 +10,6 @@
 package de.fraunhofer.iem.kpiCalculator.adapter.tools.trivy
 
 import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
-import de.fraunhofer.iem.kpiCalculator.adapter.KpiAdapter
 import de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve.CveAdapter
 import de.fraunhofer.iem.kpiCalculator.model.adapter.trivy.*
 import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
@@ -20,7 +19,7 @@ import kotlinx.serialization.json.*
 import java.io.InputStream
 import kotlin.math.max
 
-object TrivyAdapter : KpiAdapter<TrivyDto> {
+object TrivyAdapter {
 
     private val logger = KotlinLogging.logger {}
 
@@ -29,20 +28,20 @@ object TrivyAdapter : KpiAdapter<TrivyDto> {
         explicitNulls = false
     }
 
-    override fun transformDataToKpi(data: Collection<TrivyDto>): Collection<AdapterResult> {
+    fun transformDataToKpi(data: Collection<TrivyDto>): Collection<AdapterResult> {
         return CveAdapter.transformDataToKpi(data.flatMap { it.Vulnerabilities })
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     fun dtoFromJson(jsonData: InputStream): TrivyDto {
-        val json =  Json.decodeFromStream<JsonElement>(jsonData)
+        val json = Json.decodeFromStream<JsonElement>(jsonData)
 
         if (json is JsonArray)
             return parseV1(json)
         else if (json !is JsonObject)
             throw UnsupportedOperationException("The provided Trivy result is not supported.")
 
-        val schemaVersion = json.get("SchemaVersion")?.jsonPrimitive?.intOrNull
+        val schemaVersion = json["SchemaVersion"]?.jsonPrimitive?.intOrNull
 
         if (schemaVersion == 2)
             return parseV2(json)
@@ -50,7 +49,7 @@ object TrivyAdapter : KpiAdapter<TrivyDto> {
         throw UnsupportedOperationException("Trivy results for schema version '$schemaVersion' are currently not supported.")
     }
 
-    private fun parseV1(json: JsonArray) : TrivyDto {
+    private fun parseV1(json: JsonArray): TrivyDto {
         logger.info { "Processing Trivy result from version 0.19.0 or earlier." }
         val v1dto = jsonParser.decodeFromJsonElement<List<TrivyDtoV1>>(json)
         val vulnerabilities = createVulnerabilitiesDto(v1dto.flatMap { it.Vulnerabilities })
@@ -69,7 +68,7 @@ object TrivyAdapter : KpiAdapter<TrivyDto> {
      * Trivy allows to annotate multiple CVSS scores to a vulnerability entry (e.g, CVSS2 or CVSS3 or even vendor specific).
      * This transformation always selects the highest available score for each vulnerability.
      */
-    private fun createVulnerabilitiesDto(vulnerabilities: Collection<TrivyVulnerabilityDto>) : Collection<VulnerabilityDto> {
+    private fun createVulnerabilitiesDto(vulnerabilities: Collection<TrivyVulnerabilityDto>): Collection<VulnerabilityDto> {
         return vulnerabilities
             .mapNotNull {
                 if (it.CVSS == null) {
@@ -87,7 +86,7 @@ object TrivyAdapter : KpiAdapter<TrivyDto> {
             }
     }
 
-    private fun getHighestCvssScore(scores: Collection<CVSSData>) : Double {
+    private fun getHighestCvssScore(scores: Collection<CVSSData>): Double {
         // NB: If no value was coded we simply return 0.0 (no vulnerability)
         // In practice this should never happen
         var v2Score = 0.0
