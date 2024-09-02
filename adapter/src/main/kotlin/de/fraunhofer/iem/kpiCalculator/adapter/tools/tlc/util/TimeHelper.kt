@@ -16,7 +16,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-object TimeHelper {
+internal object TimeHelper {
     fun dateToMs(dateString: String): Long {
         val formatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
         val dateTime: OffsetDateTime = OffsetDateTime.parse(dateString, formatter)

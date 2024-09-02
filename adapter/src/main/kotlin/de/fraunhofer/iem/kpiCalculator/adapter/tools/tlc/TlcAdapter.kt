@@ -22,7 +22,7 @@ import io.github.z4kn4fein.semver.toVersion
 
 sealed class TechLagResult {
     data class Success(val libyear: Long) : TechLagResult()
-    data class Incomplete(val reason: String) : TechLagResult()
+    data class Empty(val reason: String) : TechLagResult()
 }
 
 private val logger = KotlinLogging.logger {}
@@ -70,8 +70,9 @@ object TlcAdapter : KpiAdapter<TlcDto> {
 
     private fun getLibyearScore(libyear: Long): Int {
         // NB: these values need to be sanity checked
+        // TODO: libyear thresholds should live in a config file
         return when (libyear) {
-            in 0..30 -> 100
+            in Int.MIN_VALUE..30 -> 100
             in 31..90 -> 75
             in 91..180 -> 50
             in 181..360 -> 25
@@ -88,7 +89,7 @@ object TlcAdapter : KpiAdapter<TlcDto> {
 
     private fun getTechLagForGraph(graph: Graph, artifacts: List<Artifact>, targetVersion: Version): TechLagResult {
         if (graph.directDependencies.isEmpty()) {
-            return TechLagResult.Incomplete(
+            return TechLagResult.Empty(
                 reason = "Direct dependencies are empty."
             )
         }
@@ -114,16 +115,16 @@ object TlcAdapter : KpiAdapter<TlcDto> {
             updateType = targetUpdateType,
             versions = artifact.versions
         )
-        val currentVersion = artifact.versions.find { it.versionNumber == node.usedVersion }
+        val usedVersion = artifact.versions.find { it.versionNumber == node.usedVersion }
 
-        if (currentVersion == null || targetVersion == null) {
-            return TechLagResult.Incomplete(
-                reason = "Result incomplete. Current version: $currentVersion, target version: $targetVersion."
+        if (usedVersion == null || targetVersion == null) {
+            return TechLagResult.Empty(
+                reason = "Result incomplete. Current version: $usedVersion, target version: $targetVersion."
             )
         }
 
         val diffInDays = TimeHelper.getDifferenceInDays(
-            currentVersion = currentVersion.releaseDate,
+            currentVersion = usedVersion.releaseDate,
             newestVersion = targetVersion.releaseDate
         )
 
@@ -142,7 +143,7 @@ object TlcAdapter : KpiAdapter<TlcDto> {
      *
      * @return highest applicable version
      */
-    private fun getTargetVersion(
+    internal fun getTargetVersion(
         usedVersion: String,
         updateType: Version,
         versions: List<ArtifactVersion>,
@@ -164,7 +165,6 @@ object TlcAdapter : KpiAdapter<TlcDto> {
         val highestVersion = when (updateType) {
             Version.Minor -> {
                 filteredVersions.filter { it.major == current.major }
-
             }
 
             Version.Major -> {
