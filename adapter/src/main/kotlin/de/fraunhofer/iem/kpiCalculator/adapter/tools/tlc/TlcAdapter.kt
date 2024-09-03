@@ -76,7 +76,10 @@ object TlcAdapter {
                             )
                         }
 
-                        return@map AdapterResult.Success(rawValueKpi)
+                        return@map AdapterResult.Success.KpiTechLag(
+                            rawValueKpi = rawValueKpi,
+                            techLag = techLag
+                        )
                     }
 
                     return@map AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)

@@ -21,7 +21,7 @@ object CveAdapter {
         return data
             .map {
                 return@map if (isValid(it)) {
-                    AdapterResult.Success(
+                    AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.VULNERABILITY_SCORE,
                             score = (it.severity * 10).toInt()
