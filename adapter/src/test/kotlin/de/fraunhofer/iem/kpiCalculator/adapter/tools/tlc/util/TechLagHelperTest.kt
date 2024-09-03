@@ -25,7 +25,6 @@ class TechLagHelperTest {
                 versions = versions
             )
         }
-
     }
 
     private fun generateVersions(count: Int): List<ArtifactVersion> {
