@@ -37,5 +37,4 @@ data class ProjectInfoDto(
 data class EnvironmentInfoDto(
     val ortVersion: String,
     val javaVersion: String,
-    val os: String
 )

@@ -8,12 +8,13 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
 class TlcAdapterTest {
+
 
     @Test
     fun transformDataToKpiEmpty() {
@@ -28,7 +29,6 @@ class TlcAdapterTest {
                     environmentInfo = EnvironmentInfoDto(
                         ortVersion = "",
                         javaVersion = "",
-                        os = ""
                     ),
                     projectDtos = listOf(
                         ProjectDto(
@@ -49,12 +49,13 @@ class TlcAdapterTest {
 
 
     @Test
-    fun transformDataToKpi() {
+    fun transformSingleNodeToKpi() {
 
         val usedVersionDate = LocalDateTime(2024, 1, 1, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
         val patchVersionDate = LocalDateTime(2024, 1, 3, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
         val minorVersionDate = LocalDateTime(2024, 1, 9, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
-        val majorVersionDate = LocalDateTime(2024, 1, 19, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
+        val majorVersionDate =
+            LocalDateTime(2024, 1, 19, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
 
         val versions = listOf(
             ArtifactVersionDto(versionNumber = "3.11", releaseDate = usedVersionDate, isDefault = true),
@@ -76,7 +77,6 @@ class TlcAdapterTest {
                     environmentInfo = EnvironmentInfoDto(
                         ortVersion = "",
                         javaVersion = "",
-                        os = ""
                     ),
                     projectDtos = listOf(
                         ProjectDto(
@@ -116,10 +116,16 @@ class TlcAdapterTest {
         val isSuccess = kpi is AdapterResult.Success
         assertTrue(isSuccess)
 
+        val isSuccessWithResult = kpi is AdapterResult.Success.KpiTechLag
+        assertTrue(isSuccessWithResult)
+
         val rawValueKpi = (kpi as AdapterResult.Success).rawValueKpi
 
         assertEquals(KpiId.LIB_DAYS_PROD, rawValueKpi.kind)
         assertEquals(100, rawValueKpi.score)
+
+        val techLag = (kpi as AdapterResult.Success.KpiTechLag)
+        assertEquals(18, techLag.techLag.libyear)
     }
 
     private fun testVersion(
@@ -146,8 +152,10 @@ class TlcAdapterTest {
         val usedVersionDate = LocalDateTime(2024, 1, 1, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
         val patchVersionDate = LocalDateTime(2024, 1, 3, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
         val minorVersionDate = LocalDateTime(2024, 1, 9, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
-        val majorVersionDate = LocalDateTime(2024, 1, 19, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
-        val alphaVersionDate = LocalDateTime(2024, 1, 29, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
+        val majorVersionDate =
+            LocalDateTime(2024, 1, 19, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
+        val alphaVersionDate =
+            LocalDateTime(2024, 1, 29, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
 
         val versions = listOf(
             ArtifactVersion.create(versionNumber = "0.3.11", releaseDate = usedVersionDate, isDefault = true),
@@ -156,7 +164,11 @@ class TlcAdapterTest {
             ArtifactVersion.create(versionNumber = "3.12", releaseDate = 0L, isDefault = false),
             ArtifactVersion.create(versionNumber = "3.12.3", releaseDate = minorVersionDate, isDefault = false),
             ArtifactVersion.create(versionNumber = "4.12.3", releaseDate = majorVersionDate, isDefault = false),
-            ArtifactVersion.create(versionNumber = "4.12.4-Alpha", releaseDate = alphaVersionDate, isDefault = false),
+            ArtifactVersion.create(
+                versionNumber = "4.12.4-Alpha",
+                releaseDate = alphaVersionDate,
+                isDefault = false
+            ),
         ).mapNotNull { it }
 
         testVersion("4.12.3", versions, Version.Major, "3.11")
@@ -177,7 +189,8 @@ class TlcAdapterTest {
         val usedVersionDate = LocalDateTime(2024, 1, 1, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
         val patchVersionDate = LocalDateTime(2024, 1, 3, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
         val minorVersionDate = LocalDateTime(2024, 1, 9, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
-        val majorVersionDate = LocalDateTime(2024, 1, 19, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
+        val majorVersionDate =
+            LocalDateTime(2024, 1, 19, 0, 0).toInstant(TimeZone.of("UTC+3")).toEpochMilliseconds()
 
         val versions = listOf(
             ArtifactVersion.create(versionNumber = "3.11", releaseDate = usedVersionDate, isDefault = true),

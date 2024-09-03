@@ -28,19 +28,19 @@ object VcsAdapter {
         //XXX: we need to decide about error handling in adapters
         val repoDetailsDto = data.first()
         return listOf(
-            AdapterResult.Success(
+            AdapterResult.Success.Kpi(
                 RawValueKpi(
                     kind = KpiId.NUMBER_OF_COMMITS,
                     score = repoDetailsDto.numberOfCommits
                 )
             ),
-            AdapterResult.Success(
+            AdapterResult.Success.Kpi(
                 RawValueKpi(
                     kind = KpiId.NUMBER_OF_SIGNED_COMMITS,
                     score = repoDetailsDto.numberOfSignedCommits
                 )
             ),
-            AdapterResult.Success(
+            AdapterResult.Success.Kpi(
                 RawValueKpi(
                     kind = KpiId.IS_DEFAULT_BRANCH_PROTECTED,
                     score = if (repoDetailsDto.isDefaultBranchProtected) 100 else 0

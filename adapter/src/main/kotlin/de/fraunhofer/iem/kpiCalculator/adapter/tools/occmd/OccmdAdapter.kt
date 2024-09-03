@@ -22,7 +22,7 @@ object OccmdAdapter {
         return data.mapNotNull {
             return@mapNotNull when (Checks.fromString(it.check)) {
                 Checks.CheckedInBinaries ->
-                    AdapterResult.Success(
+                    AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.CHECKED_IN_BINARIES,
                             score = (it.score * 100).toInt()
@@ -30,7 +30,7 @@ object OccmdAdapter {
                     )
 
                 Checks.SastUsageBasic ->
-                    AdapterResult.Success(
+                    AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.SAST_USAGE,
                             score = (it.score * 100).toInt()
@@ -38,7 +38,7 @@ object OccmdAdapter {
                     )
 
                 Checks.Secrets ->
-                    AdapterResult.Success(
+                    AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.SECRETS,
                             score = (it.score * 100).toInt()
@@ -46,7 +46,7 @@ object OccmdAdapter {
                     )
 
                 Checks.CommentsInCode ->
-                    AdapterResult.Success(
+                    AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.COMMENTS_IN_CODE,
                             score = (it.score * 100).toInt()
@@ -54,7 +54,7 @@ object OccmdAdapter {
                     )
 
                 Checks.DocumentationInfrastructure ->
-                    AdapterResult.Success(
+                    AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.DOCUMENTATION_INFRASTRUCTURE,
                             score = (it.score * 100).toInt()

@@ -41,6 +41,16 @@ internal object TechLagHelper {
     }
 
     private fun getTechLagForNode(node: Node, artifacts: List<Artifact>, targetUpdateType: Version): TechLagResult {
+
+        val childSum = node.children.sumOf {
+            val techLag = getTechLagForNode(it, artifacts, targetUpdateType)
+            if (techLag is TechLagResult.Success) {
+                techLag.libyear
+            } else {
+                0
+            }
+        }
+
         val artifact = artifacts[node.artifactIdx]
 
         val targetVersion = getTargetVersion(
@@ -61,6 +71,6 @@ internal object TechLagHelper {
             newestVersion = targetVersion.releaseDate
         )
 
-        return TechLagResult.Success(libyear = diffInDays)
+        return TechLagResult.Success(libyear = diffInDays + childSum)
     }
 }
