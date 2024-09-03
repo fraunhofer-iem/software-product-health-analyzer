@@ -14,6 +14,7 @@ private val Project.libs: LibrariesForLibs
 
 plugins {
     // Apply core plugins.
+    jacoco
     `java-library`
 
     kotlin("jvm")
@@ -53,3 +54,10 @@ configurations.all {
 }
 
 if (project != rootProject) version = rootProject.version
+
+tasks.register("jacocoReport") {
+    description = "Generates code coverage reports for all test tasks."
+    group = "Reporting"
+
+    dependsOn(tasks.withType<JacocoReport>())
+}
