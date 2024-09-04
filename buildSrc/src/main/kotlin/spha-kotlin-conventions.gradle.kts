@@ -18,36 +18,28 @@ plugins {
     `java-library`
 
     kotlin("jvm")
+    id("com.ncorti.ktfmt.gradle")
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
 
 kotlin {
-    compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
-    }
+    compilerOptions { apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0) }
 }
 
-testing {
-    suites {
-        withType<JvmTestSuite>().configureEach {
-            useJUnitJupiter()
-        }
-    }
-}
+testing { suites { withType<JvmTestSuite>().configureEach { useJUnitJupiter() } } }
 
 dependencies {
     implementation(libs.bundles.logging)
     testImplementation(libs.slf4j.logger)
     testImplementation(libs.kotlin.test)
+}
+
+ktfmt {
+    // KotlinLang style - 4 space indentation - From kotlinlang.org/docs/coding-conventions.html
+    kotlinLangStyle()
 }
 
 configurations.all {
