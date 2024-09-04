@@ -18,6 +18,9 @@ jobs:
       - name: Execute tests
         run: ./gradlew test
 
+      - name: Code style
+        run: ./gradlew ktfmtCheck
+
       - name: Test Summary
         uses: test-summary/action@v2
         with:
