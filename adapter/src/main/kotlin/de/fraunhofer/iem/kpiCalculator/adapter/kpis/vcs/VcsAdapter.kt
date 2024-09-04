@@ -20,32 +20,27 @@ object VcsAdapter {
     fun transformDataToKpi(data: Collection<RepositoryDetailsDto>): Collection<AdapterResult> {
 
         if (data.size != 1) {
-            return listOf(
-                AdapterResult.Error(type = ErrorType.DATA_VALIDATION_ERROR)
-            )
+            return listOf(AdapterResult.Error(type = ErrorType.DATA_VALIDATION_ERROR))
         }
 
-        //XXX: we need to decide about error handling in adapters
+        // XXX: we need to decide about error handling in adapters
         val repoDetailsDto = data.first()
         return listOf(
             AdapterResult.Success.Kpi(
-                RawValueKpi(
-                    kind = KpiId.NUMBER_OF_COMMITS,
-                    score = repoDetailsDto.numberOfCommits
-                )
+                RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = repoDetailsDto.numberOfCommits)
             ),
             AdapterResult.Success.Kpi(
                 RawValueKpi(
                     kind = KpiId.NUMBER_OF_SIGNED_COMMITS,
-                    score = repoDetailsDto.numberOfSignedCommits
+                    score = repoDetailsDto.numberOfSignedCommits,
                 )
             ),
             AdapterResult.Success.Kpi(
                 RawValueKpi(
                     kind = KpiId.IS_DEFAULT_BRANCH_PROTECTED,
-                    score = if (repoDetailsDto.isDefaultBranchProtected) 100 else 0
+                    score = if (repoDetailsDto.isDefaultBranchProtected) 100 else 0,
                 )
-            )
+            ),
         )
     }
 }

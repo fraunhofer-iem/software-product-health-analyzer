@@ -11,15 +11,10 @@ package de.fraunhofer.iem.kpiCalculator.model.adapter.tlc
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
-data class TlcConfig(
-    val thresholds: Collection<RangeThreshold>
-) {
+data class TlcConfig(val thresholds: Collection<RangeThreshold>) {
     init {
-        require(validThresholds(thresholds)) {
-            "TlcConfig ranges are invalid"
-        }
+        require(validThresholds(thresholds)) { "TlcConfig ranges are invalid" }
     }
 
     private fun validThresholds(rangeThresholds: Collection<RangeThreshold>): Boolean {
@@ -33,7 +28,10 @@ data class TlcConfig(
             }
 
             val next = sortedThresholds[index + 1]
-            if (next.range.from != threshold.range.to + 1 || threshold.range.from > threshold.range.to) {
+            if (
+                next.range.from != threshold.range.to + 1 ||
+                    threshold.range.from > threshold.range.to
+            ) {
                 return false
             }
         }
@@ -43,14 +41,9 @@ data class TlcConfig(
 }
 
 @Serializable
-data class RangeThreshold(
-    val score: Int,
-    val range: Range
-) {
+data class RangeThreshold(val score: Int, val range: Range) {
     init {
-        require(score in 0..100) {
-            "Thresholds must be between 0 and 100"
-        }
+        require(score in 0..100) { "Thresholds must be between 0 and 100" }
     }
 }
 

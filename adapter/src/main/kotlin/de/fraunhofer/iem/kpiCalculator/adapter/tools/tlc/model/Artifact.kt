@@ -21,27 +21,30 @@ internal data class Artifact(
 
 private val logger = KotlinLogging.logger {}
 
-internal class ArtifactVersion private constructor(
+internal class ArtifactVersion
+private constructor(
     val versionNumber: String,
     val releaseDate: Long,
-    val isDefault: Boolean = false
+    val isDefault: Boolean = false,
 ) : Comparable<ArtifactVersion> {
 
-    val semver by lazy {
-        versionNumber.toVersion(strict = false)
-    }
+    val semver by lazy { versionNumber.toVersion(strict = false) }
 
     override fun compareTo(other: ArtifactVersion): Int = semver.compareTo(other.semver)
 
     companion object {
-        fun create(versionNumber: String, releaseDate: Long, isDefault: Boolean = false): ArtifactVersion? {
+        fun create(
+            versionNumber: String,
+            releaseDate: Long,
+            isDefault: Boolean = false,
+        ): ArtifactVersion? {
             return try {
                 ArtifactVersion(
                     releaseDate = releaseDate,
                     isDefault = isDefault,
                     // this step harmonizes possibly weired version formats like 2.4 or 5
                     // those are parsed to 2.4.0 and 5.0.0
-                    versionNumber = validateAndHarmonizeVersionString(versionNumber)
+                    versionNumber = validateAndHarmonizeVersionString(versionNumber),
                 )
             } catch (e: VersionFormatException) {
                 logger.warn { "Version cast failed with ${e.message}." }
@@ -54,15 +57,12 @@ internal class ArtifactVersion private constructor(
         }
 
         /**
-         * If the used version is stable all pre-release versions are ignored.
-         * If the used version is pre-release, pre-release versions are
-         * also considered.
+         * If the used version is stable all pre-release versions are ignored. If the used version
+         * is pre-release, pre-release versions are also considered.
          *
          * @param usedVersion version currently in use
-         * @param updateType do we try to update to the largest
-         * patch, minor or major version
+         * @param updateType do we try to update to the largest patch, minor or major version
          * @param versions all available versions for the artifact
-         *
          * @return highest applicable version
          */
         fun getTargetVersion(
@@ -74,29 +74,33 @@ internal class ArtifactVersion private constructor(
             val semvers = versions.map { it.semver }
             val current = usedVersion.toVersion(strict = false)
 
-            val filteredVersions = if (current.isStable) {
-                semvers.filter { it.isStable && !it.isPreRelease }
-            } else {
-                if (current.isPreRelease) {
-                    semvers
+            val filteredVersions =
+                if (current.isStable) {
+                    semvers.filter { it.isStable && !it.isPreRelease }
                 } else {
-                    semvers.filter { !it.isPreRelease }
-                }
-            }
-
-            val highestVersion = when (updateType) {
-                Version.Minor -> {
-                    filteredVersions.filter { it.major == current.major }
+                    if (current.isPreRelease) {
+                        semvers
+                    } else {
+                        semvers.filter { !it.isPreRelease }
+                    }
                 }
 
-                Version.Major -> {
-                    filteredVersions
-                }
+            val highestVersion =
+                when (updateType) {
+                    Version.Minor -> {
+                        filteredVersions.filter { it.major == current.major }
+                    }
 
-                Version.Patch -> {
-                    filteredVersions.filter { it.major == current.major && it.minor == current.minor }
-                }
-            }.max()
+                    Version.Major -> {
+                        filteredVersions
+                    }
+
+                    Version.Patch -> {
+                        filteredVersions.filter {
+                            it.major == current.major && it.minor == current.minor
+                        }
+                    }
+                }.max()
 
             return versions.find { it.versionNumber == highestVersion.toString() }
         }

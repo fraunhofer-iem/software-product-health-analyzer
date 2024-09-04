@@ -9,7 +9,6 @@
 
 package de.fraunhofer.iem.kpiCalculator.model.kpi
 
-
 enum class KpiId {
     // Raw Value KPIs
     CHECKED_IN_BINARIES,
@@ -35,5 +34,5 @@ enum class KpiId {
     DOCUMENTATION,
 
     // ROOT
-    ROOT
+    ROOT,
 }

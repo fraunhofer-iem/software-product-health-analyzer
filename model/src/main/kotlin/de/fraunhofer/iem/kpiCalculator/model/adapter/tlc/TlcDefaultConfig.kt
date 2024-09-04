@@ -13,34 +13,10 @@ object TlcDefaultConfig {
     fun get(): TlcConfig {
         return TlcConfig(
             listOf(
-                RangeThreshold(
-                    score = 100,
-                    Range(
-                        from = 0,
-                        to = 60
-                    )
-                ),
-                RangeThreshold(
-                    score = 75,
-                    Range(
-                        from = 61,
-                        to = 120
-                    )
-                ),
-                RangeThreshold(
-                    score = 50,
-                    Range(
-                        from = 121,
-                        to = 180
-                    )
-                ),
-                RangeThreshold(
-                    score = 25,
-                    Range(
-                        from = 181,
-                        to = 360
-                    )
-                ),
+                RangeThreshold(score = 100, Range(from = 0, to = 60)),
+                RangeThreshold(score = 75, Range(from = 61, to = 120)),
+                RangeThreshold(score = 50, Range(from = 121, to = 180)),
+                RangeThreshold(score = 25, Range(from = 181, to = 360)),
             )
         )
     }

@@ -18,26 +18,23 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 object CveAdapter {
 
     fun transformDataToKpi(data: Collection<VulnerabilityDto>): Collection<AdapterResult> {
-        return data
-            .map {
-                return@map if (isValid(it)) {
-                    AdapterResult.Success.Kpi(
-                        RawValueKpi(
-                            kind = KpiId.VULNERABILITY_SCORE,
-                            score = (it.severity * 10).toInt()
-                        )
+        return data.map {
+            return@map if (isValid(it)) {
+                AdapterResult.Success.Kpi(
+                    RawValueKpi(
+                        kind = KpiId.VULNERABILITY_SCORE,
+                        score = (it.severity * 10).toInt(),
                     )
-                } else {
-                    AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)
-                }
+                )
+            } else {
+                AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)
             }
+        }
     }
 
     private fun isValid(data: VulnerabilityDto): Boolean {
-        return (
-                data.severity in 0.0..10.0 &&
-                        data.packageName.isNotBlank() &&
-                        data.cveIdentifier.isNotBlank()
-                )
+        return (data.severity in 0.0..10.0 &&
+            data.packageName.isNotBlank() &&
+            data.cveIdentifier.isNotBlank())
     }
 }

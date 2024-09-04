@@ -12,13 +12,16 @@ package de.fraunhofer.iem.kpiCalculator.adapter
 import de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc.TechLagResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 
-
-enum class ErrorType { DATA_VALIDATION_ERROR }
+enum class ErrorType {
+    DATA_VALIDATION_ERROR
+}
 
 sealed class AdapterResult {
     sealed class Success(val rawValueKpi: RawValueKpi) : AdapterResult() {
         class Kpi(rawValueKpi: RawValueKpi) : Success(rawValueKpi)
-        class KpiTechLag(rawValueKpi: RawValueKpi, val techLag: TechLagResult.Success) : Success(rawValueKpi)
+
+        class KpiTechLag(rawValueKpi: RawValueKpi, val techLag: TechLagResult.Success) :
+            Success(rawValueKpi)
     }
 
     data class Error(val type: ErrorType) : AdapterResult()

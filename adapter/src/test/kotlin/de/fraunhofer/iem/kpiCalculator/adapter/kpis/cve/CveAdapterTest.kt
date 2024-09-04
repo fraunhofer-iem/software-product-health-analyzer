@@ -12,8 +12,8 @@ package de.fraunhofer.iem.kpiCalculator.adapter.kpis.cve
 import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.adapter.ErrorType
 import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.VulnerabilityDto
-import org.junit.jupiter.api.Test
 import kotlin.test.fail
+import org.junit.jupiter.api.Test
 
 class CveAdapterTest {
 
@@ -21,15 +21,16 @@ class CveAdapterTest {
     fun basicVulnerabilityToKpiTransformation() {
         val adapter = CveAdapter
         // valid input
-        val validKpi = adapter.transformDataToKpi(
-            listOf(
-                VulnerabilityDto(
-                    cveIdentifier = "not blank",
-                    packageName = "not blank",
-                    severity = 0.1
+        val validKpi =
+            adapter.transformDataToKpi(
+                listOf(
+                    VulnerabilityDto(
+                        cveIdentifier = "not blank",
+                        packageName = "not blank",
+                        severity = 0.1,
+                    )
                 )
             )
-        )
         when (val kpi = validKpi.first()) {
             is AdapterResult.Success -> {
                 assert(kpi.rawValueKpi.score in (0..100))
@@ -41,30 +42,23 @@ class CveAdapterTest {
         }
 
         // invalid input
-        val invalidKpis = CveAdapter.transformDataToKpi(
-            listOf(
-                VulnerabilityDto(
-                    cveIdentifier = "not blank",
-                    packageName = "",
-                    severity = 0.1
-                ),
-                VulnerabilityDto(
-                    cveIdentifier = "",
-                    packageName = "not blank",
-                    severity = 0.1
-                ),
-                VulnerabilityDto(
-                    cveIdentifier = "not blank",
-                    packageName = "not blank",
-                    severity = -0.1
-                ),
-                VulnerabilityDto(
-                    cveIdentifier = "not blank",
-                    packageName = "not blank",
-                    severity = 10.1
+        val invalidKpis =
+            CveAdapter.transformDataToKpi(
+                listOf(
+                    VulnerabilityDto(cveIdentifier = "not blank", packageName = "", severity = 0.1),
+                    VulnerabilityDto(cveIdentifier = "", packageName = "not blank", severity = 0.1),
+                    VulnerabilityDto(
+                        cveIdentifier = "not blank",
+                        packageName = "not blank",
+                        severity = -0.1,
+                    ),
+                    VulnerabilityDto(
+                        cveIdentifier = "not blank",
+                        packageName = "not blank",
+                        severity = 10.1,
+                    ),
                 )
             )
-        )
 
         invalidKpis.forEach { invalidKpi ->
             when (invalidKpi) {

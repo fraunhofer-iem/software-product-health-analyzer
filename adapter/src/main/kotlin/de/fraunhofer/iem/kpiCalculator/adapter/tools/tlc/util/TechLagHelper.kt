@@ -20,56 +20,67 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 internal object TechLagHelper {
-    fun getTechLagForGraph(graph: Graph, artifacts: List<Artifact>, targetVersion: Version): TechLagResult {
+    fun getTechLagForGraph(
+        graph: Graph,
+        artifacts: List<Artifact>,
+        targetVersion: Version,
+    ): TechLagResult {
         if (graph.directDependencies.isEmpty()) {
-            return TechLagResult.Empty(
-                reason = "Direct dependencies are empty."
-            )
+            return TechLagResult.Empty(reason = "Direct dependencies are empty.")
         }
 
-        val sumOfTechLag = graph.directDependencies.sumOf { directDependency ->
-            val techLagResult = getTechLagForNode(directDependency, artifacts, targetVersion)
-            if (techLagResult is TechLagResult.Success) {
-                techLagResult.libyear
-            } else {
-                logger.warn { "Tech lag result is $techLagResult" }
-                0
+        val sumOfTechLag =
+            graph.directDependencies.sumOf { directDependency ->
+                val techLagResult = getTechLagForNode(directDependency, artifacts, targetVersion)
+                if (techLagResult is TechLagResult.Success) {
+                    techLagResult.libyear
+                } else {
+                    logger.warn { "Tech lag result is $techLagResult" }
+                    0
+                }
             }
-        }
 
         return TechLagResult.Success(libyear = sumOfTechLag)
     }
 
-    private fun getTechLagForNode(node: Node, artifacts: List<Artifact>, targetUpdateType: Version): TechLagResult {
+    private fun getTechLagForNode(
+        node: Node,
+        artifacts: List<Artifact>,
+        targetUpdateType: Version,
+    ): TechLagResult {
 
-        val childSum = node.children.sumOf {
-            val techLag = getTechLagForNode(it, artifacts, targetUpdateType)
-            if (techLag is TechLagResult.Success) {
-                techLag.libyear
-            } else {
-                0
+        val childSum =
+            node.children.sumOf {
+                val techLag = getTechLagForNode(it, artifacts, targetUpdateType)
+                if (techLag is TechLagResult.Success) {
+                    techLag.libyear
+                } else {
+                    0
+                }
             }
-        }
 
         val artifact = artifacts[node.artifactIdx]
 
-        val targetVersion = getTargetVersion(
-            usedVersion = node.usedVersion,
-            updateType = targetUpdateType,
-            versions = artifact.versions
-        )
+        val targetVersion =
+            getTargetVersion(
+                usedVersion = node.usedVersion,
+                updateType = targetUpdateType,
+                versions = artifact.versions,
+            )
         val usedVersion = artifact.versions.find { it.versionNumber == node.usedVersion }
 
         if (usedVersion == null || targetVersion == null) {
             return TechLagResult.Empty(
-                reason = "Result incomplete. Current version: $usedVersion, target version: $targetVersion."
+                reason =
+                    "Result incomplete. Current version: $usedVersion, target version: $targetVersion."
             )
         }
 
-        val diffInDays = TimeHelper.getDifferenceInDays(
-            currentVersion = usedVersion.releaseDate,
-            newestVersion = targetVersion.releaseDate
-        )
+        val diffInDays =
+            TimeHelper.getDifferenceInDays(
+                currentVersion = usedVersion.releaseDate,
+                newestVersion = targetVersion.releaseDate,
+            )
 
         return TechLagResult.Success(libyear = diffInDays + childSum)
     }

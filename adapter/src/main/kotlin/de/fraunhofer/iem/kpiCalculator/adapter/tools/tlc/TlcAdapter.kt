@@ -19,13 +19,14 @@ import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDefaultConfig
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDto
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
+import java.io.InputStream
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import java.io.InputStream
 
 sealed class TechLagResult {
     data class Success(val libyear: Long) : TechLagResult()
+
     data class Empty(val reason: String) : TechLagResult()
 }
 
@@ -43,42 +44,34 @@ object TlcAdapter {
 
     fun transformDataToKpi(
         data: Collection<TlcDto>,
-        config: TlcConfig = TlcDefaultConfig.get()
+        config: TlcConfig = TlcDefaultConfig.get(),
     ): Collection<AdapterResult> {
 
         return data.flatMap { tlcDto ->
             tlcDto.projectDtos.flatMap {
                 val project = Project.from(it)
                 project.graph.map { (scope, graph) ->
-
                     val techLag =
                         getTechLagForGraph(
                             graph = graph,
                             artifacts = project.artifacts,
-                            targetVersion = Version.Major
+                            targetVersion = Version.Major,
                         )
 
                     if (techLag is TechLagResult.Success) {
 
                         val libyearScore = getLibyearScore(techLag.libyear, config)
 
-                        val rawValueKpi = if (
-                            isProductionScope(ecosystem = project.ecosystem, scope = scope)
-                        ) {
-                            RawValueKpi(
-                                score = libyearScore,
-                                kind = KpiId.LIB_DAYS_PROD
-                            )
-                        } else {
-                            RawValueKpi(
-                                score = libyearScore,
-                                kind = KpiId.LIB_DAYS_DEV
-                            )
-                        }
+                        val rawValueKpi =
+                            if (isProductionScope(ecosystem = project.ecosystem, scope = scope)) {
+                                RawValueKpi(score = libyearScore, kind = KpiId.LIB_DAYS_PROD)
+                            } else {
+                                RawValueKpi(score = libyearScore, kind = KpiId.LIB_DAYS_DEV)
+                            }
 
                         return@map AdapterResult.Success.KpiTechLag(
                             rawValueKpi = rawValueKpi,
-                            techLag = techLag
+                            techLag = techLag,
                         )
                     }
 

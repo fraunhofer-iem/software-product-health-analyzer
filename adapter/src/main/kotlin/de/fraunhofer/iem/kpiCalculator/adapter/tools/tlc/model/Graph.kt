@@ -13,16 +13,14 @@ import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.DependencyGraphDto
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.DependencyNodeDto
 
 internal enum class Version {
-    Patch, Minor, Major
+    Patch,
+    Minor,
+    Major,
 }
 
-internal class Graph(
-    val directDependencies: List<Node>,
-) {
+internal class Graph(val directDependencies: List<Node>) {
 
-    /**
-     * @return the number of nodes in the graph
-     */
+    /** @return the number of nodes in the graph */
     fun size(): Int {
         return directDependencies.sumOf { 1 + it.size() }
     }
@@ -30,7 +28,8 @@ internal class Graph(
     companion object {
         fun from(dependencyGraphDto: DependencyGraphDto): Graph {
 
-            val nodeToChild: MutableMap<DependencyNodeDto, MutableList<DependencyNodeDto>> = mutableMapOf()
+            val nodeToChild: MutableMap<DependencyNodeDto, MutableList<DependencyNodeDto>> =
+                mutableMapOf()
 
             dependencyGraphDto.edges.forEach { edge ->
                 val fromNode = dependencyGraphDto.nodes[edge.from]
@@ -43,23 +42,25 @@ internal class Graph(
                 nodeToChild[fromNode]!!.add(targetNode)
             }
 
-            fun transformNode(node: DependencyNodeDto, visited: MutableSet<DependencyNodeDto>): Node {
+            fun transformNode(
+                node: DependencyNodeDto,
+                visited: MutableSet<DependencyNodeDto>,
+            ): Node {
 
                 if (node in visited) {
-                    //NB: every cycle in a graph adds this artificial node with the correct
+                    // NB: every cycle in a graph adds this artificial node with the correct
                     // artifact id and used version but without its children.
                     return Node(
                         children = listOf(),
                         artifactIdx = node.artifactIdx,
-                        version = node.usedVersion
+                        version = node.usedVersion,
                     )
                 }
 
                 visited.add(node)
 
-                val children = nodeToChild[node]?.map { child ->
-                    transformNode(child, visited)
-                } ?: listOf()
+                val children =
+                    nodeToChild[node]?.map { child -> transformNode(child, visited) } ?: listOf()
 
                 return Node(
                     children = children,
@@ -69,10 +70,11 @@ internal class Graph(
             }
 
             return Graph(
-                directDependencies = dependencyGraphDto.directDependencyIndices.map { idx ->
-                    val directDependency = dependencyGraphDto.nodes[idx]
-                    transformNode(directDependency, mutableSetOf())
-                }
+                directDependencies =
+                    dependencyGraphDto.directDependencyIndices.map { idx ->
+                        val directDependency = dependencyGraphDto.nodes[idx]
+                        transformNode(directDependency, mutableSetOf())
+                    }
             )
         }
     }
@@ -82,7 +84,7 @@ class Node(
     val children: List<Node> = listOf(),
     val artifactIdx: Int,
     version: String,
-    val usedVersion: String = ArtifactVersion.validateAndHarmonizeVersionString(version)
+    val usedVersion: String = ArtifactVersion.validateAndHarmonizeVersionString(version),
 ) {
     fun size(): Int {
         return children.size + children.sumOf { it.size() }
