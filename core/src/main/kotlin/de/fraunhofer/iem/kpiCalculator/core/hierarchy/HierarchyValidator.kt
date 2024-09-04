@@ -30,7 +30,6 @@ object HierarchyValidator {
      *
      * @param kpiHierarchy hierarchy to validate.
      * @param strict validation mode. Some errors in strict may only be warnings in relaxed mode.
-     *
      * @return if the hierarchy is valid.
      */
     fun isValid(kpiHierarchy: KpiHierarchy, strict: Boolean = false): Boolean {
@@ -47,7 +46,6 @@ object HierarchyValidator {
             }
         }
 
-
         return validateStrategies(root, strict)
     }
 
@@ -58,26 +56,31 @@ object HierarchyValidator {
             if (edgeWeightSum != 1.0) {
                 logger.error {
                     "Incorrect edge weights. Should sum up to 1.0 " +
-                            "actual sum of weights $edgeWeightSum."
+                        "actual sum of weights $edgeWeightSum."
                 }
                 return false
             }
         }
 
-        val isValid = when (node.kpiStrategyId) {
-            KpiStrategyId.RAW_VALUE_STRATEGY -> {
-                if (node.edges.isNotEmpty()) {
-                    logger.error { "Raw Value nodes must not have children as they expect only tool results." }
-                    false
-                } else {
-                    true
+        val isValid =
+            when (node.kpiStrategyId) {
+                KpiStrategyId.RAW_VALUE_STRATEGY -> {
+                    if (node.edges.isNotEmpty()) {
+                        logger.error {
+                            "Raw Value nodes must not have children as they expect only tool results."
+                        }
+                        false
+                    } else {
+                        true
+                    }
                 }
-            }
 
-            KpiStrategyId.AGGREGATION_STRATEGY -> AggregationKPICalculationStrategy.isValid(node, strict)
-            KpiStrategyId.MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy.isValid(node, strict)
-            KpiStrategyId.RATIO_STRATEGY -> RatioKPICalculationStrategy.isValid(node, strict)
-        }
+                KpiStrategyId.AGGREGATION_STRATEGY ->
+                    AggregationKPICalculationStrategy.isValid(node, strict)
+                KpiStrategyId.MAXIMUM_STRATEGY ->
+                    MaximumKPICalculationStrategy.isValid(node, strict)
+                KpiStrategyId.RATIO_STRATEGY -> RatioKPICalculationStrategy.isValid(node, strict)
+            }
 
         if (!isValid) {
             return false

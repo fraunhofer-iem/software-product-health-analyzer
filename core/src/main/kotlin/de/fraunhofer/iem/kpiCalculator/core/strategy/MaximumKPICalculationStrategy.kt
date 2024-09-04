@@ -25,35 +25,29 @@ internal object MaximumKPICalculationStrategy : BaseKpiCalculationStrategy() {
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
         additionalWeight: Double,
-        hasIncompleteResults: Boolean
+        hasIncompleteResults: Boolean,
     ): KpiCalculationResult {
 
-        val max =
-            if (successScores.isEmpty())
-                0
-            else
-                successScores.maxOf { it.first.score }
+        val max = if (successScores.isEmpty()) 0 else successScores.maxOf { it.first.score }
 
         if (hasIncompleteResults) {
             return KpiCalculationResult.Incomplete(
                 score = max,
                 reason = "Missing ${failed.size} elements.",
-                additionalWeights = additionalWeight
+                additionalWeights = additionalWeight,
             )
         }
 
         return KpiCalculationResult.Success(score = max)
     }
 
-    /**
-     * There is no validity requirement for this strategy.
-     */
+    /** There is no validity requirement for this strategy. */
     override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
 
         if (node.edges.size == 1) {
             logger.warn {
                 "Maximum KPI calculation strategy for node $node is planned " +
-                        "for a single child."
+                    "for a single child."
             }
         }
 

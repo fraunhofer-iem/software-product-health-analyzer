@@ -19,18 +19,17 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiResultEdge
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiResultNode
 
-
 internal class KpiHierarchyNode(
     val kpiId: KpiId,
     val kpiStrategyId: KpiStrategyId,
-    val parent: KpiHierarchyNode?
+    val parent: KpiHierarchyNode?,
 ) {
 
     private var result: KpiCalculationResult = KpiCalculationResult.Empty()
+
     fun setResult(result: Int) {
         this.result = KpiCalculationResult.Success(result)
     }
-
 
     private val _hierarchyEdges: MutableList<KpiHierarchyEdge> = mutableListOf()
     val hierarchyEdges: List<KpiHierarchyEdge>
@@ -49,54 +48,53 @@ internal class KpiHierarchyNode(
     }
 
     fun calculateKpi(): KpiCalculationResult {
-        val strategyData = hierarchyEdges.map {
-            Pair(it.to.result, it.actualWeight)
-        }
-        result = when (kpiStrategyId) {
-            KpiStrategyId.RAW_VALUE_STRATEGY ->
-                result
+        val strategyData = hierarchyEdges.map { Pair(it.to.result, it.actualWeight) }
+        result =
+            when (kpiStrategyId) {
+                KpiStrategyId.RAW_VALUE_STRATEGY -> result
 
-            KpiStrategyId.RATIO_STRATEGY ->
-                RatioKPICalculationStrategy.calculateKpi(strategyData)
+                KpiStrategyId.RATIO_STRATEGY ->
+                    RatioKPICalculationStrategy.calculateKpi(strategyData)
 
-            KpiStrategyId.AGGREGATION_STRATEGY ->
-                AggregationKPICalculationStrategy.calculateKpi(strategyData)
+                KpiStrategyId.AGGREGATION_STRATEGY ->
+                    AggregationKPICalculationStrategy.calculateKpi(strategyData)
 
-            KpiStrategyId.MAXIMUM_STRATEGY ->
-                MaximumKPICalculationStrategy.calculateKpi(strategyData)
-        }
+                KpiStrategyId.MAXIMUM_STRATEGY ->
+                    MaximumKPICalculationStrategy.calculateKpi(strategyData)
+            }
         updateEdgeWeights(result)
         return result
     }
 
     private fun updateEdgeWeights(result: KpiCalculationResult) {
-        val updatedEdges = hierarchyEdges.map { edge ->
+        val updatedEdges =
+            hierarchyEdges.map { edge ->
+                if (result is KpiCalculationResult.Success) {
+                    return@map edge
+                }
 
-            if (result is KpiCalculationResult.Success) {
-                return@map edge
-            }
+                val targetResult = edge.to.result
 
-            val targetResult = edge.to.result
+                if (
+                    result is KpiCalculationResult.Incomplete &&
+                        (targetResult !is KpiCalculationResult.Empty &&
+                            targetResult !is KpiCalculationResult.Error)
+                ) {
+                    return@map KpiHierarchyEdge(
+                        from = this,
+                        to = edge.to,
+                        plannedWeight = edge.plannedWeight,
+                        actualWeight = edge.plannedWeight + result.additionalWeights,
+                    )
+                }
 
-            if (result is KpiCalculationResult.Incomplete
-                && (targetResult !is KpiCalculationResult.Empty
-                        && targetResult !is KpiCalculationResult.Error)
-            ) {
                 return@map KpiHierarchyEdge(
                     from = this,
                     to = edge.to,
                     plannedWeight = edge.plannedWeight,
-                    actualWeight = edge.plannedWeight + result.additionalWeights
+                    actualWeight = 0.0,
                 )
             }
-
-            return@map KpiHierarchyEdge(
-                from = this,
-                to = edge.to,
-                plannedWeight = edge.plannedWeight,
-                actualWeight = 0.0
-            )
-        }
 
         _hierarchyEdges.clear()
         _hierarchyEdges.addAll(updatedEdges)
@@ -108,13 +106,14 @@ internal class KpiHierarchyNode(
                 kpiId = node.kpiId,
                 strategyType = node.kpiStrategyId,
                 kpiResult = node.result,
-                children = node.hierarchyEdges.map {
-                    KpiResultEdge(
-                        target = to(it.to),
-                        plannedWeight = it.plannedWeight,
-                        actualWeight = it.actualWeight
-                    )
-                }
+                children =
+                    node.hierarchyEdges.map {
+                        KpiResultEdge(
+                            target = to(it.to),
+                            plannedWeight = it.plannedWeight,
+                            actualWeight = it.actualWeight,
+                        )
+                    },
             )
         }
 
@@ -125,14 +124,19 @@ internal class KpiHierarchyNode(
         private fun from(node: KpiNode, parent: KpiHierarchyNode? = null): KpiHierarchyNode {
 
             val calcNode =
-                KpiHierarchyNode(kpiId = node.kpiId, parent = parent, kpiStrategyId = node.kpiStrategyId)
-            val children = node.edges.map { child ->
-                KpiHierarchyEdge(
-                    to = from(child.target, calcNode),
-                    from = calcNode,
-                    plannedWeight = child.weight
+                KpiHierarchyNode(
+                    kpiId = node.kpiId,
+                    parent = parent,
+                    kpiStrategyId = node.kpiStrategyId,
                 )
-            }
+            val children =
+                node.edges.map { child ->
+                    KpiHierarchyEdge(
+                        to = from(child.target, calcNode),
+                        from = calcNode,
+                        plannedWeight = child.weight,
+                    )
+                }
             calcNode._hierarchyEdges.addAll(children)
 
             return calcNode

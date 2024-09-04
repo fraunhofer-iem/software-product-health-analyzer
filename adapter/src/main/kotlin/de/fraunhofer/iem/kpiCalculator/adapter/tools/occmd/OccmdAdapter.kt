@@ -25,39 +25,30 @@ object OccmdAdapter {
                     AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.CHECKED_IN_BINARIES,
-                            score = (it.score * 100).toInt()
+                            score = (it.score * 100).toInt(),
                         )
                     )
 
                 Checks.SastUsageBasic ->
                     AdapterResult.Success.Kpi(
-                        RawValueKpi(
-                            kind = KpiId.SAST_USAGE,
-                            score = (it.score * 100).toInt()
-                        )
+                        RawValueKpi(kind = KpiId.SAST_USAGE, score = (it.score * 100).toInt())
                     )
 
                 Checks.Secrets ->
                     AdapterResult.Success.Kpi(
-                        RawValueKpi(
-                            kind = KpiId.SECRETS,
-                            score = (it.score * 100).toInt()
-                        )
+                        RawValueKpi(kind = KpiId.SECRETS, score = (it.score * 100).toInt())
                     )
 
                 Checks.CommentsInCode ->
                     AdapterResult.Success.Kpi(
-                        RawValueKpi(
-                            kind = KpiId.COMMENTS_IN_CODE,
-                            score = (it.score * 100).toInt()
-                        )
+                        RawValueKpi(kind = KpiId.COMMENTS_IN_CODE, score = (it.score * 100).toInt())
                     )
 
                 Checks.DocumentationInfrastructure ->
                     AdapterResult.Success.Kpi(
                         RawValueKpi(
                             kind = KpiId.DOCUMENTATION_INFRASTRUCTURE,
-                            score = (it.score * 100).toInt()
+                            score = (it.score * 100).toInt(),
                         )
                     )
 

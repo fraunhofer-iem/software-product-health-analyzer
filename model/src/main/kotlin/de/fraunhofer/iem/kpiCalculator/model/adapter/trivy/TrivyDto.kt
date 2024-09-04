@@ -13,35 +13,21 @@ import de.fraunhofer.iem.kpiCalculator.model.adapter.vulnerability.Vulnerability
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
-data class TrivyDto(val Vulnerabilities: Collection<VulnerabilityDto>)
+data class TrivyDto(val vulnerabilities: Collection<VulnerabilityDto>)
 
-@Serializable
-data class TrivyDtoV1(
-    val Vulnerabilities: List<TrivyVulnerabilityDto> = listOf()
-)
+@Serializable data class TrivyDtoV1(val vulnerabilities: List<TrivyVulnerabilityDto> = listOf())
 
-@Serializable
-data class TrivyDtoV2(
-    val Results: List<Result> = listOf(),
-    val SchemaVersion: Int
-)
+@Serializable data class TrivyDtoV2(val results: List<Result> = listOf(), val schemaVersion: Int)
 
-@Serializable
-data class Result(
-    val Vulnerabilities: List<TrivyVulnerabilityDto> = listOf()
-)
+@Serializable data class Result(val vulnerabilities: List<TrivyVulnerabilityDto> = listOf())
 
 @Serializable
 data class TrivyVulnerabilityDto(
     // NB: Because the names of its inner elements are not fixed, this needs to be a JsonObject.
     // This way we can iterate over those when required. Their type is always CVSSData.
-    val CVSS: JsonObject?,
-    val VulnerabilityID: String,
-    val PkgID: String
+    val cvss: JsonObject?,
+    val vulnerabilityID: String,
+    val pkgID: String,
 )
 
-@Serializable
-data class CVSSData(
-    val V2Score: Double?,
-    val V3Score: Double?,
-)
+@Serializable data class CVSSData(val v2Score: Double?, val v3Score: Double?)

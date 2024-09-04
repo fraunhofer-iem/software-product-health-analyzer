@@ -22,49 +22,39 @@ internal object AggregationKPICalculationStrategy : BaseKpiCalculationStrategy()
         get() = KpiStrategyId.AGGREGATION_STRATEGY
 
     /**
-     * This function calculates the aggregate sum of all given children.
-     * If a child is empty it is removed from the calculation and its
-     * corresponding edge weight is distributed evenly between the
-     * remaining children.
-     * The method returns the KPIs value as well as the updated
+     * This function calculates the aggregate sum of all given children. If a child is empty it is
+     * removed from the calculation and its corresponding edge weight is distributed evenly between
+     * the remaining children. The method returns the KPIs value as well as the updated
      * KPIHierarchyEdgeDtos with the actual used weight.
      */
     override fun internalCalculateKpi(
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
         additionalWeight: Double,
-        hasIncompleteResults: Boolean
+        hasIncompleteResults: Boolean,
     ): KpiCalculationResult {
 
         val aggregation =
-            if (successScores.isEmpty())
-                0
-            else
-                successScores.sumOf {
-                    (it.first).score * (it.second + additionalWeight)
-                }.toInt()
-
+            if (successScores.isEmpty()) 0
+            else successScores.sumOf { (it.first).score * (it.second + additionalWeight) }.toInt()
 
         if (hasIncompleteResults) {
             return KpiCalculationResult.Incomplete(
                 score = aggregation,
                 reason = "There were ${failed.size} elements missing during aggregation.",
-                additionalWeights = additionalWeight
+                additionalWeights = additionalWeight,
             )
         }
 
         return KpiCalculationResult.Success(score = aggregation)
     }
 
-    /**
-     * There is no validity requirement for this strategy.
-     */
+    /** There is no validity requirement for this strategy. */
     override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
 
         if (node.edges.size == 1) {
             logger.warn {
-                "Maximum KPI calculation strategy for node $node is planned" +
-                        "for a single child."
+                "Maximum KPI calculation strategy for node $node is planned" + "for a single child."
             }
         }
 

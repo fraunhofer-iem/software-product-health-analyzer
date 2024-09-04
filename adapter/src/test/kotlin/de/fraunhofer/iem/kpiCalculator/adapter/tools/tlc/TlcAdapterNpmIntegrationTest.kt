@@ -11,14 +11,13 @@ package de.fraunhofer.iem.kpiCalculator.adapter.tools.tlc
 
 import de.fraunhofer.iem.kpiCalculator.adapter.AdapterResult
 import de.fraunhofer.iem.kpiCalculator.model.adapter.tlc.TlcDefaultConfig
-import org.junit.jupiter.api.assertDoesNotThrow
 import java.nio.file.Files
 import kotlin.io.path.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.jupiter.api.assertDoesNotThrow
 
 class TlcAdapterNpmIntegrationTest {
-
 
     @Test
     fun npmTransformationTest() {
@@ -95,11 +94,11 @@ class TlcAdapterNpmIntegrationTest {
             //              "isDefault": false
             //            }
             // artifact [16] color
-            //{
+            // {
             //   "versionNumber": "0.3.2",
             //  "releaseDate": 1673369513000,
             // "isDefault": true
-            //}
+            // }
             val prodTechLag = kpis.first() as AdapterResult.Success.KpiTechLag
             assertEquals(2297, prodTechLag.techLag.libyear)
 

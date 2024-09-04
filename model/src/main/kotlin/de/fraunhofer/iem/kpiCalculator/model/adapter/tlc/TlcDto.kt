@@ -22,7 +22,7 @@ data class TlcDto(
 data class RepositoryInfoDto(
     val url: String,
     val revision: String,
-    val projects: List<ProjectInfoDto>
+    val projects: List<ProjectInfoDto>,
 )
 
 @Serializable
@@ -30,11 +30,7 @@ data class ProjectInfoDto(
     val type: String,
     val namespace: String,
     val name: String,
-    val version: String
+    val version: String,
 )
 
-@Serializable
-data class EnvironmentInfoDto(
-    val ortVersion: String,
-    val javaVersion: String,
-)
+@Serializable data class EnvironmentInfoDto(val ortVersion: String, val javaVersion: String)

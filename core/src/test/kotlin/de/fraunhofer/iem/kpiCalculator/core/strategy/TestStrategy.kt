@@ -14,12 +14,13 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
 internal class TestStrategy(
-    val callback: (
-        successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-        failed: List<Pair<KpiCalculationResult, Double>>,
-        additionalWeight: Double,
-        hasIncompleteResults: Boolean
-    ) -> Unit
+    val callback:
+        (
+            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
+            failed: List<Pair<KpiCalculationResult, Double>>,
+            additionalWeight: Double,
+            hasIncompleteResults: Boolean,
+        ) -> Unit
 ) : BaseKpiCalculationStrategy() {
     override val kpiStrategyId: KpiStrategyId
         get() = TODO("Not yet implemented")
@@ -28,7 +29,7 @@ internal class TestStrategy(
         successScores: List<Pair<KpiCalculationResult.Success, Double>>,
         failed: List<Pair<KpiCalculationResult, Double>>,
         additionalWeight: Double,
-        hasIncompleteResults: Boolean
+        hasIncompleteResults: Boolean,
     ): KpiCalculationResult {
         callback(successScores, failed, additionalWeight, hasIncompleteResults)
         return KpiCalculationResult.Empty()
