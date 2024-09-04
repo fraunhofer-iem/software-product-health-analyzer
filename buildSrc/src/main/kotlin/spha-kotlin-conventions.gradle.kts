@@ -36,8 +36,12 @@ kotlin {
     }
 }
 
-tasks.test {
-    useJUnitPlatform()
+testing {
+    suites {
+        withType<JvmTestSuite>().configureEach {
+            useJUnitJupiter()
+        }
+    }
 }
 
 dependencies {
