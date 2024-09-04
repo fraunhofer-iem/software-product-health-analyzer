@@ -86,6 +86,7 @@ fabric.properties
 
 .idea/*
 !.idea/copyright
+!.idea/ktfmt.xml
 !.idea/codeStyles
 !.idea/runConfigurations
 
