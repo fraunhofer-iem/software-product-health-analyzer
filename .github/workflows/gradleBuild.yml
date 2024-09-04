@@ -17,3 +17,12 @@ jobs:
 
       - name: Execute tests
         run: ./gradlew test
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: |
+            core/build/test-results/test/TEST-*.xml
+            adapter/build/test-results/test/TEST-*.xml
+            model/build/test-results/test/TEST-*.xml
+        if: always()
