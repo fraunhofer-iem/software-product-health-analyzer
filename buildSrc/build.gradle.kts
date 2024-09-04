@@ -12,9 +12,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 private val Project.libs: LibrariesForLibs
     get() = extensions.getByType()
 
-plugins {
-    `kotlin-dsl`
-}
+plugins { `kotlin-dsl` }
 
 repositories {
     // Allow to resolve external plugins from precompiled script plugins.
