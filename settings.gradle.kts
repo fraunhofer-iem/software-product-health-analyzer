@@ -7,7 +7,7 @@
  * License-Filename: LICENSE
  */
 
-rootProject.name = "kpi-calculator"
+rootProject.name = "software-product-health-analyzer"
 
 include("core")
 include("model")
@@ -21,5 +21,5 @@ pluginManagement {
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.8.0")
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("0.8.0")
 }
