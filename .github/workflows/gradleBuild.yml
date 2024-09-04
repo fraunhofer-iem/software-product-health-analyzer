@@ -14,10 +14,14 @@ jobs:
 
       - name: Execute Gradle build
         run: ./gradlew build
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "**/test-results/**/TEST-*.xml"
+        if: always()
 
       - name: Execute tests
         run: ./gradlew test
-
       - name: Test Summary
         uses: test-summary/action@v2
         with:
