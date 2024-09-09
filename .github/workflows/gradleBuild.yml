@@ -31,7 +31,11 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@cae93f61ea553f8babe9d8c1e365c1ce5cece922
         with:
-          paths: "**/reports/jacoco/**/jacocoTestReport.xml"
+          paths: |
+            "**/adapter/**/reports/jacoco/**/jacocoTestReport.xml"
+            "**/core/**/reports/jacoco/**/jacocoTestReport.xml"
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: '80'
           min-coverage-changed-files: '80'
+          title: Code Coverage
+          update-comment: true
