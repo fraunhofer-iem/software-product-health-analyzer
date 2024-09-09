@@ -74,7 +74,7 @@ class TrivyAdapterTest {
                 VulnerabilityDto("CVE-2", "B", 2.0),
                 VulnerabilityDto("CVE-3", "C", 1.3),
             )
-        TrivyAdapter.transformDataToKpi(listOf(TrivyDto(vulns)))
+        TrivyAdapter.transformDataToKpi(TrivyDto(vulns))
         verify { CveAdapter.transformDataToKpi(vulns) }
     }
 }

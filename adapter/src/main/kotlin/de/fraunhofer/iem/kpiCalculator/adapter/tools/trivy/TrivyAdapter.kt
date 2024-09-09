@@ -28,8 +28,8 @@ object TrivyAdapter {
         explicitNulls = false
     }
 
-    fun transformDataToKpi(data: Collection<TrivyDto>): Collection<AdapterResult> {
-        return CveAdapter.transformDataToKpi(data.flatMap { it.vulnerabilities })
+    fun transformDataToKpi(data: TrivyDto): Collection<AdapterResult> {
+        return CveAdapter.transformDataToKpi(data.vulnerabilities)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -45,7 +45,7 @@ object TrivyAdapter {
         if (schemaVersion == 2) return parseV2(json)
 
         throw UnsupportedOperationException(
-            "Trivy results for schema version '$schemaVersion' are currently not supported."
+                "Trivy results for schema version '$schemaVersion' are currently not supported.",
         )
     }
 
