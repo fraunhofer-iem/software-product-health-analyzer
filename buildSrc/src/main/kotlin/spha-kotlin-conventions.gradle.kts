@@ -51,6 +51,13 @@ configurations.all {
 
 if (project != rootProject) version = rootProject.version
 
+tasks.withType<Test> { finalizedBy(tasks.jacocoTestReport) }
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports { xml.required = true }
+}
+
 tasks.register("jacocoReport") {
     description = "Generates code coverage reports for all test tasks."
     group = "Reporting"
