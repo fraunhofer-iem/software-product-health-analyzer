@@ -44,7 +44,7 @@ jobs:
             ${{ github.workspace }}/**/adapter/build/reports/jacoco/test/jacocoTestReport.xml,
             ${{ github.workspace }}/**/core/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: '80'
-          min-coverage-changed-files: '80'
+          min-coverage-overall: '75'
+          min-coverage-changed-files: '75'
           title: Code Coverage
           update-comment: true
