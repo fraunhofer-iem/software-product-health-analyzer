@@ -35,8 +35,8 @@ internal class KpiHierarchyNode(
     val hierarchyEdges: List<KpiHierarchyEdge>
         get() = _hierarchyEdges
 
-    fun addChild(node: KpiHierarchyNode, weight: Double) {
-        _hierarchyEdges.add(KpiHierarchyEdge(to = node, from = this, plannedWeight = weight))
+    fun addChild(node: KpiHierarchyNode, weight: Double): Boolean {
+        return _hierarchyEdges.add(KpiHierarchyEdge(to = node, from = this, plannedWeight = weight))
     }
 
     fun removeChild(node: KpiHierarchyNode) {
@@ -45,6 +45,25 @@ internal class KpiHierarchyNode(
 
     fun getWeight(node: KpiHierarchyNode): Double? {
         return hierarchyEdges.find { it.to == node }?.actualWeight
+    }
+
+    fun updateWeight(node: KpiHierarchyNode, newWeight: Double): Boolean {
+        val oldEdge = hierarchyEdges.find { it.to == node }
+
+        if (oldEdge == null) {
+            return false
+        }
+
+        val newEdge =
+            KpiHierarchyEdge(
+                from = oldEdge.from,
+                to = oldEdge.to,
+                plannedWeight = oldEdge.plannedWeight,
+                actualWeight = newWeight,
+            )
+
+        _hierarchyEdges.remove(oldEdge)
+        return _hierarchyEdges.add(newEdge)
     }
 
     fun calculateKpi(): KpiCalculationResult {
