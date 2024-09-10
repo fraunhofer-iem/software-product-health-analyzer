@@ -9,6 +9,7 @@
 
 package de.fraunhofer.iem.kpiCalculator.core.hierarchy
 
+import de.fraunhofer.iem.kpiCalculator.core.randomNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiEdge
@@ -16,18 +17,6 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiHierarchy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
-
-fun randomNode(edges: List<KpiEdge> = listOf()): KpiNode {
-
-    val rndIds = (0..<KpiId.entries.size).random()
-    val rndStrategies = (0..<KpiStrategyId.entries.size).random()
-
-    return KpiNode(
-        kpiId = KpiId.entries[rndIds],
-        kpiStrategyId = KpiStrategyId.entries[rndStrategies],
-        edges = edges,
-    )
-}
 
 class HierarchyValidatorTest {
 
