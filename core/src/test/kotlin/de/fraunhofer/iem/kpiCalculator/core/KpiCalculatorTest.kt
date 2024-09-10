@@ -12,7 +12,11 @@ package de.fraunhofer.iem.kpiCalculator.core
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
-import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.*
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.DefaultHierarchy
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiEdge
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiHierarchy
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import kotlin.test.assertEquals
 import kotlin.test.fail
 import org.junit.jupiter.api.Test
@@ -138,6 +142,98 @@ class KpiCalculatorTest {
                         )
                     ),
             )
+        val hierarchy = KpiHierarchy.create(root)
+
+        val res = KpiCalculator.calculateKpis(hierarchy, rawValueKpis)
+        val result = res.rootNode.kpiResult
+
+        if (result is KpiCalculationResult.Incomplete) {
+            assertEquals(90, result.score)
+        } else {
+            fail()
+        }
+    }
+
+    @Test
+    fun calculateRatioKpisIncomplete() {
+        val rawValueKpis =
+            listOf(
+                RawValueKpi(kind = KpiId.VULNERABILITY_SCORE, score = 82),
+                RawValueKpi(kind = KpiId.VULNERABILITY_SCORE, score = 90),
+                RawValueKpi(kind = KpiId.VULNERABILITY_SCORE, score = 65),
+            )
+
+        val root =
+            KpiNode(
+                kpiId = KpiId.ROOT,
+                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                edges =
+                    listOf(
+                        KpiEdge(
+                            target =
+                                KpiNode(
+                                    kpiId = KpiId.SIGNED_COMMITS_RATIO,
+                                    kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                                    edges =
+                                        listOf(
+                                            KpiEdge(
+                                                target =
+                                                    KpiNode(
+                                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                                        edges = emptyList(),
+                                                        kpiStrategyId =
+                                                            KpiStrategyId.RAW_VALUE_STRATEGY,
+                                                    ),
+                                                weight = 1.0,
+                                            ),
+                                            KpiEdge(
+                                                target =
+                                                    KpiNode(
+                                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                                        edges = emptyList(),
+                                                        kpiStrategyId =
+                                                            KpiStrategyId.RAW_VALUE_STRATEGY,
+                                                    ),
+                                                weight = 1.0,
+                                            ),
+                                        ),
+                                ),
+                            weight = 0.5,
+                        ),
+                        KpiEdge(
+                            target =
+                                KpiNode(
+                                    kpiId = KpiId.SECURITY,
+                                    kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                                    edges =
+                                        listOf(
+                                            KpiEdge(
+                                                target =
+                                                    KpiNode(
+                                                        kpiId = KpiId.VULNERABILITY_SCORE,
+                                                        kpiStrategyId =
+                                                            KpiStrategyId.RAW_VALUE_STRATEGY,
+                                                        edges = emptyList(),
+                                                    ),
+                                                weight = 0.5,
+                                            ),
+                                            KpiEdge(
+                                                target =
+                                                    KpiNode(
+                                                        kpiId = KpiId.SAST_USAGE,
+                                                        kpiStrategyId =
+                                                            KpiStrategyId.RAW_VALUE_STRATEGY,
+                                                        edges = emptyList(),
+                                                    ),
+                                                weight = 0.5,
+                                            ),
+                                        ),
+                                ),
+                            weight = 0.5,
+                        ),
+                    ),
+            )
+
         val hierarchy = KpiHierarchy.create(root)
 
         val res = KpiCalculator.calculateKpis(hierarchy, rawValueKpis)

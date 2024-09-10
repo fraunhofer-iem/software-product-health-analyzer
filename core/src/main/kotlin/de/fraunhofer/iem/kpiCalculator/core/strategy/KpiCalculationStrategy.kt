@@ -64,7 +64,8 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
 
         // distributes weights of incomplete edges evenly between existing edges
         val additionalWeight =
-            if (missingEdgeWeights == 0.0) 0.0 else missingEdgeWeights / successScores.size
+            if (missingEdgeWeights == 0.0) 0.0
+            else if (successScores.isEmpty()) 1.0 else missingEdgeWeights / successScores.size
 
         if (successScores.isEmpty()) {
             return KpiCalculationResult.Incomplete(
