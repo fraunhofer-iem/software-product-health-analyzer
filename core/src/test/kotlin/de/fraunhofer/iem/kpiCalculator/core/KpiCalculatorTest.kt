@@ -216,8 +216,7 @@ class KpiCalculatorTest {
                                                         edges = emptyList(),
                                                     ),
                                                 weight = 0.5,
-                                            ),
-
+                                            )
                                         ),
                                 ),
                             weight = 0.5,
