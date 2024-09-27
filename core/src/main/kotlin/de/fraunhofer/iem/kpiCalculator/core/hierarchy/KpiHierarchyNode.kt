@@ -14,109 +14,47 @@ import de.fraunhofer.iem.kpiCalculator.core.strategy.MaximumKPICalculationStrate
 import de.fraunhofer.iem.kpiCalculator.core.strategy.RatioKPICalculationStrategy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
+import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiResultEdge
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiResultNode
 
-internal class KpiHierarchyNode(
+internal class KpiHierarchyNode
+private constructor(
     val kpiId: KpiId,
     val kpiStrategyId: KpiStrategyId,
-    val parent: KpiHierarchyNode?,
+    val hierarchyEdges: List<KpiHierarchyEdge>,
 ) {
 
-    private var result: KpiCalculationResult = KpiCalculationResult.Empty()
+    var result: KpiCalculationResult = KpiCalculationResult.Empty()
+        private set
 
-    fun setResult(result: Int) {
-        this.result = KpiCalculationResult.Success(result)
-    }
+    val score: Int
+        get() =
+            (result as? KpiCalculationResult.Success)?.score
+                ?: (result as? KpiCalculationResult.Incomplete)?.score
+                ?: 0
 
-    private val _hierarchyEdges: MutableList<KpiHierarchyEdge> = mutableListOf()
-    val hierarchyEdges: List<KpiHierarchyEdge>
-        get() = _hierarchyEdges
-
-    fun addChild(node: KpiHierarchyNode, weight: Double): Boolean {
-        return _hierarchyEdges.add(KpiHierarchyEdge(to = node, from = this, plannedWeight = weight))
-    }
-
-    fun removeChild(node: KpiHierarchyNode) {
-        _hierarchyEdges.removeIf { it.to == node }
-    }
-
-    fun getWeight(node: KpiHierarchyNode): Double? {
-        return hierarchyEdges.find { it.to == node }?.actualWeight
-    }
-
-    fun updateWeight(node: KpiHierarchyNode, newWeight: Double): Boolean {
-        val oldEdge = hierarchyEdges.find { it.to == node }
-
-        if (oldEdge == null) {
-            return false
-        }
-
-        val newEdge =
-            KpiHierarchyEdge(
-                from = oldEdge.from,
-                to = oldEdge.to,
-                plannedWeight = oldEdge.plannedWeight,
-                actualWeight = newWeight,
-            )
-
-        _hierarchyEdges.remove(oldEdge)
-        return _hierarchyEdges.add(newEdge)
+    fun hasNoResult(): Boolean {
+        return (result is KpiCalculationResult.Empty) || (result is KpiCalculationResult.Error)
     }
 
     fun calculateKpi(): KpiCalculationResult {
-        val strategyData = hierarchyEdges.map { Pair(it.to.result, it.actualWeight) }
         result =
             when (kpiStrategyId) {
                 KpiStrategyId.RAW_VALUE_STRATEGY -> result
 
                 KpiStrategyId.RATIO_STRATEGY ->
-                    RatioKPICalculationStrategy.calculateKpi(strategyData)
+                    RatioKPICalculationStrategy.calculateKpi(hierarchyEdges)
 
                 KpiStrategyId.AGGREGATION_STRATEGY ->
-                    AggregationKPICalculationStrategy.calculateKpi(strategyData)
+                    AggregationKPICalculationStrategy.calculateKpi(hierarchyEdges)
 
                 KpiStrategyId.MAXIMUM_STRATEGY ->
-                    MaximumKPICalculationStrategy.calculateKpi(strategyData)
+                    MaximumKPICalculationStrategy.calculateKpi(hierarchyEdges)
             }
-        updateEdgeWeights(result)
         return result
-    }
-
-    private fun updateEdgeWeights(result: KpiCalculationResult) {
-        val updatedEdges =
-            hierarchyEdges.map { edge ->
-                if (result is KpiCalculationResult.Success) {
-                    return@map edge
-                }
-
-                val targetResult = edge.to.result
-
-                if (
-                    result is KpiCalculationResult.Incomplete &&
-                        (targetResult !is KpiCalculationResult.Empty &&
-                            targetResult !is KpiCalculationResult.Error)
-                ) {
-                    return@map KpiHierarchyEdge(
-                        from = this,
-                        to = edge.to,
-                        plannedWeight = edge.plannedWeight,
-                        actualWeight = edge.plannedWeight + result.additionalWeights,
-                    )
-                }
-
-                return@map KpiHierarchyEdge(
-                    from = this,
-                    to = edge.to,
-                    plannedWeight = edge.plannedWeight,
-                    actualWeight = 0.0,
-                )
-            }
-
-        _hierarchyEdges.clear()
-        _hierarchyEdges.addAll(updatedEdges)
     }
 
     companion object {
@@ -136,29 +74,78 @@ internal class KpiHierarchyNode(
             )
         }
 
-        fun from(node: KpiNode): KpiHierarchyNode {
-            return from(node, parent = null)
+        fun from(node: KpiNode, rawValueKpis: List<RawValueKpi>): KpiHierarchyNode {
+            val kpiIdToValues = mutableMapOf<KpiId, MutableList<RawValueKpi>>()
+            KpiId.entries.forEach { kpiIdToValues[it] = mutableListOf() }
+
+            rawValueKpis.forEach { kpiIdToValues[it.kind]!!.add(it) }
+
+            val hierarchy = from(node, kpiIdToValues = kpiIdToValues)
+
+            return hierarchy
         }
 
-        private fun from(node: KpiNode, parent: KpiHierarchyNode? = null): KpiHierarchyNode {
+        private fun from(
+            node: KpiNode,
+            kpiIdToValues: Map<KpiId, List<RawValueKpi>>,
+        ): KpiHierarchyNode {
+
+            val children: MutableList<KpiHierarchyEdge> = mutableListOf()
+            node.edges.forEach { child ->
+                val rawValues = kpiIdToValues[child.target.kpiId] ?: emptyList()
+                if (rawValues.isNotEmpty()) {
+                    rawValues.forEach { rawValueKpi ->
+                        val hierarchyNode =
+                            KpiHierarchyNode(
+                                kpiId = child.target.kpiId,
+                                // we force the kpi strategy to be raw value if we had a
+                                // raw value for the given node.
+                                kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                hierarchyEdges = emptyList(),
+                            )
+                        hierarchyNode.result = KpiCalculationResult.Success(rawValueKpi.score)
+                        val edge =
+                            KpiHierarchyEdge(
+                                to = hierarchyNode,
+                                plannedWeight = child.weight / rawValues.count(),
+                            )
+                        children.add(edge)
+                    }
+                } else {
+                    children.add(
+                        KpiHierarchyEdge(
+                            to = from(child.target, kpiIdToValues),
+                            plannedWeight = child.weight,
+                        )
+                    )
+                }
+            }
 
             val calcNode =
                 KpiHierarchyNode(
                     kpiId = node.kpiId,
-                    parent = parent,
+                    hierarchyEdges = children,
                     kpiStrategyId = node.kpiStrategyId,
                 )
-            val children =
-                node.edges.map { child ->
-                    KpiHierarchyEdge(
-                        to = from(child.target, calcNode),
-                        from = calcNode,
-                        plannedWeight = child.weight,
-                    )
-                }
-            calcNode._hierarchyEdges.addAll(children)
 
             return calcNode
+        }
+
+        fun depthFirstTraversal(
+            node: KpiHierarchyNode,
+            seen: MutableSet<KpiHierarchyNode> = mutableSetOf(),
+            action: (node: KpiHierarchyNode) -> Unit,
+        ) {
+            if (seen.contains(node)) {
+                return
+            }
+
+            node.hierarchyEdges.forEach { child ->
+                depthFirstTraversal(node = child.to, seen = seen, action)
+            }
+
+            action(node)
+            seen.add(node)
         }
     }
 }

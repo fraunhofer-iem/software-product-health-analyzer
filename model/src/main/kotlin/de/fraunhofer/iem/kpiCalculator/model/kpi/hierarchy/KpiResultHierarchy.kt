@@ -44,8 +44,7 @@ sealed class KpiCalculationResult {
     @Serializable data class Error(val reason: String) : KpiCalculationResult()
 
     @Serializable
-    data class Incomplete(val score: Int, val additionalWeights: Double, val reason: String) :
-        KpiCalculationResult()
+    data class Incomplete(val score: Int, val reason: String) : KpiCalculationResult()
 
     @Serializable
     data class Empty(val reason: String = "This KPI is empty") : KpiCalculationResult()

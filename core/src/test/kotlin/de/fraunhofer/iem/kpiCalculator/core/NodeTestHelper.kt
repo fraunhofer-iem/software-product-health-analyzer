@@ -15,15 +15,18 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiEdge
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
-internal fun randomKpiHierarchyNode(parent: KpiHierarchyNode? = null): KpiHierarchyNode {
+internal fun randomKpiHierarchyNode(): KpiHierarchyNode {
 
     val rndIds = (0..<KpiId.entries.size).random()
     val rndStrategies = (0..<KpiStrategyId.entries.size).random()
 
-    return KpiHierarchyNode(
-        kpiId = KpiId.entries[rndIds],
-        kpiStrategyId = KpiStrategyId.entries[rndStrategies],
-        parent = parent,
+    return KpiHierarchyNode.from(
+        KpiNode(
+            kpiId = KpiId.entries[rndIds],
+            kpiStrategyId = KpiStrategyId.entries[rndStrategies],
+            edges = listOf(),
+        ),
+        emptyList(),
     )
 }
 
