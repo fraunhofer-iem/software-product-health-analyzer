@@ -217,16 +217,7 @@ class KpiCalculatorTest {
                                                     ),
                                                 weight = 0.5,
                                             ),
-                                            KpiEdge(
-                                                target =
-                                                    KpiNode(
-                                                        kpiId = KpiId.SAST_USAGE,
-                                                        kpiStrategyId =
-                                                            KpiStrategyId.RAW_VALUE_STRATEGY,
-                                                        edges = emptyList(),
-                                                    ),
-                                                weight = 0.5,
-                                            ),
+
                                         ),
                                 ),
                             weight = 0.5,
