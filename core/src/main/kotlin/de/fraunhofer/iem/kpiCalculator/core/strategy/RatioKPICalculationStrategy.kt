@@ -50,14 +50,20 @@ internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
             smallerValue = edges.first().to.score
         }
 
-        return try {
-            KpiCalculationResult.Success(
-                score = ((smallerValue.toDouble() / biggerValue.toDouble()) * 100).toInt()
-            )
-        } catch (e: Exception) {
-            logger.error { "Error " }
-            KpiCalculationResult.Error(e.message ?: e.toString())
-        }
+        val ratio =
+            try {
+                if (biggerValue != 0) {
+                    smallerValue.toDouble() / biggerValue.toDouble()
+                } else {
+                    // NB: for whatever reason the statement above results in -Infinity
+                    // instead of an ArithmeticException when  dividing by 0.
+                    throw ArithmeticException("Tried division by 0")
+                }
+            } catch (e: Exception) {
+                logger.error { "Error " }
+                return KpiCalculationResult.Error(e.message ?: e.toString())
+            }
+        return KpiCalculationResult.Success(score = (ratio * 100).toInt())
     }
 
     /**
