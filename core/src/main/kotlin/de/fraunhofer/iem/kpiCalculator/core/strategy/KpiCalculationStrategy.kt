@@ -57,7 +57,7 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
     ): KpiCalculationResult {
 
         if (
-            strict && hierarchyEdges.none { it.to.result is KpiCalculationResult.Success } ||
+            (strict && hierarchyEdges.none { it.to.result is KpiCalculationResult.Success }) ||
                 hierarchyEdges.none { !it.to.hasNoResult() } ||
                 hierarchyEdges.isEmpty()
         ) {
