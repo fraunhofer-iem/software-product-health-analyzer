@@ -28,7 +28,7 @@ private constructor(
 ) {
 
     var result: KpiCalculationResult = KpiCalculationResult.Empty()
-        private set
+        internal set
 
     val score: Int
         get() =
@@ -40,19 +40,19 @@ private constructor(
         return (result is KpiCalculationResult.Empty) || (result is KpiCalculationResult.Error)
     }
 
-    fun calculateKpi(): KpiCalculationResult {
+    fun calculateKpi(strict: Boolean = false): KpiCalculationResult {
         result =
             when (kpiStrategyId) {
                 KpiStrategyId.RAW_VALUE_STRATEGY -> result
 
                 KpiStrategyId.RATIO_STRATEGY ->
-                    RatioKPICalculationStrategy.calculateKpi(hierarchyEdges)
+                    RatioKPICalculationStrategy.calculateKpi(hierarchyEdges, strict)
 
                 KpiStrategyId.AGGREGATION_STRATEGY ->
-                    AggregationKPICalculationStrategy.calculateKpi(hierarchyEdges)
+                    AggregationKPICalculationStrategy.calculateKpi(hierarchyEdges, strict)
 
                 KpiStrategyId.MAXIMUM_STRATEGY ->
-                    MaximumKPICalculationStrategy.calculateKpi(hierarchyEdges)
+                    MaximumKPICalculationStrategy.calculateKpi(hierarchyEdges, strict)
             }
         return result
     }

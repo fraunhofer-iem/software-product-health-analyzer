@@ -10,15 +10,78 @@
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
 import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyEdge
+import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyNode
+import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
+import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
+import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiEdge
+import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import kotlin.test.fail
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+
+internal fun getNodeWithErrorResult(plannedWeight: Double): KpiHierarchyNode {
+    val node =
+        KpiNode(
+            kpiId = KpiId.NUMBER_OF_COMMITS,
+            kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+            edges =
+                listOf(
+                    KpiEdge(
+                        KpiNode(
+                            kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                            kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                            edges = listOf(),
+                        ),
+                        weight = plannedWeight,
+                    )
+                ),
+        )
+
+    val hierarchyNode =
+        KpiHierarchyNode.from(node, listOf(RawValueKpi(KpiId.NUMBER_OF_SIGNED_COMMITS, score = 20)))
+    hierarchyNode.calculateKpi()
+    return hierarchyNode
+}
+
+internal fun getNodeIncompleteResult(plannedWeight: Double): KpiHierarchyNode {
+
+    val node =
+        KpiNode(
+            kpiId = KpiId.SECRETS,
+            kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+            edges =
+                listOf(
+                    KpiEdge(
+                        KpiNode(
+                            kpiId = KpiId.NUMBER_OF_COMMITS,
+                            kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                            edges = listOf(),
+                        ),
+                        weight = plannedWeight,
+                    ),
+                    KpiEdge(
+                        KpiNode(
+                            kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                            kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                            edges = listOf(),
+                        ),
+                        weight = plannedWeight,
+                    ),
+                ),
+        )
+
+    val hierarchyNode =
+        KpiHierarchyNode.from(node, listOf(RawValueKpi(KpiId.NUMBER_OF_SIGNED_COMMITS, score = 20)))
+    return hierarchyNode
+}
 
 class AbstractKpiCalculationTest {
 
     @Test
     fun calculateKpiEmptyChildren() {
-        fun callback(edges: Collection<KpiHierarchyEdge>): Unit {
+        fun callback(edges: Collection<KpiHierarchyEdge>) {
             fail()
         }
 
@@ -32,191 +95,81 @@ class AbstractKpiCalculationTest {
 
         assert(emptyStrict is KpiCalculationResult.Empty)
     }
-    //
-    //    @Test
-    //    fun calculateKpiSuccess() {
-    //
-    //        val childScores: List<Pair<KpiCalculationResult, Double>> =
-    //            listOf(
-    //                Pair(KpiCalculationResult.Success(score = 10), 0.4),
-    //                Pair(KpiCalculationResult.Success(score = 10), 0.4),
-    //                Pair(KpiCalculationResult.Success(score = 10), 0.4),
-    //            )
-    //
-    //        fun callback(
-    //            edges: Collection<KpiHierarchyEdge>,
-    //        ) {
-    ////            assertEquals(successScores.size, childScores.size)
-    ////            assert(failed.isEmpty())
-    ////            assertEquals(additionalWeight, 0.0)
-    ////            assert(!hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategy = TestStrategy(callback = ::callback)
-    //
-    //        testStrategy.calculateKpi(childScores = childScores, strict = false)
-    //        testStrategy.calculateKpi(childScores = childScores, strict = true)
-    //    }
-    //
-    //    @Test
-    //    fun calculateKpiIncomplete() {
-    //
-    //        val childScores: List<Pair<KpiCalculationResult, Double>> =
-    //            listOf(
-    //                Pair(
-    //                    KpiCalculationResult.Incomplete(
-    //                        score = 10,
-    //                        reason = "",
-    //                        additionalWeights = 0.2,
-    //                    ),
-    //                    0.4,
-    //                ),
-    //                Pair(
-    //                    KpiCalculationResult.Incomplete(
-    //                        score = 10,
-    //                        reason = "",
-    //                        additionalWeights = 0.2,
-    //                    ),
-    //                    0.4,
-    //                ),
-    //                Pair(
-    //                    KpiCalculationResult.Incomplete(
-    //                        score = 10,
-    //                        reason = "",
-    //                        additionalWeights = 0.2,
-    //                    ),
-    //                    0.2,
-    //                ),
-    //            )
-    //
-    //        fun callbackRelaxed(
-    //            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-    //            failed: List<Pair<KpiCalculationResult, Double>>,
-    //            additionalWeight: Double,
-    //            hasIncompleteResults: Boolean,
-    //        ) {
-    //            assertEquals(successScores.size, childScores.size)
-    //            assert(failed.isEmpty())
-    //            assertEquals(additionalWeight, 0.0)
-    //            assert(hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategy = TestStrategy(callback = ::callbackRelaxed)
-    //        testStrategy.calculateKpi(childScores = childScores, strict = false)
-    //
-    //        fun callbackStrict(
-    //            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-    //            failed: List<Pair<KpiCalculationResult, Double>>,
-    //            additionalWeight: Double,
-    //            hasIncompleteResults: Boolean,
-    //        ) {
-    //            assert(successScores.isEmpty())
-    //            assert(failed.isEmpty())
-    //            assertEquals(additionalWeight, 0.0)
-    //            assert(hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategyStrict = TestStrategy(callback = ::callbackStrict)
-    //        testStrategyStrict.calculateKpi(childScores = childScores, strict = true)
-    //    }
-    //
-    //    @Test
-    //    fun calculateKpiError() {
-    //
-    //        val childScores: List<Pair<KpiCalculationResult, Double>> =
-    //            listOf(
-    //                Pair(KpiCalculationResult.Empty(), 0.4),
-    //                Pair(KpiCalculationResult.Empty(), 0.4),
-    //                Pair(KpiCalculationResult.Error(reason = ""), 0.2),
-    //            )
-    //
-    //        fun callback(
-    //            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-    //            failed: List<Pair<KpiCalculationResult, Double>>,
-    //            additionalWeight: Double,
-    //            hasIncompleteResults: Boolean,
-    //        ) {
-    //            assert(successScores.isEmpty())
-    //            assertEquals(failed.size, childScores.size)
-    //            assertEquals(additionalWeight, 1.0)
-    //            assert(hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategy = TestStrategy(callback = ::callback)
-    //        testStrategy.calculateKpi(childScores = childScores, strict = false)
-    //        testStrategy.calculateKpi(childScores = childScores, strict = true)
-    //
-    //        val childScoresMixed: List<Pair<KpiCalculationResult, Double>> =
-    //            listOf(
-    //                Pair(KpiCalculationResult.Empty(), 0.4),
-    //                Pair(KpiCalculationResult.Success(score = 9), 0.4),
-    //                Pair(KpiCalculationResult.Error(reason = ""), 0.2),
-    //            )
-    //
-    //        fun callbackMixed(
-    //            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-    //            failed: List<Pair<KpiCalculationResult, Double>>,
-    //            additionalWeight: Double,
-    //            hasIncompleteResults: Boolean,
-    //        ) {
-    //            assertEquals(1, successScores.size)
-    //            assertEquals(2, failed.size)
-    //            assertEquals((0.4 + 0.2) / 1, additionalWeight)
-    //            assert(hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategyMixed = TestStrategy(callback = ::callbackMixed)
-    //        testStrategyMixed.calculateKpi(childScores = childScoresMixed, strict = false)
-    //        testStrategyMixed.calculateKpi(childScores = childScoresMixed, strict = true)
-    //    }
-    //
-    //    @Test
-    //    fun calculateKpiMixed() {
-    //
-    //        val childScores: List<Pair<KpiCalculationResult, Double>> =
-    //            listOf(
-    //                Pair(KpiCalculationResult.Success(score = 4), 0.15),
-    //                Pair(KpiCalculationResult.Success(score = 4), 0.15),
-    //                Pair(
-    //                    KpiCalculationResult.Incomplete(
-    //                        score = 4,
-    //                        reason = "",
-    //                        additionalWeights = 0.1,
-    //                    ),
-    //                    0.3,
-    //                ),
-    //                Pair(KpiCalculationResult.Empty(), 0.2),
-    //                Pair(KpiCalculationResult.Error(reason = ""), 0.2),
-    //            )
-    //
-    //        fun callbackRelaxed(
-    //            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-    //            failed: List<Pair<KpiCalculationResult, Double>>,
-    //            additionalWeight: Double,
-    //            hasIncompleteResults: Boolean,
-    //        ) {
-    //            assertEquals(3, successScores.size)
-    //            assertEquals(2, failed.size)
-    //            assertEquals((0.4 / 3), additionalWeight)
-    //            assert(hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategyStrict = TestStrategy(callback = ::callbackRelaxed)
-    //        testStrategyStrict.calculateKpi(childScores = childScores, strict = false)
-    //
-    //        fun callbackStrict(
-    //            successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-    //            failed: List<Pair<KpiCalculationResult, Double>>,
-    //            additionalWeight: Double,
-    //            hasIncompleteResults: Boolean,
-    //        ) {
-    //            assertEquals(2, successScores.size)
-    //            assertEquals(3, failed.size)
-    //            assertEquals((0.3 + 0.2 + 0.2) / 2, additionalWeight)
-    //            assert(hasIncompleteResults)
-    //        }
-    //
-    //        val testStrategyMixed = TestStrategy(callback = ::callbackStrict)
-    //        testStrategyMixed.calculateKpi(childScores = childScores, strict = true)
-    //    }
+
+    @Test
+    fun calculateKpiSuccess() {
+
+        val nodeCorrectChildren =
+            KpiNode(
+                kpiId = KpiId.ROOT,
+                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                edges =
+                    listOf(
+                        KpiEdge(
+                            target =
+                                KpiNode(
+                                    kpiId = KpiId.NUMBER_OF_COMMITS,
+                                    kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                    edges = listOf(),
+                                ),
+                            weight = 0.5,
+                        ),
+                        KpiEdge(
+                            target =
+                                KpiNode(
+                                    kpiId = KpiId.NUMBER_OF_COMMITS,
+                                    kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                    edges = listOf(),
+                                ),
+                            weight = 0.5,
+                        ),
+                    ),
+            )
+
+        val root =
+            KpiHierarchyNode.from(
+                nodeCorrectChildren,
+                listOf(RawValueKpi(KpiId.NUMBER_OF_COMMITS, 20)),
+            )
+
+        fun callback(edges: Collection<KpiHierarchyEdge>) {
+            assertEquals(2, edges.size)
+            assertEquals(0.5, edges.first().actualWeight)
+            assertEquals(0.5, edges.first().actualWeight)
+            assertEquals(0.5, edges.last().plannedWeight)
+            assertEquals(0.5, edges.last().plannedWeight)
+        }
+
+        val testStrategy = TestStrategy(callback = ::callback)
+        testStrategy.calculateKpi(root.hierarchyEdges)
+    }
+
+    @Test
+    fun calculateErrorKpisNewEdgeWeights() {
+        val errorNode = getNodeWithErrorResult(plannedWeight = 0.5)
+
+        val edges = listOf(KpiHierarchyEdge(to = errorNode, plannedWeight = 0.5))
+
+        fun callback(edges: Collection<KpiHierarchyEdge>) {
+            fail()
+        }
+
+        val testStrategy = TestStrategy(callback = ::callback)
+        testStrategy.calculateKpi(edges)
+        assertEquals(0.5, edges.first().plannedWeight)
+        assertEquals(0.0, edges.first().actualWeight)
+    }
+
+    @Test
+    fun calculateKpisIncomplete() {
+
+        val incompleteNode = getNodeIncompleteResult(plannedWeight = 0.5)
+        val incompleteResult = incompleteNode.calculateKpi(false)
+        assert(incompleteResult is KpiCalculationResult.Incomplete)
+
+        assertEquals(0.5, incompleteNode.hierarchyEdges.first().plannedWeight)
+        assertEquals(0.0, incompleteNode.hierarchyEdges.first().actualWeight)
+        assertEquals(0.5, incompleteNode.hierarchyEdges.last().plannedWeight)
+        assertEquals(1.0, incompleteNode.hierarchyEdges.last().actualWeight)
+    }
 }
