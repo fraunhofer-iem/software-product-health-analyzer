@@ -9,6 +9,7 @@
 
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
+import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyEdge
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
@@ -22,54 +23,47 @@ internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
         get() = KpiStrategyId.RATIO_STRATEGY
 
     /** Returns smallerValue / biggerValue, regardless in which order the values are given. */
-    override fun internalCalculateKpi(
-        successScores: List<Pair<KpiCalculationResult.Success, Double>>,
-        failed: List<Pair<KpiCalculationResult, Double>>,
-        additionalWeight: Double,
-        hasIncompleteResults: Boolean,
-    ): KpiCalculationResult {
+    override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
 
-        if (successScores.size != 2) {
+        if (edges.size != 2) {
             return KpiCalculationResult.Error(
                 "Ratio calculation strategy called " +
-                    "with ${successScores.size} valid elements, which is illegal."
+                    "with ${edges.size} valid elements, which is illegal."
             )
         }
 
-        val biggerValue =
-            if (successScores.first().first.score > successScores[1].first.score) {
-                successScores.first().first.score
-            } else {
-                successScores.last().first.score
-            }
-
-        val smallerValue =
-            if (successScores.first().first.score < successScores[1].first.score) {
-                successScores.first().first.score
-            } else {
-                successScores[1].first.score
-            }
-
-        if (biggerValue == smallerValue && smallerValue == 0) {
-            return KpiCalculationResult.Success(0)
+        if (edges.any { it.to.hasNoResult() }) {
+            return KpiCalculationResult.Error(
+                reason = "Ratio calculation strategy has elements without result"
+            )
         }
 
-        return try {
-            if (!hasIncompleteResults) {
-                KpiCalculationResult.Success(
-                    score = ((smallerValue.toDouble() / biggerValue.toDouble()) * 100).toInt()
-                )
-            } else {
-                KpiCalculationResult.Incomplete(
-                    score = ((smallerValue.toDouble() / biggerValue.toDouble()) * 100).toInt(),
-                    reason = "Incomplete results.",
-                    additionalWeights = 0.0,
-                )
-            }
-        } catch (e: Exception) {
-            logger.error { "Error " }
-            KpiCalculationResult.Error(e.message ?: e.toString())
+        val biggerValue: Int
+        val smallerValue: Int
+
+        if (edges.first().to.score > edges.last().to.score) {
+            biggerValue = edges.first().to.score
+            smallerValue = edges.last().to.score
+        } else {
+
+            biggerValue = edges.last().to.score
+            smallerValue = edges.first().to.score
         }
+
+        val ratio =
+            try {
+                if (biggerValue != 0) {
+                    smallerValue.toDouble() / biggerValue.toDouble()
+                } else {
+                    // NB: for whatever reason the statement above results in -Infinity
+                    // instead of an ArithmeticException when  dividing by 0.
+                    throw ArithmeticException("Tried division by 0")
+                }
+            } catch (e: Exception) {
+                logger.error { "Error " }
+                return KpiCalculationResult.Error(e.message ?: e.toString())
+            }
+        return KpiCalculationResult.Success(score = (ratio * 100).toInt())
     }
 
     /**
