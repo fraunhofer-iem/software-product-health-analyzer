@@ -9,6 +9,7 @@
 
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
+import de.fraunhofer.iem.kpiCalculator.core.KpiCalculator
 import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyEdge
 import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
@@ -41,7 +42,7 @@ internal fun getNodeWithErrorResult(plannedWeight: Double): KpiHierarchyNode {
 
     val hierarchyNode =
         KpiHierarchyNode.from(node, listOf(RawValueKpi(KpiId.NUMBER_OF_SIGNED_COMMITS, score = 20)))
-    hierarchyNode.calculateKpi()
+    KpiCalculator.calculateKpi(hierarchyNode)
     return hierarchyNode
 }
 
@@ -164,7 +165,7 @@ class AbstractKpiCalculationTest {
     fun calculateKpisIncomplete() {
 
         val incompleteNode = getNodeIncompleteResult(plannedWeight = 0.5)
-        val incompleteResult = incompleteNode.calculateKpi(false)
+        val incompleteResult = KpiCalculator.calculateKpi(incompleteNode, false)
         assert(incompleteResult is KpiCalculationResult.Incomplete)
 
         assertEquals(0.5, incompleteNode.hierarchyEdges.first().plannedWeight)
