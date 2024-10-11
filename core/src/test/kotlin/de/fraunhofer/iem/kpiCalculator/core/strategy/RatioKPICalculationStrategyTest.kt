@@ -9,6 +9,7 @@
 
 package de.fraunhofer.iem.kpiCalculator.core.strategy
 
+import de.fraunhofer.iem.kpiCalculator.core.KpiCalculator
 import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyNode
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
@@ -273,7 +274,7 @@ class RatioKPICalculationStrategyTest {
                 ),
             )
 
-        KpiHierarchyNode.depthFirstTraversal(root) { it.calculateKpi() }
+        KpiHierarchyNode.depthFirstTraversal(root) { it.result = KpiCalculator.calculateKpi(it) }
 
         assertEquals(true, root.result is KpiCalculationResult.Error)
 
