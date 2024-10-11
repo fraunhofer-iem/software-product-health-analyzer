@@ -9,9 +9,6 @@
 
 package de.fraunhofer.iem.kpiCalculator.core.hierarchy
 
-import de.fraunhofer.iem.kpiCalculator.core.strategy.AggregationKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.core.strategy.MaximumKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.core.strategy.RatioKPICalculationStrategy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
@@ -28,7 +25,6 @@ private constructor(
 ) {
 
     var result: KpiCalculationResult = KpiCalculationResult.Empty()
-        internal set
 
     val score: Int
         get() =
@@ -38,23 +34,6 @@ private constructor(
 
     fun hasNoResult(): Boolean {
         return (result is KpiCalculationResult.Empty) || (result is KpiCalculationResult.Error)
-    }
-
-    fun calculateKpi(strict: Boolean = false): KpiCalculationResult {
-        result =
-            when (kpiStrategyId) {
-                KpiStrategyId.RAW_VALUE_STRATEGY -> result
-
-                KpiStrategyId.RATIO_STRATEGY ->
-                    RatioKPICalculationStrategy.calculateKpi(hierarchyEdges, strict)
-
-                KpiStrategyId.AGGREGATION_STRATEGY ->
-                    AggregationKPICalculationStrategy.calculateKpi(hierarchyEdges, strict)
-
-                KpiStrategyId.MAXIMUM_STRATEGY ->
-                    MaximumKPICalculationStrategy.calculateKpi(hierarchyEdges, strict)
-            }
-        return result
     }
 
     companion object {
@@ -136,7 +115,7 @@ private constructor(
             seen: MutableSet<KpiHierarchyNode> = mutableSetOf(),
             action: (node: KpiHierarchyNode) -> Unit,
         ) {
-            if (seen.contains(node)) {
+            if (!seen.add(node)) {
                 return
             }
 
@@ -145,7 +124,6 @@ private constructor(
             }
 
             action(node)
-            seen.add(node)
         }
     }
 }
