@@ -40,6 +40,10 @@ private constructor(
         return result is KpiCalculationResult.Incomplete
     }
 
+    override fun toString(): String {
+        return "KpiHierarchyNode($kpiId, $kpiStrategyId, $result, $hierarchyEdges)"
+    }
+
     companion object {
         fun to(node: KpiHierarchyNode): KpiResultNode {
             return KpiResultNode(
