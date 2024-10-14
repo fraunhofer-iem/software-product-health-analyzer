@@ -36,6 +36,10 @@ private constructor(
         return (result is KpiCalculationResult.Empty) || (result is KpiCalculationResult.Error)
     }
 
+    fun hasIncompleteResult(): Boolean {
+        return result is KpiCalculationResult.Incomplete
+    }
+
     companion object {
         fun to(node: KpiHierarchyNode): KpiResultNode {
             return KpiResultNode(
