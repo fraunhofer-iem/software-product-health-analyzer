@@ -19,7 +19,7 @@ internal interface KpiCalculationStrategy {
      * Calculates a KpiCalculationResult by applying the KpiCalculation strategy on the given child
      * scores.
      *
-     * @param childScores List of KpiCalculationResults and their corresponding weights.
+     * @param hierarchyEdges based on whose results this result is calculated.
      * @param strict calculation mode, true implies that the strategy will only take childScores of
      *   type Success into account. False implies that the calculation is also performed on
      *   Incomplete childScores.
@@ -61,6 +61,8 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
                 hierarchyEdges.none { !it.to.hasNoResult() } ||
                 hierarchyEdges.isEmpty()
         ) {
+            // There are no valid results to use, thus we set every actualWeight to 0 and return
+            // the empty result
             hierarchyEdges.forEach { it.actualWeight = 0.0 }
             return KpiCalculationResult.Empty()
         }
@@ -73,6 +75,11 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
             hierarchyEdges.any { it.to.result !is KpiCalculationResult.Success } &&
                 result is KpiCalculationResult.Success
         ) {
+            // Even if the current calculation returns success, we repackage this result into an
+            // Incomplete result, if any of the edges had no result / an incomplete results to
+            // propagate
+            // this information to the top. Every result depending on incomplete information is also
+            // incomplete.
             return KpiCalculationResult.Incomplete(
                 score = result.score,
                 reason = "Incomplete results.",
@@ -83,27 +90,20 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
     }
 
     /**
-     * Sorts the given childScores into separate lists for Success and Failed results. The sorting
-     * of Incomplete results depends on the strict mode.
+     * Performs an inplace update of every edge's `actualWeight` value, depending on the results of
+     * all given edges. Edges with no result, or, in strict mode, an incomplete result, get a weight
+     * of 0.0, as they are ignored for further calculation.Their `plannedWeight` is distributed
+     * evenly between all edges with valid results attached to them.
      *
-     * In strict mode, we consider Incomplete results as failed, and they are not considered in the
-     * KPI calculation. In not strict mode, we cast Incomplete results to Success results and use
-     * them for further calculation.
-     *
-     * @param childScores the KPI results and their planned edge weights.
-     * @param strict mode which influences the separation.
-     * @return SeparatedKpiResults, which contain a List of success and failed scores,
-     *   missingEdgeWeights (the sum of all failed node's edge weights), hasIncompleteResults
-     *   (indicates whether the original childScores contained an Incomplete result)
+     * @param edges whose weights are updated by this function.
+     * @param strict mode which defines if incomplete edges should be used or not.
      */
     private fun updateEdgeWeights(edges: Collection<KpiHierarchyEdge>, strict: Boolean) {
         var missingEdgeWeight = 0.0
         var counterIncompleteEdges = 0
 
         edges.forEach { edge ->
-            if (
-                edge.to.hasNoResult() || strict && edge.to.result is KpiCalculationResult.Incomplete
-            ) {
+            if (edge.to.hasNoResult() || (strict && edge.to.hasIncompleteResult())) {
                 missingEdgeWeight += edge.plannedWeight
                 edge.actualWeight = 0.0
                 counterIncompleteEdges++
