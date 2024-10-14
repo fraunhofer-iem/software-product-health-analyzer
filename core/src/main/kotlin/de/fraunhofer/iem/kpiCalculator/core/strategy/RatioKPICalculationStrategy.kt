@@ -38,22 +38,24 @@ internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
             )
         }
 
-        val biggerValue: Int
-        val smallerValue: Int
+        val biggerValue: Double
+        val smallerValue: Double
 
-        if (edges.first().to.score > edges.last().to.score) {
-            biggerValue = edges.first().to.score
-            smallerValue = edges.last().to.score
+        val firstScore = edges.first().to.score * edges.first().actualWeight
+        val secondScore = edges.last().to.score * edges.last().actualWeight
+
+        if (firstScore > secondScore) {
+            biggerValue = firstScore
+            smallerValue = secondScore
         } else {
-
-            biggerValue = edges.last().to.score
-            smallerValue = edges.first().to.score
+            biggerValue = secondScore
+            smallerValue = firstScore
         }
 
         val ratio =
             try {
-                if (biggerValue != 0) {
-                    smallerValue.toDouble() / biggerValue.toDouble()
+                if (biggerValue != 0.0) {
+                    smallerValue / biggerValue
                 } else {
                     // NB: for whatever reason the statement above results in -Infinity
                     // instead of an ArithmeticException when  dividing by 0.
