@@ -17,33 +17,22 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-internal object AggregationKPICalculationStrategy : BaseKpiCalculationStrategy() {
-
+internal object RawValueKpiCalculationStrategy : BaseKpiCalculationStrategy() {
     override val kpiStrategyId: KpiStrategyId
-        get() = KpiStrategyId.AGGREGATION_STRATEGY
+        get() = KpiStrategyId.RAW_VALUE_STRATEGY
 
-    /**
-     * This function calculates the aggregate sum of all given children. If a child is empty it is
-     * removed from the calculation and its corresponding edge weight is distributed evenly between
-     * the remaining children. The method returns the KPIs value as well as the updated
-     * KPIHierarchyEdgeDtos with the actual used weight.
-     */
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
-
-        val aggregation = edges.sumOf { edge -> edge.actualWeight * edge.to.score }.toInt()
-
-        return KpiCalculationResult.Success(score = aggregation)
+        return KpiCalculationResult.Empty()
     }
 
-    /** There is no validity requirement for this strategy. */
     override fun internalIsValid(node: KpiNode, strict: Boolean): Boolean {
-
-        if (node.edges.size == 1) {
-            logger.warn {
-                "Maximum KPI calculation strategy for node $node is planned for a single child."
+        return if (node.edges.isNotEmpty()) {
+            logger.error {
+                "Raw Value nodes must not have children as they expect only tool results."
             }
+            false
+        } else {
+            true
         }
-
-        return true
     }
 }
