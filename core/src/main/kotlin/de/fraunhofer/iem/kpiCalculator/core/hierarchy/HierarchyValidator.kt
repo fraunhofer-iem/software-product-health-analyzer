@@ -9,10 +9,7 @@
 
 package de.fraunhofer.iem.kpiCalculator.core.hierarchy
 
-import de.fraunhofer.iem.kpiCalculator.core.strategy.AggregationKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.core.strategy.MaximumKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.core.strategy.RatioKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
+import de.fraunhofer.iem.kpiCalculator.core.strategy.getKpiCalculationStrategy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiHierarchy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -62,25 +59,7 @@ object HierarchyValidator {
             }
         }
 
-        val isValid =
-            when (node.kpiStrategyId) {
-                KpiStrategyId.RAW_VALUE_STRATEGY -> {
-                    if (node.edges.isNotEmpty()) {
-                        logger.error {
-                            "Raw Value nodes must not have children as they expect only tool results."
-                        }
-                        false
-                    } else {
-                        true
-                    }
-                }
-
-                KpiStrategyId.AGGREGATION_STRATEGY ->
-                    AggregationKPICalculationStrategy.isValid(node, strict)
-                KpiStrategyId.MAXIMUM_STRATEGY ->
-                    MaximumKPICalculationStrategy.isValid(node, strict)
-                KpiStrategyId.RATIO_STRATEGY -> RatioKPICalculationStrategy.isValid(node, strict)
-            }
+        val isValid = getKpiCalculationStrategy(node.kpiStrategyId).isValid(node, strict)
 
         if (!isValid) {
             return false

@@ -11,9 +11,7 @@ package de.fraunhofer.iem.kpiCalculator.core
 
 import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyNode
 import de.fraunhofer.iem.kpiCalculator.core.hierarchy.KpiHierarchyNode.Companion.depthFirstTraversal
-import de.fraunhofer.iem.kpiCalculator.core.strategy.AggregationKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.core.strategy.MaximumKPICalculationStrategy
-import de.fraunhofer.iem.kpiCalculator.core.strategy.RatioKPICalculationStrategy
+import de.fraunhofer.iem.kpiCalculator.core.strategy.getKpiCalculationStrategy
 import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.RawValueKpi
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
@@ -46,19 +44,12 @@ object KpiCalculator {
         strict: Boolean = false,
     ): KpiCalculationResult {
         logger.info { "Running KPI calculation on $node" }
+        if (node.kpiStrategyId == KpiStrategyId.RAW_VALUE_STRATEGY) {
+            return node.result
+        }
+
         val result =
-            when (node.kpiStrategyId) {
-                KpiStrategyId.RAW_VALUE_STRATEGY -> node.result
-
-                KpiStrategyId.RATIO_STRATEGY ->
-                    RatioKPICalculationStrategy.calculateKpi(node.hierarchyEdges, strict)
-
-                KpiStrategyId.AGGREGATION_STRATEGY ->
-                    AggregationKPICalculationStrategy.calculateKpi(node.hierarchyEdges, strict)
-
-                KpiStrategyId.MAXIMUM_STRATEGY ->
-                    MaximumKPICalculationStrategy.calculateKpi(node.hierarchyEdges, strict)
-            }
+            getKpiCalculationStrategy(node.kpiStrategyId).calculateKpi(node.hierarchyEdges, strict)
         logger.info { "KPI calculation result $result" }
         return result
     }
