@@ -124,7 +124,7 @@ class KpiCalculatorTest {
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = emptyList(),
                                                     ),
-                                                weight = 0.5,
+                                                weight = 1.0,
                                             ),
                                             KpiEdge(
                                                 target =
@@ -134,7 +134,7 @@ class KpiCalculatorTest {
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = emptyList(),
                                                     ),
-                                                weight = 0.5,
+                                                weight = 1.0,
                                             ),
                                         ),
                                 ),
