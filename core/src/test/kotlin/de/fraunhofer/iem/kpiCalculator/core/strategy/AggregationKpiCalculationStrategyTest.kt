@@ -78,7 +78,13 @@ class AggregationKpiCalculationStrategyTest {
 
         assert(calcRelaxed is KpiCalculationResult.Success)
         assert(calcStrict is KpiCalculationResult.Success)
-        assertEquals(((20 * 0.5) + (15 * 0.5)).toInt(), (calcStrict as KpiCalculationResult.Success).score)
-        assertEquals(((20 * 0.5) + (15 * 0.5)).toInt(), (calcRelaxed as KpiCalculationResult.Success).score)
+        assertEquals(
+            ((20 * 0.5) + (15 * 0.5)).toInt(),
+            (calcStrict as KpiCalculationResult.Success).score,
+        )
+        assertEquals(
+            ((20 * 0.5) + (15 * 0.5)).toInt(),
+            (calcRelaxed as KpiCalculationResult.Success).score,
+        )
     }
 }
