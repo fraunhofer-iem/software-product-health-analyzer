@@ -14,6 +14,19 @@ import de.fraunhofer.iem.kpiCalculator.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.kpiCalculator.model.kpi.hierarchy.KpiNode
 
+internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculationStrategy {
+    return when (strategyId) {
+        KpiStrategyId.RAW_VALUE_STRATEGY -> RawValueKpiCalculationStrategy
+        KpiStrategyId.RATIO_STRATEGY -> RatioKPICalculationStrategy
+
+        KpiStrategyId.AGGREGATION_STRATEGY -> AggregationKPICalculationStrategy
+
+        KpiStrategyId.MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
+
+        KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
+    }
+}
+
 internal interface KpiCalculationStrategy {
     /**
      * Calculates a KpiCalculationResult by applying the KpiCalculation strategy on the given child
