@@ -57,9 +57,10 @@ internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
                 if (biggerValue != 0.0) {
                     smallerValue / biggerValue
                 } else {
-                    // NB: for whatever reason the statement above results in -Infinity
+                    // the statement above results in -Infinity
                     // instead of an ArithmeticException when  dividing by 0.
-                    throw ArithmeticException("Tried division by 0")
+
+                    return KpiCalculationResult.Error("Tried division by 0")
                 }
             } catch (e: Exception) {
                 logger.error { "Error " }
