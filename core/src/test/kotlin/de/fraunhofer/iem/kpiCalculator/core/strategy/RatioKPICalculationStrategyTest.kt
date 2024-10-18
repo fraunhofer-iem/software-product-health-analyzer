@@ -274,9 +274,7 @@ class RatioKPICalculationStrategyTest {
                 ),
             )
 
-        KpiHierarchyNode.depthFirstTraversal(root) {
-            it.result = KpiCalculator.calculateKpi(it)
-        }
+        KpiHierarchyNode.depthFirstTraversal(root) { it.result = KpiCalculator.calculateKpi(it) }
 
         assertEquals(true, root.result is KpiCalculationResult.Error)
 
