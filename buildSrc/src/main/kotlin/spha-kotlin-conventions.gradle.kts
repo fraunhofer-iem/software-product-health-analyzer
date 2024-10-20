@@ -19,6 +19,7 @@ plugins {
     id("dev.adamko.dokkatoo")
     kotlin("jvm")
     id("com.ncorti.ktfmt.gradle")
+    id("spha-release-conventions")
 }
 
 repositories { mavenCentral() }
@@ -72,9 +73,4 @@ tasks.register<Jar>("javadocJar") {
     dependsOn(tasks.dokkatooGeneratePublicationJavadoc)
     from(tasks.dokkatooGeneratePublicationJavadoc.flatMap { it.outputDirectory })
     archiveClassifier = "javadoc"
-}
-
-tasks.register<Jar>("sourcesJar") {
-    archiveClassifier = "sources"
-    from(sourceSets.main.get().allSource)
 }
