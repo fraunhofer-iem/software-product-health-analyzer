@@ -9,6 +9,8 @@ mockk = "1.13.13"
 semver = "2.0.0"
 kotlinDate = "0.6.1"
 ktfmtPlugin = "0.20.1"
+mavenPublishPlugin = "0.30.0"
+dokkatooPlugin = "2.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -22,7 +24,8 @@ plugin-ktfmt = { module = "com.ncorti.ktfmt.gradle:plugin", version.ref = "ktfmt
 semver = { module = "io.github.z4kn4fein:semver", version.ref = "semver" }
 test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-
+plugin-mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublishPlugin" }
+plugin-dokkatoo = { module = "dev.adamko.dokkatoo:dokkatoo-plugin", version.ref = "dokkatooPlugin" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
