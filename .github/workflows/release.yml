@@ -20,13 +20,23 @@ jobs:
       SPHA_VERSION: ${{ inputs.tag || github.ref_name }}
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
         with:
           ref: ${{ env.SPHA_VERSION }}
 
 
       - name: Generate Release Notes
         run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
+
+      - name: Publish to OSSRH
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
+        run: ./gradlew --no-configuration-cache publishAndReleaseToMavenCentral
 
       - name: Create GitHub Release
         env:
