@@ -16,7 +16,7 @@ plugins {
     // Apply core plugins.
     jacoco
     `java-library`
-
+    id("dev.adamko.dokkatoo")
     kotlin("jvm")
     id("com.ncorti.ktfmt.gradle")
 }
@@ -63,4 +63,18 @@ tasks.register("jacocoReport") {
     group = "Reporting"
 
     dependsOn(tasks.withType<JacocoReport>())
+}
+
+tasks.register<Jar>("javadocJar") {
+    description = "Assembles a JAR containing the Javadoc documentation."
+    group = "Documentation"
+
+    dependsOn(tasks.dokkatooGeneratePublicationJavadoc)
+    from(tasks.dokkatooGeneratePublicationJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier = "javadoc"
+}
+
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier = "sources"
+    from(sourceSets.main.get().allSource)
 }
