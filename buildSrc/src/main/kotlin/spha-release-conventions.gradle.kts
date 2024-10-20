@@ -17,11 +17,7 @@ plugins {
 }
 
 mavenPublishing {
-    fun getGroupId(parent: Project?): String =
-        parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
-
-    coordinates(groupId = "org${getGroupId(parent)}")
-    publishToMavenCentral()
+    coordinates(groupId = "de.fraunhofer.iem", artifactId = "spha", version = version.toString())
 
     configure(
         KotlinJvm(
