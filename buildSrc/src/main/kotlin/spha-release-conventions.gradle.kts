@@ -63,7 +63,6 @@ mavenPublishing {
                 "scm:git:https://github.com/fraunhofer-iem/software-product-health-analyzer.git"
             developerConnection =
                 "scm:git:git@github.com:fraunhofer-iem/software-product-health-analyzer.git"
-            tag = version.toString()
             url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
         }
     }
