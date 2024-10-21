@@ -17,7 +17,7 @@ plugins {
 }
 
 mavenPublishing {
-    coordinates(groupId = "de.fraunhofer.iem", artifactId = "spha", version = version.toString())
+    coordinates(groupId = "de.fraunhofer.iem", artifactId = "spha")
 
     configure(
         KotlinJvm(
