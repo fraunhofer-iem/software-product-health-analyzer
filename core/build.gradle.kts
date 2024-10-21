@@ -7,12 +7,8 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    id("spha-kotlin-conventions")
-}
+plugins { id("spha-kotlin-conventions") }
 
-group = "de.fraunhofer.iem.kpiCalculator"
+group = "de.fraunhofer.iem.spha"
 
-dependencies {
-    implementation(project(":model"))
-}
+dependencies { implementation(project(":model")) }
