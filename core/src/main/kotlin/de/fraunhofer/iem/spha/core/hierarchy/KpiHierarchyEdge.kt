@@ -7,13 +7,10 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    id("spha-kotlin-conventions")
-    alias(libs.plugins.serialization)
-}
+package de.fraunhofer.iem.spha.core.hierarchy
 
-group = "de.fraunhofer.iem.spha"
-
-dependencies { implementation(libs.kotlin.serialization.json) }
-
-tasks.test { useJUnitPlatform() }
+internal data class KpiHierarchyEdge(
+    val to: KpiHierarchyNode,
+    val plannedWeight: Double,
+    var actualWeight: Double = plannedWeight,
+)

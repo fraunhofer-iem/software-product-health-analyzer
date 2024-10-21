@@ -7,13 +7,11 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    id("spha-kotlin-conventions")
-    alias(libs.plugins.serialization)
-}
+package de.fraunhofer.iem.spha.model.adapter.vcs
 
-group = "de.fraunhofer.iem.spha"
-
-dependencies { implementation(libs.kotlin.serialization.json) }
-
-tasks.test { useJUnitPlatform() }
+data class RepositoryDetailsDto(
+    val projectId: Long,
+    val numberOfCommits: Int,
+    val numberOfSignedCommits: Int,
+    val isDefaultBranchProtected: Boolean,
+)

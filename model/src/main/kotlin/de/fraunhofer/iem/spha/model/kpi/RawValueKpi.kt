@@ -7,13 +7,8 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    id("spha-kotlin-conventions")
-    alias(libs.plugins.serialization)
-}
+package de.fraunhofer.iem.spha.model.kpi
 
-group = "de.fraunhofer.iem.spha"
+import kotlinx.serialization.Serializable
 
-dependencies { implementation(libs.kotlin.serialization.json) }
-
-tasks.test { useJUnitPlatform() }
+@Serializable data class RawValueKpi(val kind: KpiId, val score: Int)

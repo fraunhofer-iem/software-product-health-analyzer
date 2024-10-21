@@ -7,13 +7,12 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    id("spha-kotlin-conventions")
-    alias(libs.plugins.serialization)
+package de.fraunhofer.iem.spha.model.kpi
+
+enum class KpiStrategyId {
+    RAW_VALUE_STRATEGY,
+    AGGREGATION_STRATEGY,
+    MAXIMUM_STRATEGY,
+    WEIGHTED_MAXIMUM_STRATEGY,
+    RATIO_STRATEGY,
 }
-
-group = "de.fraunhofer.iem.spha"
-
-dependencies { implementation(libs.kotlin.serialization.json) }
-
-tasks.test { useJUnitPlatform() }

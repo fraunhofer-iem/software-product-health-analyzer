@@ -12,7 +12,7 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
-group = "de.fraunhofer.iem.kpiCalculator"
+group = "de.fraunhofer.iem.spha"
 
 dependencies {
     implementation(project(":model"))
