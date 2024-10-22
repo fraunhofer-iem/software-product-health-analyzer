@@ -39,7 +39,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
           SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
-        run: ./gradlew --no-configuration-cache publishAndReleaseToMavenCentral
+        run: ./gradlew publishAllPublicationsToMavenCentralRepository
 
       - name: Generate Release Notes
         run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
