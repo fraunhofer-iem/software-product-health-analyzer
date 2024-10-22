@@ -15,7 +15,7 @@ plugins {
 }
 
 mavenPublishing {
-    coordinates(groupId = "de.fraunhofer.iem.spha")
+    coordinates(groupId = "de.fraunhofer.iem")
 
     publishToMavenCentral(SonatypeHost.S01)
 
