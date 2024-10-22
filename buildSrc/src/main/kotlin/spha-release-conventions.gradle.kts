@@ -17,7 +17,7 @@ plugins {
 mavenPublishing {
     coordinates(groupId = "de.fraunhofer.iem.spha")
 
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.S01)
 
     pom {
         name = project.name
