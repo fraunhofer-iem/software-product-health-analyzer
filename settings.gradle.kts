@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: MIT
  * License-Filename: LICENSE
  */
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "spha"
 
