@@ -11,25 +11,28 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
 
 jobs:
   publish:
     env:
       SPHA_VERSION: ${{ inputs.tag || github.ref_name }}
-    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
         with:
           ref: ${{ env.SPHA_VERSION }}
-
-
-      - name: Generate Release Notes
-        run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
+        with:
+          dependency-graph: generate-and-submit
 
       - name: Publish to OSSRH
         env:
+          GITHUB_DEPENDENCY_GRAPH_REF: refs/heads/main
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USER }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PW }}
           ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
@@ -37,6 +40,9 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
           SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
         run: ./gradlew --no-configuration-cache publishAndReleaseToMavenCentral
+
+      - name: Generate Release Notes
+        run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
 
       - name: Create GitHub Release
         env:

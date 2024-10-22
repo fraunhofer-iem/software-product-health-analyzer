@@ -7,11 +7,13 @@
  * License-Filename: LICENSE
  */
 
-rootProject.name = "software-product-health-analyzer"
+rootProject.name = "spha"
 
-include("core")
-include("model")
-include("adapter")
+include(":core")
+
+include(":model")
+
+include(":adapter")
 
 pluginManagement {
     repositories {
@@ -20,6 +22,4 @@ pluginManagement {
     }
 }
 
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version ("0.8.0")
-}
+plugins { id("org.gradle.toolchains.foojay-resolver-convention") version ("0.8.0") }

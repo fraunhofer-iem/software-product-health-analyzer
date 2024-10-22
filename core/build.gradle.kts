@@ -9,6 +9,4 @@
 
 plugins { id("spha-kotlin-conventions") }
 
-group = "de.fraunhofer.iem.spha"
-
 dependencies { implementation(project(":model")) }

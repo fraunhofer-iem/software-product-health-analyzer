@@ -1,5 +1,3 @@
-import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SonatypeHost
 
 /*
@@ -17,23 +15,9 @@ plugins {
 }
 
 mavenPublishing {
-    coordinates(groupId = "de.fraunhofer.iem", artifactId = "spha")
+    coordinates(groupId = "de.fraunhofer.iem.spha")
 
-    configure(
-        KotlinJvm(
-            // configures the -javadoc artifact, possible values:
-            // - `JavadocJar.None()` don't publish this artifact
-            // - `JavadocJar.Empty()` publish an empty jar
-            // - `JavadocJar.Dokka("dokkaHtml")` when using Kotlin with Dokka, where `dokkaHtml` is
-            // the name of the Dokka task that should be used as input
-            javadocJar = JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc"),
-            // whether to publish a sources jar
-            sourcesJar = true,
-        )
-    )
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-    signAllPublications()
 
     pom {
         name = project.name
@@ -63,6 +47,7 @@ mavenPublishing {
                 "scm:git:https://github.com/fraunhofer-iem/software-product-health-analyzer.git"
             developerConnection =
                 "scm:git:git@github.com:fraunhofer-iem/software-product-health-analyzer.git"
+            tag = version.toString()
             url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
         }
     }

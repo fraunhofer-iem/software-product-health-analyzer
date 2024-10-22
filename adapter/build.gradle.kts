@@ -12,8 +12,6 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
-group = "de.fraunhofer.iem.spha"
-
 dependencies {
     implementation(project(":model"))
     implementation(libs.semver)

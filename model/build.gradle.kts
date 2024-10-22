@@ -12,8 +12,4 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
-group = "de.fraunhofer.iem.spha"
-
 dependencies { implementation(libs.kotlin.serialization.json) }
-
-tasks.test { useJUnitPlatform() }

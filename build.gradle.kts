@@ -33,3 +33,5 @@ if (version == Project.DEFAULT_VERSION) {
             // Fall back to a plain version without pre-release or build parts.
             ?: semver.version
 }
+
+logger.lifecycle("Building SPHA version $version.")
