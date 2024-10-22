@@ -7,8 +7,6 @@
  * License-Filename: LICENSE
  */
 
-import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.KotlinJvm
 import org.gradle.accessors.dm.LibrariesForLibs
 
 private val Project.libs: LibrariesForLibs
@@ -16,32 +14,69 @@ private val Project.libs: LibrariesForLibs
 
 plugins {
     // Apply core plugins.
-    jacoco
     `java-library`
+    `maven-publish`
+    signing
+    jacoco
     id("dev.adamko.dokkatoo")
-    kotlin("jvm")
     id("com.ncorti.ktfmt.gradle")
-    id("spha-release-conventions")
+    kotlin("jvm")
 }
 
 repositories { mavenCentral() }
 
-mavenPublishing {
-    configure(
-        KotlinJvm(
-            // configures the -javadoc artifact, possible values:
-            // - `JavadocJar.None()` don't publish this artifact
-            // - `JavadocJar.Empty()` publish an empty jar
-            // - `JavadocJar.Dokka("dokkaHtml")` when using Kotlin with Dokka, where `dokkaHtml` is
-            // the name of the Dokka task that should be used as input
-            javadocJar = JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc"),
-            // whether to publish a sources jar
-            sourcesJar = true,
-        )
-    )
+// mavenPublishing {
+//    configure(
+//        KotlinJvm(
+//            // configures the -javadoc artifact, possible values:
+//            // - `JavadocJar.None()` don't publish this artifact
+//            // - `JavadocJar.Empty()` publish an empty jar
+//            // - `JavadocJar.Dokka("dokkaHtml")` when using Kotlin with Dokka, where `dokkaHtml`
+// is
+//            // the name of the Dokka task that should be used as input
+//            javadocJar = JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc"),
+//            // whether to publish a sources jar
+//            sourcesJar = true,
+//        )
+//    )
+// }
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
 }
 
-java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "de.fraunhofer.iem"
+            artifactId = "spha-${project.name}"
+            from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            name = "mavenCentral"
+            val releasesRepoUrl =
+                "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url =
+                uri(
+                    if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl
+                    else releasesRepoUrl
+                )
+            credentials(PasswordCredentials::class)
+        }
+    }
+}
+
+ signing {
+     val signingKey: String? by project
+     val signingPassword: String? by project
+     useInMemoryPgpKeys(signingKey, signingPassword)
+     sign(publishing.publications["maven"])
+ }
 
 kotlin {
     compilerOptions { apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0) }
@@ -81,16 +116,4 @@ tasks.register("jacocoReport") {
     dependsOn(tasks.withType<JacocoReport>())
 }
 
-tasks.register<Jar>("javadocJar") {
-    description = "Assembles a JAR containing the Javadoc documentation."
-    group = "Documentation"
-
-    dependsOn(tasks.dokkatooGeneratePublicationJavadoc)
-    from(tasks.dokkatooGeneratePublicationJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier = "javadoc"
-}
-
-if (project != rootProject)
-    version =
-        rootProject
-            .version
+if (project != rootProject) version = rootProject.version

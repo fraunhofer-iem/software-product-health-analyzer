@@ -27,19 +27,14 @@ jobs:
           ref: ${{ env.SPHA_VERSION }}
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
-        with:
-          dependency-graph: generate-and-submit
 
       - name: Publish to OSSRH
         env:
-          GITHUB_DEPENDENCY_GRAPH_REF: refs/heads/main
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USER }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PW }}
-          ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: true
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
-          SONATYPE_CONNECT_TIMEOUT_SECONDS: 300
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+        run: ./gradlew publish
 
       - name: Generate Release Notes
         run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
