@@ -7,7 +7,6 @@
  * License-Filename: LICENSE
  */
 
-import java.util.*
 import org.gradle.accessors.dm.LibrariesForLibs
 
 private val Project.libs: LibrariesForLibs
@@ -19,7 +18,7 @@ plugins {
     `maven-publish`
     signing
     jacoco
-    id("dev.adamko.dokkatoo")
+    id("org.jetbrains.dokka")
     id("com.ncorti.ktfmt.gradle")
     kotlin("jvm")
 }
@@ -27,8 +26,8 @@ plugins {
 repositories { mavenCentral() }
 
 java {
-    withJavadocJar()
     withSourcesJar()
+    withJavadocJar()
     toolchain { languageVersion = JavaLanguageVersion.of(21) }
 }
 
@@ -122,6 +121,14 @@ tasks.withType<Test> { finalizedBy(tasks.jacocoTestReport) }
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports { xml.required = true }
+}
+
+tasks.named<Jar>("javadocJar") { from(tasks.named("dokkaJavadoc")) }
+
+tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
 }
 
 tasks.register("jacocoReport") {
