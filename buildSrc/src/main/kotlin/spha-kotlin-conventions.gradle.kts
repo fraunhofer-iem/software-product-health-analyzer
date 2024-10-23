@@ -7,6 +7,7 @@
  * License-Filename: LICENSE
  */
 
+import java.util.*
 import org.gradle.accessors.dm.LibrariesForLibs
 
 private val Project.libs: LibrariesForLibs
@@ -71,12 +72,18 @@ publishing {
     }
 }
 
- signing {
-     val signingKey: String? by project
-     val signingPassword: String? by project
-     useInMemoryPgpKeys(signingKey, signingPassword)
-     sign(publishing.publications["maven"])
- }
+fun base64Decode(encodedString: String): String {
+    return String(Base64.getDecoder().decode(encodedString))
+}
+
+val signingKeyEncoded: String? by project
+
+signing {
+    val signingKey = base64Decode(signingKeyEncoded!!)
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications["maven"])
+}
 
 kotlin {
     compilerOptions { apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0) }
