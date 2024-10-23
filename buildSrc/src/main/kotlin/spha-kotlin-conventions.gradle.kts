@@ -26,22 +26,6 @@ plugins {
 
 repositories { mavenCentral() }
 
-// mavenPublishing {
-//    configure(
-//        KotlinJvm(
-//            // configures the -javadoc artifact, possible values:
-//            // - `JavadocJar.None()` don't publish this artifact
-//            // - `JavadocJar.Empty()` publish an empty jar
-//            // - `JavadocJar.Dokka("dokkaHtml")` when using Kotlin with Dokka, where `dokkaHtml`
-// is
-//            // the name of the Dokka task that should be used as input
-//            javadocJar = JavadocJar.Dokka("dokkatooGeneratePublicationJavadoc"),
-//            // whether to publish a sources jar
-//            sourcesJar = true,
-//        )
-//    )
-// }
-
 java {
     withJavadocJar()
     withSourcesJar()
@@ -58,7 +42,7 @@ publishing {
     }
     repositories {
         maven {
-            name = "mavenCentral"
+            name = "OSSRH"
             val releasesRepoUrl =
                 "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             val snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
@@ -72,14 +56,8 @@ publishing {
     }
 }
 
-fun base64Decode(encodedString: String): String {
-    return String(Base64.getDecoder().decode(encodedString))
-}
-
-val signingKeyEncoded: String? by project
-
 signing {
-    val signingKey = base64Decode(signingKeyEncoded!!)
+    val signingKey: String? by project
     val signingPassword: String? by project
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications["maven"])
