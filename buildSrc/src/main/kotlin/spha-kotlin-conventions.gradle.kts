@@ -35,6 +35,36 @@ java {
 publishing {
     publications {
         create<MavenPublication>("maven") {
+            pom {
+                name = "spha-${project.name}"
+                description =
+                    "SPHA is a collection of libraries to work with hierarchical KPI models."
+                url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url =
+                            "https://github.com/fraunhofer-iem/software-product-health-analyzer/blob/main/LICENSE.md"
+                    }
+                }
+                developers {
+                    developer {
+                        name = "Jan-Niclas Struewer"
+                        email = "jan-niclas.struewer@iem.fraunhofer.de"
+                    }
+                    developer {
+                        name = "Sebastian Leuer"
+                        email = "sebastian.leuer@iem.fraunhofer.de"
+                    }
+                }
+                scm {
+                    connection =
+                        "scm:git:git@github.com:fraunhofer-iem/software-product-health-analyzer.git"
+                    developerConnection =
+                        "scm:git:ssh://github.com:fraunhofer-iem/software-product-health-analyzer.git"
+                    url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
+                }
+            }
             groupId = "de.fraunhofer.iem"
             artifactId = "spha-${project.name}"
             from(components["java"])
