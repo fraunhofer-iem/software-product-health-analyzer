@@ -7,6 +7,9 @@
  * License-Filename: LICENSE
  */
 
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SonatypeHost
 import org.gradle.accessors.dm.LibrariesForLibs
 
 private val Project.libs: LibrariesForLibs
@@ -15,60 +18,62 @@ private val Project.libs: LibrariesForLibs
 plugins {
     // Apply core plugins.
     `java-library`
-    `maven-publish`
-    signing
+    id("com.vanniktech.maven.publish")
     jacoco
     id("org.jetbrains.dokka")
     id("com.ncorti.ktfmt.gradle")
     kotlin("jvm")
 }
 
+if (project != rootProject) version = rootProject.version
+
 repositories { mavenCentral() }
 
-java {
-    withSourcesJar()
-    withJavadocJar()
-    toolchain { languageVersion = JavaLanguageVersion.of(21) }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            pom {
-                name = "spha-${project.name}"
-                description =
-                    "SPHA is a collection of libraries to work with hierarchical KPI models."
-                url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
-                licenses {
-                    license {
-                        name = "MIT License"
-                        url =
-                            "https://github.com/fraunhofer-iem/software-product-health-analyzer/blob/main/LICENSE.md"
-                    }
-                }
-                developers {
-                    developer {
-                        name = "Jan-Niclas Struewer"
-                        email = "jan-niclas.struewer@iem.fraunhofer.de"
-                    }
-                    developer {
-                        name = "Sebastian Leuer"
-                        email = "sebastian.leuer@iem.fraunhofer.de"
-                    }
-                }
-                scm {
-                    connection =
-                        "scm:git:git@github.com:fraunhofer-iem/software-product-health-analyzer.git"
-                    developerConnection =
-                        "scm:git:ssh://github.com:fraunhofer-iem/software-product-health-analyzer.git"
-                    url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
-                }
+mavenPublishing {
+    configure(KotlinJvm(JavadocJar.Dokka("dokkaJavadoc")))
+
+    coordinates(
+        groupId = "de.fraunhofer.iem",
+        artifactId = "spha-${project.name}",
+        version = version.toString(),
+    )
+
+    publishToMavenCentral(SonatypeHost.S01, automaticRelease = false)
+    signAllPublications()
+
+    pom {
+        name = "spha-${project.name}"
+        description = "SPHA is a collection of libraries to work with hierarchical KPI models."
+        url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
+        version = version.toString()
+        licenses {
+            license {
+                name = "MIT License"
+                url =
+                    "https://github.com/fraunhofer-iem/software-product-health-analyzer/blob/main/LICENSE.md"
             }
-            groupId = "de.fraunhofer.iem"
-            artifactId = "spha-${project.name}"
-            from(components["java"])
+        }
+        developers {
+            developer {
+                name = "Jan-Niclas Struewer"
+                email = "jan-niclas.struewer@iem.fraunhofer.de"
+            }
+            developer {
+                name = "Sebastian Leuer"
+                email = "sebastian.leuer@iem.fraunhofer.de"
+            }
+        }
+        scm {
+            connection =
+                "scm:git:git@github.com:fraunhofer-iem/software-product-health-analyzer.git"
+            developerConnection =
+                "scm:git:ssh://github.com:fraunhofer-iem/software-product-health-analyzer.git"
+            url = "https://github.com/fraunhofer-iem/software-product-health-analyzer"
         }
     }
+
     repositories {
         maven {
             name = "mavenCentral"
@@ -83,13 +88,6 @@ publishing {
             credentials(PasswordCredentials::class)
         }
     }
-}
-
-signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign(publishing.publications["maven"])
 }
 
 kotlin {
@@ -123,19 +121,9 @@ tasks.jacocoTestReport {
     reports { xml.required = true }
 }
 
-tasks.named<Jar>("javadocJar") { from(tasks.named("dokkaJavadoc")) }
-
-tasks.register<Jar>("dokkaJavadocJar") {
-    dependsOn(tasks.dokkaJavadoc)
-    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier.set("javadoc")
-}
-
 tasks.register("jacocoReport") {
     description = "Generates code coverage reports for all test tasks."
     group = "Reporting"
 
     dependsOn(tasks.withType<JacocoReport>())
 }
-
-if (project != rootProject) version = rootProject.version
