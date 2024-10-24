@@ -33,11 +33,11 @@ jobs:
 
       - name: Publish to OSSRH
         env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: '${{ secrets.SONATYPE_USER }}'
-          ORG_GRADLE_PROJECT_mavenCentralPassword: '${{ secrets.SONATYPE_PW }}'
-          ORG_GRADLE_PROJECT_signingKey: '${{ secrets.GPG_PRIVATE_KEY }}'
-          ORG_GRADLE_PROJECT_signingPassword: '${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}'
-        run: ./gradlew publish
+          ossrhUsername: ${{ secrets.SONATYPE_USER }}
+          ossrhPassword: ${{ secrets.SONATYPE_PW }}
+          pgpKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          pgpPassphrase: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+        run: ./gradlew -PmavenCentralUsername="$ossrhUsername" -PmavenCentralPassword="$ossrhPassword" -PsigningKey="$pgpKey" -PsigningPassword="$pgpPassphrase" publish
 
       - name: Generate Release Notes
         run: ./gradlew -q printChangeLog > RELEASE_NOTES.md
