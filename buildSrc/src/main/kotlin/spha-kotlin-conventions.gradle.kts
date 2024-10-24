@@ -85,7 +85,6 @@ mavenPublishing {
                     if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl
                     else releasesRepoUrl
                 )
-            credentials(PasswordCredentials::class)
         }
     }
 }
