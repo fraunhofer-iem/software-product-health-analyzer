@@ -30,7 +30,10 @@ class AggregationKpiCalculationStrategyTest {
                 strict = false,
             )
         val calcStrict =
-            WeightedAverageKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
+            WeightedAverageKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = listOf(),
+                strict = true,
+            )
 
         assertEquals(true, calcRelaxed is KpiCalculationResult.Empty)
         assertEquals(true, calcStrict is KpiCalculationResult.Empty)

@@ -24,7 +24,11 @@ internal object WeightedMinimumKPICalculationStrategy : BaseKpiCalculationStrate
 
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
 
-        val min = edges.minByOrNull { it.to.score * it.actualWeight }?.to?.score ?: 0
+        val min = edges.minByOrNull { it.to.score * it.actualWeight }?.to?.score
+
+        if (min == null) {
+            return KpiCalculationResult.Empty()
+        }
 
         return KpiCalculationResult.Success(score = min)
     }

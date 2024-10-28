@@ -55,9 +55,15 @@ class WeightedRatioKPICalculationStrategyTest {
     fun calculateEmpty() {
 
         val calcRelaxed =
-            WeightedRatioKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = false)
+            WeightedRatioKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = listOf(),
+                strict = false,
+            )
         val calcStrict =
-            WeightedRatioKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
+            WeightedRatioKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = listOf(),
+                strict = true,
+            )
 
         assertEquals(true, calcRelaxed is KpiCalculationResult.Empty)
         assertEquals(true, calcStrict is KpiCalculationResult.Empty)
@@ -208,8 +214,10 @@ class WeightedRatioKPICalculationStrategyTest {
                 listOf(RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 15)),
             )
 
-        val relaxed = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
-        val strict = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+        val relaxed =
+            WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+        val strict =
+            WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
         assertEquals(true, relaxed is KpiCalculationResult.Error)
         assertEquals(true, strict is KpiCalculationResult.Error)
     }
@@ -278,8 +286,10 @@ class WeightedRatioKPICalculationStrategyTest {
 
         assertEquals(true, root.result is KpiCalculationResult.Error)
 
-        val relaxed = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
-        val strict = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+        val relaxed =
+            WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+        val strict =
+            WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
 
         assertEquals(true, relaxed is KpiCalculationResult.Error)
         assertEquals(true, strict is KpiCalculationResult.Error)

@@ -24,7 +24,11 @@ internal object WeightedMaximumKPICalculationStrategy : BaseKpiCalculationStrate
 
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
 
-        val max = edges.maxByOrNull { it.to.score * it.actualWeight }?.to?.score ?: 0
+        val max = edges.maxByOrNull { it.to.score * it.actualWeight }?.to?.score
+
+        if (max == null) {
+            return KpiCalculationResult.Empty()
+        }
 
         return KpiCalculationResult.Success(score = max)
     }
