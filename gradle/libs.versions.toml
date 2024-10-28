@@ -29,4 +29,4 @@ plugin-dokkatoo = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-logging = ["kotlin-loggin", "slf4j-api"]
+logging = ["kotlin-loggin", "slf4j-api", "slf4j-logger"]
