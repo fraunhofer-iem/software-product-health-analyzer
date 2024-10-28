@@ -17,13 +17,16 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculationStrategy {
     return when (strategyId) {
         KpiStrategyId.RAW_VALUE_STRATEGY -> RawValueKpiCalculationStrategy
+
         KpiStrategyId.WEIGHTED_RATIO_STRATEGY -> WeightedRatioKPICalculationStrategy
 
         KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY -> WeightedAverageKPICalculationStrategy
 
         KpiStrategyId.MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
 
-        KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
+        KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY -> WeightedMaximumKPICalculationStrategy
+
+        KpiStrategyId.WEIGHTED_MINIMUM_STRATEGY -> WeightedMinimumKPICalculationStrategy
     }
 }
 
