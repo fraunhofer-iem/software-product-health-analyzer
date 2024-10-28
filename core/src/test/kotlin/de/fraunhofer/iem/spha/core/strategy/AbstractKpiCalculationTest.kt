@@ -223,4 +223,13 @@ class AbstractKpiCalculationTest {
             )
         }
     }
+
+    @Test
+    fun rangeCheckForNoScoreResults() {
+        val errorResult = KpiCalculationResult.Error("Error")
+        val emptyResult = KpiCalculationResult.Empty()
+
+        assertEquals(emptyResult, BaseKpiCalculationStrategy.getResultInValidRange(emptyResult))
+        assertEquals(errorResult, BaseKpiCalculationStrategy.getResultInValidRange(errorResult))
+    }
 }
