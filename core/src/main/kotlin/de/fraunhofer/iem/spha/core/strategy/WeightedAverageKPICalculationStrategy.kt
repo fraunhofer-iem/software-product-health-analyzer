@@ -17,10 +17,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-internal object AggregationKPICalculationStrategy : BaseKpiCalculationStrategy() {
+internal object WeightedAverageKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override val kpiStrategyId: KpiStrategyId
-        get() = KpiStrategyId.AGGREGATION_STRATEGY
+        get() = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY
 
     /**
      * This function calculates the aggregate sum of all given children. If a child is empty it is

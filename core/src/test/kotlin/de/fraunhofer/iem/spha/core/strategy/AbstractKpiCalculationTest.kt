@@ -26,7 +26,7 @@ internal fun getNodeWithErrorResult(plannedWeight: Double): KpiHierarchyNode {
     val node =
         KpiNode(
             kpiId = KpiId.NUMBER_OF_COMMITS,
-            kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+            kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
             edges =
                 listOf(
                     KpiEdge(
@@ -51,7 +51,7 @@ internal fun getNodeIncompleteResult(plannedWeight: Double): KpiHierarchyNode {
     val node =
         KpiNode(
             kpiId = KpiId.SECRETS,
-            kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+            kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
             edges =
                 listOf(
                     KpiEdge(
@@ -103,7 +103,7 @@ class AbstractKpiCalculationTest {
         val nodeCorrectChildren =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(

@@ -25,12 +25,12 @@ class AggregationKpiCalculationStrategyTest {
     fun calculateEmpty() {
 
         val calcRelaxed =
-            AggregationKPICalculationStrategy.calculateKpi(
+            WeightedAverageKPICalculationStrategy.calculateKpi(
                 hierarchyEdges = listOf(),
                 strict = false,
             )
         val calcStrict =
-            AggregationKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
+            WeightedAverageKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
 
         assertEquals(true, calcRelaxed is KpiCalculationResult.Empty)
         assertEquals(true, calcStrict is KpiCalculationResult.Empty)
@@ -72,9 +72,9 @@ class AggregationKpiCalculationStrategyTest {
             )
 
         val calcRelaxed =
-            AggregationKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+            WeightedAverageKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
         val calcStrict =
-            AggregationKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+            WeightedAverageKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
 
         assert(calcRelaxed is KpiCalculationResult.Success)
         assert(calcStrict is KpiCalculationResult.Success)

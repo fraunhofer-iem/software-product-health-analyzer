@@ -20,34 +20,34 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class RatioKPICalculationStrategyTest {
+class WeightedRatioKPICalculationStrategyTest {
 
     @Test
     fun isValidEmpty() {
         val node =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges = listOf(),
             )
 
-        assertEquals(true, RatioKPICalculationStrategy.isValid(node = node, strict = false))
-        assertEquals(true, RatioKPICalculationStrategy.isValid(node = node, strict = true))
+        assertEquals(true, WeightedRatioKPICalculationStrategy.isValid(node = node, strict = false))
+        assertEquals(true, WeightedRatioKPICalculationStrategy.isValid(node = node, strict = true))
 
         val incorrectStrategy =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges = listOf(),
             )
 
         assertEquals(
             true,
-            RatioKPICalculationStrategy.isValid(node = incorrectStrategy, strict = false),
+            WeightedRatioKPICalculationStrategy.isValid(node = incorrectStrategy, strict = false),
         )
         assertEquals(
             true,
-            RatioKPICalculationStrategy.isValid(node = incorrectStrategy, strict = true),
+            WeightedRatioKPICalculationStrategy.isValid(node = incorrectStrategy, strict = true),
         )
     }
 
@@ -55,9 +55,9 @@ class RatioKPICalculationStrategyTest {
     fun calculateEmpty() {
 
         val calcRelaxed =
-            RatioKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = false)
+            WeightedRatioKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = false)
         val calcStrict =
-            RatioKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
+            WeightedRatioKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
 
         assertEquals(true, calcRelaxed is KpiCalculationResult.Empty)
         assertEquals(true, calcStrict is KpiCalculationResult.Empty)
@@ -68,7 +68,7 @@ class RatioKPICalculationStrategyTest {
         val nodeCorrectChildren =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -94,11 +94,11 @@ class RatioKPICalculationStrategyTest {
 
         assertEquals(
             true,
-            RatioKPICalculationStrategy.isValid(node = nodeCorrectChildren, strict = false),
+            WeightedRatioKPICalculationStrategy.isValid(node = nodeCorrectChildren, strict = false),
         )
         assertEquals(
             true,
-            RatioKPICalculationStrategy.isValid(node = nodeCorrectChildren, strict = true),
+            WeightedRatioKPICalculationStrategy.isValid(node = nodeCorrectChildren, strict = true),
         )
     }
 
@@ -138,12 +138,12 @@ class RatioKPICalculationStrategyTest {
             )
 
         val calcRelaxed =
-            RatioKPICalculationStrategy.calculateKpi(
+            WeightedRatioKPICalculationStrategy.calculateKpi(
                 hierarchyEdges = root.hierarchyEdges,
                 strict = false,
             )
         val calcStrict =
-            RatioKPICalculationStrategy.calculateKpi(
+            WeightedRatioKPICalculationStrategy.calculateKpi(
                 hierarchyEdges = root.hierarchyEdges,
                 strict = true,
             )
@@ -160,7 +160,7 @@ class RatioKPICalculationStrategyTest {
         val nodeManyChildren =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -195,11 +195,11 @@ class RatioKPICalculationStrategyTest {
 
         assertEquals(
             true,
-            RatioKPICalculationStrategy.isValid(node = nodeManyChildren, strict = false),
+            WeightedRatioKPICalculationStrategy.isValid(node = nodeManyChildren, strict = false),
         )
         assertEquals(
             false,
-            RatioKPICalculationStrategy.isValid(node = nodeManyChildren, strict = true),
+            WeightedRatioKPICalculationStrategy.isValid(node = nodeManyChildren, strict = true),
         )
 
         val root =
@@ -208,8 +208,8 @@ class RatioKPICalculationStrategyTest {
                 listOf(RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 15)),
             )
 
-        val relaxed = RatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
-        val strict = RatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+        val relaxed = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+        val strict = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
         assertEquals(true, relaxed is KpiCalculationResult.Error)
         assertEquals(true, strict is KpiCalculationResult.Error)
     }
@@ -219,7 +219,7 @@ class RatioKPICalculationStrategyTest {
         val nestedError =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -235,7 +235,7 @@ class RatioKPICalculationStrategyTest {
                             target =
                                 KpiNode(
                                     kpiId = KpiId.SECURITY,
-                                    kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                                    kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
@@ -278,8 +278,8 @@ class RatioKPICalculationStrategyTest {
 
         assertEquals(true, root.result is KpiCalculationResult.Error)
 
-        val relaxed = RatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
-        val strict = RatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+        val relaxed = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+        val strict = WeightedRatioKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
 
         assertEquals(true, relaxed is KpiCalculationResult.Error)
         assertEquals(true, strict is KpiCalculationResult.Error)
@@ -298,7 +298,7 @@ class RatioKPICalculationStrategyTest {
         val nodeToFewChildren =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -315,11 +315,11 @@ class RatioKPICalculationStrategyTest {
 
         assertEquals(
             false,
-            RatioKPICalculationStrategy.isValid(node = nodeToFewChildren, strict = false),
+            WeightedRatioKPICalculationStrategy.isValid(node = nodeToFewChildren, strict = false),
         )
         assertEquals(
             false,
-            RatioKPICalculationStrategy.isValid(node = nodeToFewChildren, strict = true),
+            WeightedRatioKPICalculationStrategy.isValid(node = nodeToFewChildren, strict = true),
         )
     }
 }

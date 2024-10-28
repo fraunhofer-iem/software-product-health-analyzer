@@ -17,10 +17,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-internal object RatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
+internal object WeightedRatioKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override val kpiStrategyId: KpiStrategyId
-        get() = KpiStrategyId.RATIO_STRATEGY
+        get() = KpiStrategyId.WEIGHTED_RATIO_STRATEGY
 
     /** Returns smallerValue / biggerValue, regardless in which order the values are given. */
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {

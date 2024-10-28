@@ -11,8 +11,8 @@ package de.fraunhofer.iem.spha.model.kpi
 
 enum class KpiStrategyId {
     RAW_VALUE_STRATEGY,
-    AGGREGATION_STRATEGY,
+    WEIGHTED_AVERAGE_STRATEGY,
     MAXIMUM_STRATEGY,
     WEIGHTED_MAXIMUM_STRATEGY,
-    RATIO_STRATEGY,
+    WEIGHTED_RATIO_STRATEGY,
 }
