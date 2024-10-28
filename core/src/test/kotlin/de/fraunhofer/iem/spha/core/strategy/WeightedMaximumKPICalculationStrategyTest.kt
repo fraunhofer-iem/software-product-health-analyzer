@@ -81,7 +81,7 @@ class WeightedWeightedMaximumKPICalculationStrategyTest {
 
         assert(calcRelaxed is KpiCalculationResult.Success)
         assert(calcStrict is KpiCalculationResult.Success)
-        assertEquals(10, (calcStrict as KpiCalculationResult.Success).score)
-        assertEquals(10, (calcRelaxed as KpiCalculationResult.Success).score)
+        assertEquals(20, (calcStrict as KpiCalculationResult.Success).score)
+        assertEquals(20, (calcRelaxed as KpiCalculationResult.Success).score)
     }
 }
