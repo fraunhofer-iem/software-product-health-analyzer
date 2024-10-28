@@ -154,21 +154,27 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
     protected abstract fun internalIsValid(node: KpiNode, strict: Boolean): Boolean
 
     companion object {
+        /**
+         * Checks if `result.score` is in a valid range (0..100). If the score is lower 0 or higher
+         * than 100, we return 0 or 100 respectively.
+         *
+         * @param result
+         */
         fun getResultInValidRange(result: KpiCalculationResult): KpiCalculationResult {
             return when (result) {
                 is KpiCalculationResult.Success ->
-                    validateScore(result, result.score) { score ->
+                    createValidScore(result, result.score) { score ->
                         KpiCalculationResult.Success(score)
                     }
                 is KpiCalculationResult.Incomplete ->
-                    validateScore(result, result.score) { score ->
+                    createValidScore(result, result.score) { score ->
                         KpiCalculationResult.Incomplete(score, result.reason)
                     }
                 else -> result
             }
         }
 
-        private fun <T : KpiCalculationResult> validateScore(
+        private fun <T : KpiCalculationResult> createValidScore(
             result: T,
             score: Int,
             createResult: (Int) -> T,
