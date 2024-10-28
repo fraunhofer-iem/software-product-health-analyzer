@@ -18,6 +18,7 @@ import de.fraunhofer.iem.spha.model.kpi.RawValueKpi
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiEdge
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
+import kotlin.random.Random
 import kotlin.test.fail
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -172,5 +173,54 @@ class AbstractKpiCalculationTest {
         assertEquals(0.0, incompleteNode.hierarchyEdges.first().actualWeight)
         assertEquals(0.5, incompleteNode.hierarchyEdges.last().plannedWeight)
         assertEquals(1.0, incompleteNode.hierarchyEdges.last().actualWeight)
+    }
+
+    @Test
+    fun isValidResultRange() {
+        (0..100).forEach { score ->
+            val successResult = KpiCalculationResult.Success(score)
+            val incompleteResult = KpiCalculationResult.Incomplete(score, "Incomplete")
+            assertEquals(
+                successResult,
+                BaseKpiCalculationStrategy.getResultInValidRange(successResult),
+            )
+            assertEquals(
+                incompleteResult,
+                BaseKpiCalculationStrategy.getResultInValidRange(incompleteResult),
+            )
+        }
+    }
+
+    @Test
+    fun isInvalidResultRange() {
+
+        val smallerThanZero = List(10) { Random.nextInt(-100, 0) }
+        val largerThanHundred = List(10) { Random.nextInt(101, 200) }
+
+        smallerThanZero.forEach { score ->
+            val successResult = KpiCalculationResult.Success(score)
+            val incompleteResult = KpiCalculationResult.Incomplete(score, "Incomplete")
+            assertEquals(
+                KpiCalculationResult.Success(0),
+                BaseKpiCalculationStrategy.getResultInValidRange(successResult),
+            )
+            assertEquals(
+                KpiCalculationResult.Incomplete(0, "Incomplete"),
+                BaseKpiCalculationStrategy.getResultInValidRange(incompleteResult),
+            )
+        }
+
+        largerThanHundred.forEach { score ->
+            val successResult = KpiCalculationResult.Success(score)
+            val incompleteResult = KpiCalculationResult.Incomplete(score, "Incomplete")
+            assertEquals(
+                KpiCalculationResult.Success(100),
+                BaseKpiCalculationStrategy.getResultInValidRange(successResult),
+            )
+            assertEquals(
+                KpiCalculationResult.Incomplete(100, "Incomplete"),
+                BaseKpiCalculationStrategy.getResultInValidRange(incompleteResult),
+            )
+        }
     }
 }

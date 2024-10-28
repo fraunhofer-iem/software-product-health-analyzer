@@ -13,6 +13,7 @@ import de.fraunhofer.iem.spha.core.hierarchy.KpiHierarchyEdge
 import de.fraunhofer.iem.spha.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculationStrategy {
     return when (strategyId) {
@@ -65,6 +66,8 @@ internal interface KpiCalculationStrategy {
     fun isValid(node: KpiNode, strict: Boolean = false): Boolean
 }
 
+private val logger = KotlinLogging.logger {}
+
 internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
 
     abstract val kpiStrategyId: KpiStrategyId
@@ -87,7 +90,7 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
 
         updateEdgeWeights(edges = hierarchyEdges, strict)
 
-        val result = internalCalculateKpi(hierarchyEdges)
+        val result = getResultInValidRange(internalCalculateKpi(hierarchyEdges))
 
         if (
             hierarchyEdges.any { it.to.result !is KpiCalculationResult.Success } &&
@@ -154,4 +157,38 @@ internal abstract class BaseKpiCalculationStrategy : KpiCalculationStrategy {
     }
 
     protected abstract fun internalIsValid(node: KpiNode, strict: Boolean): Boolean
+
+    companion object {
+        fun getResultInValidRange(result: KpiCalculationResult): KpiCalculationResult {
+            return when (result) {
+                is KpiCalculationResult.Success ->
+                    validateScore(result, result.score) { score ->
+                        KpiCalculationResult.Success(score)
+                    }
+                is KpiCalculationResult.Incomplete ->
+                    validateScore(result, result.score) { score ->
+                        KpiCalculationResult.Incomplete(score, result.reason)
+                    }
+                else -> result
+            }
+        }
+
+        private fun <T : KpiCalculationResult> validateScore(
+            result: T,
+            score: Int,
+            createResult: (Int) -> T,
+        ): T {
+            return when {
+                score < 0 -> {
+                    logger.warn { "Calculation result score $result is out of bounds." }
+                    createResult(0)
+                }
+                score > 100 -> {
+                    logger.warn { "Calculation result score $result is out of bounds." }
+                    createResult(100)
+                }
+                else -> result
+            }
+        }
+    }
 }
