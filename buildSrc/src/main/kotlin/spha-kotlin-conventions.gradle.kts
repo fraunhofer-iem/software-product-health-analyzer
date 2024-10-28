@@ -28,6 +28,7 @@ repositories { mavenCentral() }
 
 dependencies {
     implementation(libs.bundles.logging)
+    testRuntimeOnly(libs.slf4j.logger)
     testImplementation(libs.kotlin.test)
 }
 
