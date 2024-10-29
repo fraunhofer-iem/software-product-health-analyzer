@@ -19,4 +19,5 @@ enum class KpiStrategyId {
     WEIGHTED_RATIO_STRATEGY,
     XOR_STRATEGY,
     OR_STRATEGY,
+    AND_STRATEGY,
 }

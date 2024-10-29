@@ -34,6 +34,8 @@ internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculatio
         KpiStrategyId.XOR_STRATEGY -> XorKPICalculationStrategy
 
         KpiStrategyId.OR_STRATEGY -> OrKPICalculationStrategy
+
+        KpiStrategyId.AND_STRATEGY -> AndKPICalculationStrategy
     }
 }
 
