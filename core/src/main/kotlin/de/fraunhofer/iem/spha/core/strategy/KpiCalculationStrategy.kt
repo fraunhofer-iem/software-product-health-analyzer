@@ -32,6 +32,8 @@ internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculatio
         KpiStrategyId.WEIGHTED_MINIMUM_STRATEGY -> WeightedMinimumKPICalculationStrategy
 
         KpiStrategyId.XOR_STRATEGY -> XorKPICalculationStrategy
+
+        KpiStrategyId.OR_STRATEGY -> OrKPICalculationStrategy
     }
 }
 
