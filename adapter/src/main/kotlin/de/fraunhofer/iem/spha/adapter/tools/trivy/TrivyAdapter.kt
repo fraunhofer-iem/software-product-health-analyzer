@@ -92,7 +92,7 @@ object TrivyAdapter {
 
             val score = getHighestCvssScore(cvssData)
             logger.trace { "Selected CVSS score $score for vulnerability '${it.vulnerabilityID}'" }
-            VulnerabilityDto(it.vulnerabilityID, it.pkgID, score)
+            VulnerabilityDto(it.vulnerabilityID, it.pkgName, score)
         }
     }
 
