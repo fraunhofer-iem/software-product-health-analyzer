@@ -129,6 +129,61 @@
           }
         }
       ]
+    },
+    {
+      "Target": "Python",
+      "Class": "lang-pkgs",
+      "Type": "python-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-22190",
+          "PkgName": "GitPython",
+          "PkgPath": "home/redacted/.local/lib/python3.11/site-packages/GitPython-3.1.37.dist-info/METADATA",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/gitpython@3.1.37",
+            "UID": "5591a0dc57c78b2"
+          },
+          "InstalledVersion": "3.1.37",
+          "FixedVersion": "3.1.41",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:13b0acb9b68e8a74b8e6152932c5bd6c6968e13fa32feba83cc2310346a9b7f9",
+            "DiffID": "sha256:feea6321b4864eb2cb16188d1619323db7c8738adaca6982c8005da9fe227961"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-22190",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Title": "Untrusted search path under some conditions on Windows allows arbitrary code execution",
+          "Description": "GitPython is a python library used to interact with Git repositories. There is an incomplete fix for CVE-2023-40590. On Windows, GitPython uses an untrusted search path if it uses a shell to run `git`, as well as when it runs `bash.exe` to interpret hooks. If either of those features are used on Windows, a malicious `git.exe` or `bash.exe` may be run from an untrusted repository. This issue has been patched in version 3.1.41.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-426"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "nvd": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            },
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+              "V3Score": 7.8
+            }
+          },
+          "References": [
+            "https://github.com/gitpython-developers/GitPython"
+          ],
+          "PublishedDate": "2024-01-11T02:15:48.25Z",
+          "LastModifiedDate": "2024-01-18T13:48:07.553Z"
+        }
+      ]
     }
   ]
 }
