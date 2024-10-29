@@ -33,7 +33,7 @@ object TrivyAdapter {
     }
 
     fun transformDataToKpi(data: Collection<TrivyDto>): Collection<AdapterResult> {
-        return CveAdapter.transformDataToKpi(data.flatMap { it.vulnerabilities })
+        return CveAdapter.transformContainerVulnerabilityToKpi(data.flatMap { it.vulnerabilities })
     }
 
     fun transformDataToKpi(data: TrivyDto): Collection<AdapterResult> {

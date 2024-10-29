@@ -19,10 +19,9 @@ class CveAdapterTest {
 
     @Test
     fun basicVulnerabilityToKpiTransformation() {
-        val adapter = CveAdapter
         // valid input
         val validKpi =
-            CveAdapter.transformDataToKpi(
+            CveAdapter.transformCodeVulnerabilityToKpi(
                 listOf(
                     VulnerabilityDto(
                         cveIdentifier = "not blank",
@@ -43,7 +42,7 @@ class CveAdapterTest {
 
         // invalid input
         val invalidKpis =
-            CveAdapter.transformDataToKpi(
+            CveAdapter.transformCodeVulnerabilityToKpi(
                 listOf(
                     VulnerabilityDto(cveIdentifier = "not blank", packageName = "", severity = 0.1),
                     VulnerabilityDto(cveIdentifier = "", packageName = "not blank", severity = 0.1),

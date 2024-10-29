@@ -17,14 +17,26 @@ import de.fraunhofer.iem.spha.model.kpi.RawValueKpi
 
 object CveAdapter {
 
-    fun transformDataToKpi(data: Collection<VulnerabilityDto>): Collection<AdapterResult> {
+    fun transformCodeVulnerabilityToKpi(
+        data: Collection<VulnerabilityDto>
+    ): Collection<AdapterResult> {
+        return transformDataToKpi(data, KpiId.CODE_VULNERABILITY_SCORE)
+    }
+
+    fun transformContainerVulnerabilityToKpi(
+        data: Collection<VulnerabilityDto>
+    ): Collection<AdapterResult> {
+        return transformDataToKpi(data, KpiId.CONTAINER_VULNERABILITY_SCORE)
+    }
+
+    private fun transformDataToKpi(
+        data: Collection<VulnerabilityDto>,
+        kpiId: KpiId,
+    ): Collection<AdapterResult> {
         return data.map {
             return@map if (isValid(it)) {
                 AdapterResult.Success.Kpi(
-                    RawValueKpi(
-                        kind = KpiId.VULNERABILITY_SCORE,
-                        score = 100 - (it.severity * 10).toInt(),
-                    )
+                    RawValueKpi(kind = kpiId, score = 100 - (it.severity * 10).toInt())
                 )
             } else {
                 AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)
