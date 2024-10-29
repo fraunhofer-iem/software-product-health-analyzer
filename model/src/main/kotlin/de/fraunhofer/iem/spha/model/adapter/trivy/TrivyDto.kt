@@ -43,10 +43,7 @@ data class TrivyVulnerabilityDto(
 )
 
 @Serializable
-data class PkgIdentifier(
-    @SerialName("PURL") val purl: String,
-    @SerialName("UID") val uid: String,
-)
+data class PkgIdentifier(@SerialName("PURL") val purl: String, @SerialName("UID") val uid: String)
 
 @Serializable
 data class CVSSData(
