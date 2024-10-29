@@ -86,6 +86,6 @@ class TrivyAdapterTest {
 
         TrivyAdapter.transformDataToKpi(TrivyDto(vulns))
         TrivyAdapter.transformDataToKpi(listOf(TrivyDto(vulns)))
-        verify(exactly = 2) { CveAdapter.transformDataToKpi(vulns) }
+        verify(exactly = 2) { CveAdapter.transformContainerVulnerabilityToKpi(vulns) }
     }
 }

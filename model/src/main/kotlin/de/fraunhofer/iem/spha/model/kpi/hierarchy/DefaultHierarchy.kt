@@ -106,9 +106,9 @@ object DefaultHierarchy {
                 edges = listOf(KpiEdge(target = signedCommitsRatio, weight = 1.0)),
             )
 
-        val vulnerabilities =
+        val codeVulnerabilities =
             KpiNode(
-                kpiId = KpiId.VULNERABILITY_SCORE,
+                kpiId = KpiId.CODE_VULNERABILITY_SCORE,
                 kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                 edges = listOf(),
             )
@@ -117,7 +117,21 @@ object DefaultHierarchy {
             KpiNode(
                 kpiId = KpiId.MAXIMAL_VULNERABILITY,
                 kpiStrategyId = KpiStrategyId.MINIMUM_STRATEGY,
-                edges = listOf(KpiEdge(target = vulnerabilities, weight = 1.0)),
+                edges = listOf(KpiEdge(target = codeVulnerabilities, weight = 1.0)),
+            )
+
+        val containerVulnerabilities =
+            KpiNode(
+                kpiId = KpiId.CONTAINER_VULNERABILITY_SCORE,
+                kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                edges = listOf(),
+            )
+
+        val maxContainerVulnerability =
+            KpiNode(
+                kpiId = KpiId.MAXIMAL_VULNERABILITY,
+                kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                edges = listOf(KpiEdge(target = containerVulnerabilities, weight = 1.0)),
             )
 
         val security =
@@ -126,9 +140,10 @@ object DefaultHierarchy {
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
-                        KpiEdge(target = secrets, weight = 0.3),
-                        KpiEdge(target = maxDepVulnerability, weight = 0.5),
-                        KpiEdge(target = checkedInBinaries, weight = 0.2),
+                        KpiEdge(target = secrets, weight = 0.2),
+                        KpiEdge(target = maxDepVulnerability, weight = 0.35),
+                        KpiEdge(target = maxContainerVulnerability, weight = 0.35),
+                        KpiEdge(target = checkedInBinaries, weight = 0.1),
                     ),
             )
 
