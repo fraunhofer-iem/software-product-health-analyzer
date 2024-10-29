@@ -38,7 +38,14 @@ data class TrivyVulnerabilityDto(
     // This way we can iterate over those when required. Their type is always CVSSData.
     @SerialName("CVSS") val cvss: JsonObject?,
     @SerialName("VulnerabilityID") val vulnerabilityID: String,
-    @SerialName("PkgID") val pkgID: String,
+    @SerialName("PkgIdentifier") val pkgID: PkgIdentifier,
+    @SerialName("PkgName") val pkgName: String,
+)
+
+@Serializable
+data class PkgIdentifier(
+    @SerialName("PURL") val purl: String,
+    @SerialName("UID") val uid: String,
 )
 
 @Serializable
