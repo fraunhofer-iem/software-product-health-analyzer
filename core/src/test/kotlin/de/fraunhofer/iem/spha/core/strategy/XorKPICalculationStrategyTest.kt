@@ -138,6 +138,111 @@ class XorKPICalculationStrategyTest {
     }
 
     @Test
+    fun calculateCorrectEqual() {
+        val root =
+            KpiHierarchyNode.from(
+                KpiNode(
+                    kpiId = KpiId.ROOT,
+                    kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
+                    edges =
+                        listOf(
+                            KpiEdge(
+                                target =
+                                    KpiNode(
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                        edges = listOf(),
+                                    ),
+                                weight = 0.5,
+                            ),
+                            KpiEdge(
+                                target =
+                                    KpiNode(
+                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                        edges = listOf(),
+                                    ),
+                                weight = 0.5,
+                            ),
+                        ),
+                ),
+                listOf(
+                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 100),
+                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 100),
+                ),
+            )
+
+        val calcRelaxed =
+            XorKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = root.hierarchyEdges,
+                strict = false,
+            )
+
+        val calcStrict =
+            XorKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = root.hierarchyEdges,
+                strict = true,
+            )
+
+        assertEquals(true, calcRelaxed is KpiCalculationResult.Success)
+        assertEquals(true, calcRelaxed is KpiCalculationResult.Success)
+
+        assertEquals(0, (calcStrict as KpiCalculationResult.Success).score)
+        assertEquals(0, (calcRelaxed as KpiCalculationResult.Success).score)
+
+        val rootZero =
+            KpiHierarchyNode.from(
+                KpiNode(
+                    kpiId = KpiId.ROOT,
+                    kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
+                    edges =
+                        listOf(
+                            KpiEdge(
+                                target =
+                                    KpiNode(
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                        edges = listOf(),
+                                    ),
+                                weight = 0.5,
+                            ),
+                            KpiEdge(
+                                target =
+                                    KpiNode(
+                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
+                                        edges = listOf(),
+                                    ),
+                                weight = 0.5,
+                            ),
+                        ),
+                ),
+                listOf(
+                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 0),
+                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 0),
+                ),
+            )
+
+        val calcRelaxedZero =
+            XorKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = rootZero.hierarchyEdges,
+                strict = false,
+            )
+
+        val calcStrictZero =
+            XorKPICalculationStrategy.calculateKpi(
+                hierarchyEdges = rootZero.hierarchyEdges,
+                strict = true,
+            )
+
+        assertEquals(true, calcRelaxedZero is KpiCalculationResult.Success)
+        assertEquals(true, calcStrictZero is KpiCalculationResult.Success)
+
+        assertEquals(0, (calcRelaxedZero as KpiCalculationResult.Success).score)
+        assertEquals(0, (calcStrictZero as KpiCalculationResult.Success).score)
+    }
+
+    @Test
     fun calculateCorrect() {
         val root =
             KpiHierarchyNode.from(
