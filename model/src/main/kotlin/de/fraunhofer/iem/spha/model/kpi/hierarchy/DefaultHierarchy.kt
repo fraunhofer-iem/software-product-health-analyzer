@@ -116,7 +116,7 @@ object DefaultHierarchy {
         val maxDepVulnerability =
             KpiNode(
                 kpiId = KpiId.MAXIMAL_VULNERABILITY,
-                kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                kpiStrategyId = KpiStrategyId.MINIMUM_STRATEGY,
                 edges = listOf(KpiEdge(target = vulnerabilities, weight = 1.0)),
             )
 

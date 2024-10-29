@@ -23,7 +23,7 @@ object CveAdapter {
                 AdapterResult.Success.Kpi(
                     RawValueKpi(
                         kind = KpiId.VULNERABILITY_SCORE,
-                        score = (it.severity * 10).toInt(),
+                        score = 100 - (it.severity * 10).toInt(),
                     )
                 )
             } else {
