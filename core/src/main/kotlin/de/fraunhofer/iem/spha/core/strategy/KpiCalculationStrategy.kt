@@ -25,7 +25,7 @@ internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculatio
 
         KpiStrategyId.MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
 
-        KpiStrategyId.MINIMUM_STRATEGY -> MaximumKPICalculationStrategy
+        KpiStrategyId.MINIMUM_STRATEGY -> MinimumKPICalculationStrategy
 
         KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY -> WeightedMaximumKPICalculationStrategy
 
