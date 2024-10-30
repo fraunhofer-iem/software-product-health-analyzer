@@ -84,7 +84,7 @@ class XorKPICalculationStrategyTest {
     }
 
     @Test
-    fun calculateCorrectFalse() {
+    fun calculateValidHierarchyFalseResult() {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
