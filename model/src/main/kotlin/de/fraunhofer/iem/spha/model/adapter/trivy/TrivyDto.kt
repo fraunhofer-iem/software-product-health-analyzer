@@ -40,6 +40,7 @@ data class TrivyVulnerabilityDto(
     @SerialName("VulnerabilityID") val vulnerabilityID: String,
     @SerialName("InstalledVersion") val installedVersion: String,
     @SerialName("PkgName") val pkgName: String,
+    @SerialName("Severity") val severity: String,
 )
 
 @Serializable
