@@ -25,7 +25,7 @@ class XorKPICalculationStrategyTest {
     }
 
     @Test
-    fun toManyEdges() {
+    fun tooManyEdges() {
         val nodeManyChildren =
             KpiNode(
                 kpiId = KpiId.ROOT,
