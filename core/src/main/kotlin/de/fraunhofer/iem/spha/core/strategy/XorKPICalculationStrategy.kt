@@ -28,9 +28,7 @@ internal object XorKPICalculationStrategy : BaseKpiCalculationStrategy() {
             )
         }
 
-        if (
-            (edges.first().to.score == 100) != (edges.last().to.score == 100)
-        ) {
+        if ((edges.first().to.score == 100) != (edges.last().to.score == 100)) {
             return KpiCalculationResult.Success(score = 100)
         }
 
