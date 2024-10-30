@@ -17,20 +17,20 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-internal object WeightedMaximumKPICalculationStrategy : BaseKpiCalculationStrategy() {
+internal object WeightedMinimumKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override val kpiStrategyId: KpiStrategyId
-        get() = KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY
+        get() = KpiStrategyId.WEIGHTED_MINIMUM_STRATEGY
 
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
 
-        val max = edges.maxByOrNull { it.to.score * it.actualWeight }?.to?.score
+        val min = edges.minByOrNull { it.to.score * it.actualWeight }?.to?.score
 
-        if (max == null) {
+        if (min == null) {
             return KpiCalculationResult.Empty()
         }
 
-        return KpiCalculationResult.Success(score = max)
+        return KpiCalculationResult.Success(score = min)
     }
 
     /** There is no validity requirement for this strategy. */

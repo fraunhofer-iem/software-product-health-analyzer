@@ -17,20 +17,20 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiEdge
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 import kotlin.test.Test
-import org.junit.jupiter.api.Assertions.assertEquals
+import kotlin.test.assertEquals
 
-class AggregationKpiCalculationStrategyTest {
+class WeightedMinimumKPICalculationStrategyTest {
 
     @Test
     fun calculateEmpty() {
 
         val calcRelaxed =
-            WeightedAverageKPICalculationStrategy.calculateKpi(
+            WeightedMinimumKPICalculationStrategy.calculateKpi(
                 hierarchyEdges = listOf(),
                 strict = false,
             )
         val calcStrict =
-            WeightedAverageKPICalculationStrategy.calculateKpi(
+            WeightedMinimumKPICalculationStrategy.calculateKpi(
                 hierarchyEdges = listOf(),
                 strict = true,
             )
@@ -75,19 +75,13 @@ class AggregationKpiCalculationStrategyTest {
             )
 
         val calcRelaxed =
-            WeightedAverageKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+            WeightedMinimumKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
         val calcStrict =
-            WeightedAverageKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+            WeightedMinimumKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
 
         assert(calcRelaxed is KpiCalculationResult.Success)
         assert(calcStrict is KpiCalculationResult.Success)
-        assertEquals(
-            ((20 * 0.5) + (15 * 0.5)).toInt(),
-            (calcStrict as KpiCalculationResult.Success).score,
-        )
-        assertEquals(
-            ((20 * 0.5) + (15 * 0.5)).toInt(),
-            (calcRelaxed as KpiCalculationResult.Success).score,
-        )
+        assertEquals(15, (calcStrict as KpiCalculationResult.Success).score)
+        assertEquals(15, (calcRelaxed as KpiCalculationResult.Success).score)
     }
 }

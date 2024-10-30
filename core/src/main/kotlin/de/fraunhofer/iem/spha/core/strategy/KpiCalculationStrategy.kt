@@ -18,13 +18,18 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 internal fun getKpiCalculationStrategy(strategyId: KpiStrategyId): KpiCalculationStrategy {
     return when (strategyId) {
         KpiStrategyId.RAW_VALUE_STRATEGY -> RawValueKpiCalculationStrategy
-        KpiStrategyId.RATIO_STRATEGY -> RatioKPICalculationStrategy
 
-        KpiStrategyId.AGGREGATION_STRATEGY -> AggregationKPICalculationStrategy
+        KpiStrategyId.WEIGHTED_RATIO_STRATEGY -> WeightedRatioKPICalculationStrategy
+
+        KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY -> WeightedAverageKPICalculationStrategy
 
         KpiStrategyId.MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
 
-        KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY -> MaximumKPICalculationStrategy
+        KpiStrategyId.MINIMUM_STRATEGY -> MaximumKPICalculationStrategy
+
+        KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY -> WeightedMaximumKPICalculationStrategy
+
+        KpiStrategyId.WEIGHTED_MINIMUM_STRATEGY -> WeightedMinimumKPICalculationStrategy
     }
 }
 

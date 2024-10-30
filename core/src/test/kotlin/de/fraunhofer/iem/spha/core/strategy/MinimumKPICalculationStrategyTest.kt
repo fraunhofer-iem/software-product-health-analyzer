@@ -19,21 +19,15 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 import kotlin.test.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
-class AggregationKpiCalculationStrategyTest {
+class MinimumKPICalculationStrategyTest {
 
     @Test
     fun calculateEmpty() {
 
         val calcRelaxed =
-            WeightedAverageKPICalculationStrategy.calculateKpi(
-                hierarchyEdges = listOf(),
-                strict = false,
-            )
+            MinimumKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = false)
         val calcStrict =
-            WeightedAverageKPICalculationStrategy.calculateKpi(
-                hierarchyEdges = listOf(),
-                strict = true,
-            )
+            MinimumKPICalculationStrategy.calculateKpi(hierarchyEdges = listOf(), strict = true)
 
         assertEquals(true, calcRelaxed is KpiCalculationResult.Empty)
         assertEquals(true, calcStrict is KpiCalculationResult.Empty)
@@ -45,7 +39,7 @@ class AggregationKpiCalculationStrategyTest {
             KpiHierarchyNode.from(
                 KpiNode(
                     kpiId = KpiId.ROOT,
-                    kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                    kpiStrategyId = KpiStrategyId.MINIMUM_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
@@ -75,19 +69,13 @@ class AggregationKpiCalculationStrategyTest {
             )
 
         val calcRelaxed =
-            WeightedAverageKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
+            MinimumKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
         val calcStrict =
-            WeightedAverageKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
+            MinimumKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = true)
 
         assert(calcRelaxed is KpiCalculationResult.Success)
         assert(calcStrict is KpiCalculationResult.Success)
-        assertEquals(
-            ((20 * 0.5) + (15 * 0.5)).toInt(),
-            (calcStrict as KpiCalculationResult.Success).score,
-        )
-        assertEquals(
-            ((20 * 0.5) + (15 * 0.5)).toInt(),
-            (calcRelaxed as KpiCalculationResult.Success).score,
-        )
+        assertEquals(15, (calcStrict as KpiCalculationResult.Success).score)
+        assertEquals(15, (calcRelaxed as KpiCalculationResult.Success).score)
     }
 }

@@ -34,7 +34,7 @@ class KpiHierarchyTest {
                     KpiEdge(
                         KpiNode(
                             kpiId = KpiId.SECURITY,
-                            KpiStrategyId.AGGREGATION_STRATEGY,
+                            KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                             listOf(),
                         ),
                         weight = 0.3,
@@ -42,7 +42,7 @@ class KpiHierarchyTest {
                     KpiEdge(
                         KpiNode(
                             kpiId = KpiId.PROCESS_COMPLIANCE,
-                            KpiStrategyId.AGGREGATION_STRATEGY,
+                            KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                             listOf(),
                         ),
                         weight = 0.3,
@@ -50,7 +50,7 @@ class KpiHierarchyTest {
                     KpiEdge(
                         KpiNode(
                             kpiId = KpiId.INTERNAL_QUALITY,
-                            KpiStrategyId.AGGREGATION_STRATEGY,
+                            KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                             listOf(),
                         ),
                         weight = 0.3,
@@ -59,7 +59,7 @@ class KpiHierarchyTest {
             val root =
                 KpiNode(
                     kpiId = KpiId.ROOT,
-                    kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                    kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                     childNodes,
                 )
             val hierarchy = KpiHierarchy.create(root)

@@ -56,7 +56,7 @@ class KpiCalculatorTest {
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -106,7 +106,7 @@ class KpiCalculatorTest {
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -166,14 +166,14 @@ class KpiCalculatorTest {
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
                                     kpiId = KpiId.SIGNED_COMMITS_RATIO,
-                                    kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                                    kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
@@ -247,7 +247,7 @@ class KpiCalculatorTest {
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -284,7 +284,7 @@ class KpiCalculatorTest {
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
@@ -338,7 +338,7 @@ class KpiCalculatorTest {
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(

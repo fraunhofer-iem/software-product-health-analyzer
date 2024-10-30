@@ -17,20 +17,22 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-internal object WeightedMaximumKPICalculationStrategy : BaseKpiCalculationStrategy() {
+internal object WeightedAverageKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override val kpiStrategyId: KpiStrategyId
-        get() = KpiStrategyId.WEIGHTED_MAXIMUM_STRATEGY
+        get() = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY
 
+    /**
+     * This function calculates the aggregate sum of all given children. If a child is empty it is
+     * removed from the calculation and its corresponding edge weight is distributed evenly between
+     * the remaining children. The method returns the KPIs value as well as the updated
+     * KPIHierarchyEdgeDtos with the actual used weight.
+     */
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
 
-        val max = edges.maxByOrNull { it.to.score * it.actualWeight }?.to?.score
+        val aggregation = edges.sumOf { edge -> edge.actualWeight * edge.to.score }.toInt()
 
-        if (max == null) {
-            return KpiCalculationResult.Empty()
-        }
-
-        return KpiCalculationResult.Success(score = max)
+        return KpiCalculationResult.Success(score = aggregation)
     }
 
     /** There is no validity requirement for this strategy. */
@@ -38,8 +40,7 @@ internal object WeightedMaximumKPICalculationStrategy : BaseKpiCalculationStrate
 
         if (node.edges.size == 1) {
             logger.warn {
-                "Maximum KPI calculation strategy for node $node is planned " +
-                    "for a single child."
+                "Maximum KPI calculation strategy for node $node is planned for a single child."
             }
         }
 

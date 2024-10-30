@@ -67,7 +67,7 @@ object DefaultHierarchy {
         val signedCommitsRatio =
             KpiNode(
                 kpiId = KpiId.SIGNED_COMMITS_RATIO,
-                kpiStrategyId = KpiStrategyId.RATIO_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(target = numberOfCommits, weight = 1.0),
@@ -78,7 +78,7 @@ object DefaultHierarchy {
         val documentation =
             KpiNode(
                 kpiId = KpiId.DOCUMENTATION,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(target = documentationInfrastructure, weight = 0.6),
@@ -89,7 +89,7 @@ object DefaultHierarchy {
         val processComplianceKpi =
             KpiNode(
                 kpiId = KpiId.PROCESS_COMPLIANCE,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(target = checkedInBinaries, weight = 0.2),
@@ -102,7 +102,7 @@ object DefaultHierarchy {
         val processTransparency =
             KpiNode(
                 kpiId = KpiId.PROCESS_TRANSPARENCY,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges = listOf(KpiEdge(target = signedCommitsRatio, weight = 1.0)),
             )
 
@@ -116,14 +116,14 @@ object DefaultHierarchy {
         val maxDepVulnerability =
             KpiNode(
                 kpiId = KpiId.MAXIMAL_VULNERABILITY,
-                kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
+                kpiStrategyId = KpiStrategyId.MINIMUM_STRATEGY,
                 edges = listOf(KpiEdge(target = vulnerabilities, weight = 1.0)),
             )
 
         val security =
             KpiNode(
                 kpiId = KpiId.SECURITY,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(target = secrets, weight = 0.3),
@@ -135,21 +135,21 @@ object DefaultHierarchy {
         val internalQuality =
             KpiNode(
                 kpiId = KpiId.INTERNAL_QUALITY,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges = listOf(KpiEdge(target = documentation, weight = 1.0)),
             )
 
         val externalQuality =
             KpiNode(
                 kpiId = KpiId.EXTERNAL_QUALITY,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges = listOf(KpiEdge(target = documentation, weight = 1.0)),
             )
 
         val root =
             KpiNode(
                 kpiId = KpiId.ROOT,
-                kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(target = processTransparency, weight = 0.1),

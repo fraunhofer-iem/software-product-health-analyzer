@@ -27,7 +27,7 @@ class HierarchyValidatorTest {
                 rootNode =
                     KpiNode(
                         kpiId = KpiId.ROOT,
-                        kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                        kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                         edges = emptyList(),
                     )
             )
@@ -43,7 +43,7 @@ class HierarchyValidatorTest {
                 rootNode =
                     KpiNode(
                         kpiId = KpiId.ROOT,
-                        kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                        kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                         edges =
                             listOf(
                                 KpiEdge(
@@ -72,7 +72,7 @@ class HierarchyValidatorTest {
                 rootNode =
                     KpiNode(
                         kpiId = KpiId.ROOT,
-                        kpiStrategyId = KpiStrategyId.AGGREGATION_STRATEGY,
+                        kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                         edges =
                             listOf(
                                 KpiEdge(
