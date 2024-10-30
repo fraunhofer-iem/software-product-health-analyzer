@@ -71,7 +71,7 @@ class AndKPICalculationStrategyTest {
                 strict = true,
             )
 
-        assertEquals(true, calcRelaxed is KpiCalculationResult.Success)
+        assertEquals(true, calcStrict is KpiCalculationResult.Success)
         assertEquals(true, calcRelaxed is KpiCalculationResult.Success)
 
         assertEquals(0, (calcStrict as KpiCalculationResult.Success).score)
