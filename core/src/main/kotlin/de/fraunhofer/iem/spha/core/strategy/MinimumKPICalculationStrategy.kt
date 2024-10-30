@@ -24,9 +24,13 @@ internal object MinimumKPICalculationStrategy : BaseKpiCalculationStrategy() {
 
     override fun internalCalculateKpi(edges: Collection<KpiHierarchyEdge>): KpiCalculationResult {
 
-        val max = if (edges.isEmpty()) 0 else edges.minOf { it.to.score }
+        val min = edges.minOfOrNull { it.to.score }
 
-        return KpiCalculationResult.Success(score = max)
+        if (min == null) {
+            return KpiCalculationResult.Empty()
+        }
+
+        return KpiCalculationResult.Success(score = min)
     }
 
     /** There is no validity requirement for this strategy. */

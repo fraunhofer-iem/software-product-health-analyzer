@@ -19,7 +19,7 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WeightedWeightedMinimumKPICalculationStrategyTest {
+class WeightedMinimumKPICalculationStrategyTest {
 
     @Test
     fun calculateEmpty() {
