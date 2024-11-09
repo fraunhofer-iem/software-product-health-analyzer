@@ -27,6 +27,7 @@ class CveAdapterTest {
                         cveIdentifier = "not blank",
                         packageName = "not blank",
                         severity = 0.1,
+                        version = "0.0.1",
                     )
                 )
             )
@@ -44,17 +45,29 @@ class CveAdapterTest {
         val invalidKpis =
             CveAdapter.transformCodeVulnerabilityToKpi(
                 listOf(
-                    VulnerabilityDto(cveIdentifier = "not blank", packageName = "", severity = 0.1),
-                    VulnerabilityDto(cveIdentifier = "", packageName = "not blank", severity = 0.1),
+                    VulnerabilityDto(
+                        cveIdentifier = "not blank",
+                        packageName = "",
+                        severity = 0.1,
+                        version = "0.0.1",
+                    ),
+                    VulnerabilityDto(
+                        cveIdentifier = "",
+                        packageName = "not blank",
+                        severity = 0.1,
+                        version = "0.0.1",
+                    ),
                     VulnerabilityDto(
                         cveIdentifier = "not blank",
                         packageName = "not blank",
                         severity = -0.1,
+                        version = "0.0.1",
                     ),
                     VulnerabilityDto(
                         cveIdentifier = "not blank",
                         packageName = "not blank",
                         severity = 10.1,
+                        version = "0.0.1",
                     ),
                 )
             )
