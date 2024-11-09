@@ -22,6 +22,10 @@ sealed class AdapterResult {
 
         class KpiTechLag(rawValueKpi: RawValueKpi, val techLag: TechLagResult.Success) :
             Success(rawValueKpi)
+
+        override fun toString(): String {
+            return "[Adapter Result Success]: $rawValueKpi"
+        }
     }
 
     data class Error(val type: ErrorType) : AdapterResult()

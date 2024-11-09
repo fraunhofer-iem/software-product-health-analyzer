@@ -79,9 +79,9 @@ class TrivyAdapterTest {
         mockkObject(CveAdapter)
         val vulns =
             listOf(
-                VulnerabilityDto("CVE-1", "A", 1.0),
-                VulnerabilityDto("CVE-2", "B", 2.0),
-                VulnerabilityDto("CVE-3", "C", 1.3),
+                VulnerabilityDto("CVE-1", "A", "1.0", severity = 1.0),
+                VulnerabilityDto("CVE-2", "B", "2.0", severity = 2.0),
+                VulnerabilityDto("CVE-3", "C", "1.3", severity = 1.3),
             )
 
         TrivyAdapter.transformDataToKpi(TrivyDto(vulns))
