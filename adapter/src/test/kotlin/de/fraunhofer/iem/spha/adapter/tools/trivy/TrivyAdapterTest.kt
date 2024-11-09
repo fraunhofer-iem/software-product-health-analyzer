@@ -57,7 +57,8 @@ class TrivyAdapterTest {
 
             val vuln = dto.vulnerabilities.first()
             assertEquals("CVE-2011-3374", vuln.cveIdentifier)
-            assertEquals("apt@2.6.1", vuln.packageName)
+            assertEquals("apt", vuln.packageName)
+            assertEquals("2.6.1", vuln.version)
             assertEquals(4.3, vuln.severity)
         }
     }
@@ -69,7 +70,8 @@ class TrivyAdapterTest {
             assertEquals(2, dto.vulnerabilities.count())
 
             assertTrue { dto.vulnerabilities.all { it.cveIdentifier == "CVE-2005-2541" } }
-            assertEquals("tar@1.34+dfsg-1.2", dto.vulnerabilities.first().packageName)
+            assertEquals("tar", dto.vulnerabilities.first().packageName)
+            assertEquals("1.34+dfsg-1.2", dto.vulnerabilities.first().version)
             assertEquals(10.0, dto.vulnerabilities.first().severity)
         }
     }

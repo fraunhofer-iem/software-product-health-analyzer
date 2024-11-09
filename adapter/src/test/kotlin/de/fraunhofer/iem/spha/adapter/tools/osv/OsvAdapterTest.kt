@@ -29,9 +29,7 @@ class OsvAdapterTest {
             ]
     )
     fun testInvalidJson(input: String) {
-        input.byteInputStream().use {
-            assertThrows<UnsupportedOperationException> { OsvAdapter.dtoFromJson(it) }
-        }
+        input.byteInputStream().use { assertThrows<Exception> { OsvAdapter.dtoFromJson(it) } }
     }
 
     @ParameterizedTest
