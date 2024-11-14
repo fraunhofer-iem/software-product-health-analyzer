@@ -1,4 +1,4 @@
-# Software Product Health Analyzer
+# Software Product Health Assistant
 
 This library helps users working with KPI hierarchies. It provides functionality to define
 and validate KPI hierarchies, transform tool results into KPIs, and calculate a given KPI
