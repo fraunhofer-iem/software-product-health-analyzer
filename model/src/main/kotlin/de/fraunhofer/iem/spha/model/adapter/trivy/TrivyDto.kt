@@ -29,7 +29,10 @@ data class TrivyDtoV2(
 
 @Serializable
 data class Result(
-    @SerialName("Vulnerabilities") val vulnerabilities: List<TrivyVulnerabilityDto> = listOf()
+    @SerialName("Vulnerabilities") val vulnerabilities: List<TrivyVulnerabilityDto> = listOf(),
+    @SerialName("Licenses") val licenses: List<TrivyLicenseDto> = listOf(),
+    @SerialName("Misconfigurations") val misconfigurations: List<TrivyMisconfigDto> = listOf(),
+    @SerialName("Secrets") val secrets: List<TrivySecretDto> = listOf(),
 )
 
 @Serializable
@@ -55,4 +58,38 @@ data class TrivyVulnerabilityDto(
 data class CVSSData(
     @SerialName("V2Score") val v2Score: Double?,
     @SerialName("V3Score") val v3Score: Double?,
+)
+
+@Serializable
+data class TrivyLicenseDto(
+    // License are classified using the Google License Classification:
+    /**
+     * | Classification | Severity |
+     * |----------------|----------|
+     * | Forbidden      | CRITICAL |
+     * | Restricted     | HIGH     |
+     * | Reciprocal     | MEDIUM   |
+     * | Notice         | LOW      |
+     * | Permissive     | LOW      |
+     * | Unencumbered   | LOW      |
+     * | Unknown        | UNKNOWN  |
+     */
+    @SerialName("Severity") val severity: String,
+    @SerialName("Category") val category: String,
+    @SerialName("PkgName") val pkgName: String,
+    @SerialName("Name") val name: String,
+)
+
+@Serializable
+data class TrivyMisconfigDto(
+    @SerialName("Severity") val severity: String,
+    @SerialName("ID") val id: String,
+    @SerialName("Title") val title: String,
+)
+
+@Serializable
+data class TrivySecretDto(
+    @SerialName("Severity") val severity: String,
+    @SerialName("Category") val category: String,
+    @SerialName("Title") val title: String,
 )
