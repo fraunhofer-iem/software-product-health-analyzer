@@ -5,37 +5,37 @@ message: >-
     If you use this software, please cite it using the  metadata from this file.
 type: software
 authors:
-    - given-names: Jan-Niclas
-      family-names: Strüwer
-      email: jan-niclas.struewer@iem.fraunhofer.de
-      affiliation: Fraunhofer IEM
-      orcid: 'https://orcid.org/0000-0002-4876-3483'
-      - given-names: Benedict
-      family-names: Wohlers
-      email: benedict.wohlers@iem.fraunhofer.de
-      affiliation: Fraunhofer IEM
-      orcid: 'https://orcid.org/0000-0001-8285-2343'
-      - given-names: Sebastian
-      family-names: Leuer
-      email: sebastian.leuer@iem.fraunhofer.de
-      affiliation: Fraunhofer IEM
-      - given-names: Matthias
-      family-names: Becker
-      email: matthias.becker@iem.fraunhofer.de
-      affiliation: Fraunhofer IEM
-      - given-names: Hutomo
-      family-names: Saleh
-      email: hutomo.saleh@iem.fraunhofer.de
-      affiliation: Fraunhofer IEM
-      - given-names: Lucas
-      family-names: Briese
-      email: lucas.briese@iem.fraunhofer.de
-      affiliation: Fraunhofer IEM
-      - name: Fraunhofer IEM
-      address: Zukunftsmeile 1
-      city: Paderborn
-      country: DE
-      post-code: '33102'
-      website: 'https://www.iem.fraunhofer.de'
-repository-code: 'https://github.com/fraunhofer-iem/spha'
-url: 'https://software-product.health'
+- given-names: Jan-Niclas
+  family-names: Strüwer
+  email: jan-niclas.struewer@iem.fraunhofer.de
+  affiliation: Fraunhofer IEM
+  orcid: "https://orcid.org/0000-0002-4876-3483"
+  - given-names: Benedict
+  family-names: Wohlers
+  email: benedict.wohlers@iem.fraunhofer.de
+  affiliation: Fraunhofer IEM
+  orcid: "https://orcid.org/0000-0001-8285-2343"
+  - given-names: Sebastian
+  family-names: Leuer
+  email: sebastian.leuer@iem.fraunhofer.de
+  affiliation: Fraunhofer IEM
+  - given-names: Matthias
+  family-names: Becker
+  email: matthias.becker@iem.fraunhofer.de
+  affiliation: Fraunhofer IEM
+  - given-names: Hutomo
+  family-names: Saleh
+  email: hutomo.saleh@iem.fraunhofer.de
+  affiliation: Fraunhofer IEM
+  - given-names: Lucas
+  family-names: Briese
+  email: lucas.briese@iem.fraunhofer.de
+  affiliation: Fraunhofer IEM
+  - name: Fraunhofer IEM
+  address: Zukunftsmeile 1
+  city: Paderborn
+  country: DE
+  post-code: "33102"
+  website: "https://www.iem.fraunhofer.de"
+repository-code: "https://github.com/fraunhofer-iem/spha"
+url: "https://software-product.health"
