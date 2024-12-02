@@ -40,4 +40,3 @@ IEM reserves the right to change the current license type to any other license t
 The Agreement shall be governed by the law of the Federal Republic of Germany, without reference to its conflict of law provisions and excluding the provisions of the UN convention on the international sale of goods. The ordinary courts of Munich are hereby agreed as place of jurisdiction for all disputes arising from or connected with the Contract.
 
 **With your signature you confirm the above mentioned agreements.**
-
