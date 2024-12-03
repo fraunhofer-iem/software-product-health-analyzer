@@ -10,7 +10,7 @@ see [software-product.health](https://www.software-product.health).
 ## SPHA Library
 
 This project contains SPHA's core library. Its main purpose is to calculate a products health score
-based on a given `KpiHierarchy` and `RawValueKPIs`. Further, it provides the possibility to transform
+based on a given `KpiHierarchy` and `RawValueKPIs`. Further, SPHA provides the possibility to transform
 tool results into our internal `RawValueKPI` format. The transformation is handled by dedicated tool
 adapters.  
 With the [SPHA CLI Tool](https://www.github.com/fraunhofer-iem/spha-cli) we have created an executable tool using this
