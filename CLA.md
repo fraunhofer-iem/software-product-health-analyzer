@@ -3,7 +3,7 @@
 Thank you for your interest in contributing to the open-source software project Software Product Health Assistant (hereinafter referred to as “the Project”) maintained by Fraunhofer Institute for Mechatronic Systems Design IEM (hereafter “us” or “IEM”). 
 
 The purpose of this Contributor Agreement ("Agreement") is to clarify the intellectual property license granted by persons or entities who provide code to IEM. When the Contribution is made on behalf of an entity, the term "you" in this Agreement means both the person accepting this Agreement and the entity that employs that person.
-This license is for your protection as a Contributor as well as the protection of the Fraunhofer Institute IEM and its users; it does not change your rights to use your own Contributions for any other purpose.
+This license is for your protection as a Contributor as well as the protection of Fraunhofer IEM and its users; it does not change your rights to use your own Contributions for any other purpose.
 
 **You hereby agree to the following terms and conditions:**
 
