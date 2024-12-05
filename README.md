@@ -1,4 +1,4 @@
-
+![SPHA Logo](docs/img/Software_Project_Health_Assistant_Secondary-Logo.png)
 
 ## About
 
