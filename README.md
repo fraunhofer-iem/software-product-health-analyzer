@@ -43,6 +43,7 @@ For questions about the CLA please contact us at _SPHA(at)iem.fraunhofer.de_ or 
 
 Copyright (C) Fraunhofer IEM.  
 Software Product Health Assistant (SPHA) and all its components are published under the MIT license.
+
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="./docs/img/IEM_Logo_White.png">
 <img alt="Logo IEM" src="./docs/img/IEM_Logo_Dark.png">
