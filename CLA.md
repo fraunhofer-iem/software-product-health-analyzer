@@ -24,7 +24,7 @@ You represent and warrant that, to the best of your knowledge, each Contribution
 
 In the event that you wish to submit a work of which you are not the author, you may submit it to IEM separately from a Contribution, providing full details of the source and any licenses or other restrictions (including but not limited to associated patents, trademarks and license agreements) of which you have personal knowledge and clearly marking the work as "Submitted on behalf of a third party".
 
-# 4. Warranties
+## 4. Warranties
 You are not expected to provide support for your Contributions, except to the extent you desire to provide support. Unless required by applicable law or agreed to in writing, and except for the warranties you give in this Agreement, the Contribution provided in this Projekt is provided without warranty of kind, including but not limited to any warranties or conditions of merchantability, or fitness for a particular purpose.
 
 ## 5. Notice to IEM
@@ -40,5 +40,3 @@ IEM reserves the right to change the current license type to any other license t
 The Agreement shall be governed by the law of the Federal Republic of Germany, without reference to its conflict of law provisions and excluding the provisions of the UN convention on the international sale of goods. The ordinary courts of Munich are hereby agreed as place of jurisdiction for all disputes arising from or connected with the Contract.
 
 **With your signature you confirm the above mentioned agreements.**
-
-
