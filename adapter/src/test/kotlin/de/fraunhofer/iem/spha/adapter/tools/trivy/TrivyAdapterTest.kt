@@ -9,8 +9,12 @@
 
 package de.fraunhofer.iem.spha.adapter.tools.trivy
 
+import de.fraunhofer.iem.spha.adapter.AdapterResult
 import de.fraunhofer.iem.spha.adapter.kpis.cve.CveAdapter
+import de.fraunhofer.iem.spha.model.adapter.trivy.Result
 import de.fraunhofer.iem.spha.model.adapter.trivy.TrivyDto
+import de.fraunhofer.iem.spha.model.adapter.trivy.TrivyDtoV2
+import de.fraunhofer.iem.spha.model.adapter.trivy.TrivyVulnerabilityDto
 import de.fraunhofer.iem.spha.model.adapter.vulnerability.VulnerabilityDto
 import io.mockk.mockkObject
 import io.mockk.verify
@@ -19,6 +23,8 @@ import kotlin.io.path.Path
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -61,6 +67,59 @@ class TrivyAdapterTest {
             assertEquals("2.6.1", vuln.version)
             assertEquals(4.3, vuln.severity)
         }
+    }
+
+    @Test
+    fun trivyV2DtoToRawValue() {
+
+        val trivyV2Dto =
+            TrivyDtoV2(
+                results =
+                    listOf(
+                        Result(
+                            vulnerabilities =
+                                listOf(
+                                    TrivyVulnerabilityDto(
+                                        cvss =
+                                            JsonObject(
+                                                content =
+                                                    mapOf(
+                                                        Pair(
+                                                            "nvd",
+                                                            JsonObject(
+                                                                content =
+                                                                    mapOf(
+                                                                        Pair(
+                                                                            "V2Score",
+                                                                            JsonPrimitive(5.0),
+                                                                        ),
+                                                                        Pair(
+                                                                            "V3Score",
+                                                                            JsonPrimitive(6.0),
+                                                                        ),
+                                                                    )
+                                                            ),
+                                                        )
+                                                    )
+                                            ),
+                                        vulnerabilityID = "ID",
+                                        installedVersion = "0.0.1",
+                                        pkgName = "TEST PACKAGE",
+                                        severity = "MEDIUM",
+                                    )
+                                )
+                        )
+                    ),
+                schemaVersion = 2,
+            )
+
+        val adapterResults = TrivyAdapter.transformTrivyV2ToKpi(listOf(trivyV2Dto))
+
+        assertEquals(1, adapterResults.size)
+        val result = adapterResults.first()
+
+        assert(result is AdapterResult.Success)
+        assertEquals(40, (result as AdapterResult.Success).rawValueKpi.score)
     }
 
     @Test
