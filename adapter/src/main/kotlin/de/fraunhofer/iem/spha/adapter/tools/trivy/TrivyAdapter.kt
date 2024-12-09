@@ -21,7 +21,14 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import java.io.InputStream
 import kotlin.math.max
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonPrimitive
 
 object TrivyAdapter {
 
@@ -38,6 +45,12 @@ object TrivyAdapter {
 
     fun transformDataToKpi(data: TrivyDto): Collection<AdapterResult> {
         return transformDataToKpi(listOf(data))
+    }
+
+    fun transformTrivyV2ToKpi(data: Collection<TrivyDtoV2>): Collection<AdapterResult> {
+        return CveAdapter.transformContainerVulnerabilityToKpi(
+            createVulnerabilitiesDto(data.flatMap { it.results.flatMap { it.vulnerabilities } })
+        )
     }
 
     @OptIn(ExperimentalSerializationApi::class)
