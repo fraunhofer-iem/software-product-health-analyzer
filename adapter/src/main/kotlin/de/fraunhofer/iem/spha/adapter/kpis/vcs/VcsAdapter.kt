@@ -27,17 +27,20 @@ object VcsAdapter {
         val repoDetailsDto = data.first()
         return listOf(
             AdapterResult.Success.Kpi(
-                RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = repoDetailsDto.numberOfCommits)
+                RawValueKpi(
+                    kpiId = KpiId.NUMBER_OF_COMMITS.name,
+                    score = repoDetailsDto.numberOfCommits,
+                )
             ),
             AdapterResult.Success.Kpi(
                 RawValueKpi(
-                    kind = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                    kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                     score = repoDetailsDto.numberOfSignedCommits,
                 )
             ),
             AdapterResult.Success.Kpi(
                 RawValueKpi(
-                    kind = KpiId.IS_DEFAULT_BRANCH_PROTECTED,
+                    kpiId = KpiId.IS_DEFAULT_BRANCH_PROTECTED.name,
                     score = if (repoDetailsDto.isDefaultBranchProtected) 100 else 0,
                 )
             ),

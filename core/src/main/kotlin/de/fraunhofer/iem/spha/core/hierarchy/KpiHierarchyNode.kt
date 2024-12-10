@@ -9,7 +9,6 @@
 
 package de.fraunhofer.iem.spha.core.hierarchy
 
-import de.fraunhofer.iem.spha.model.kpi.KpiId
 import de.fraunhofer.iem.spha.model.kpi.KpiStrategyId
 import de.fraunhofer.iem.spha.model.kpi.RawValueKpi
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiCalculationResult
@@ -19,7 +18,7 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiResultNode
 
 internal class KpiHierarchyNode
 private constructor(
-    val kpiId: KpiId,
+    val kpiId: String,
     val kpiStrategyId: KpiStrategyId,
     val hierarchyEdges: List<KpiHierarchyEdge>,
 ) {
@@ -62,10 +61,14 @@ private constructor(
         }
 
         fun from(node: KpiNode, rawValueKpis: List<RawValueKpi>): KpiHierarchyNode {
-            val kpiIdToValues = mutableMapOf<KpiId, MutableList<RawValueKpi>>()
-            KpiId.entries.forEach { kpiIdToValues[it] = mutableListOf() }
+            val kpiIdToValues = mutableMapOf<String, MutableList<RawValueKpi>>()
 
-            rawValueKpis.forEach { kpiIdToValues[it.kind]!!.add(it) }
+            rawValueKpis.forEach {
+                if (!kpiIdToValues.containsKey(it.kpiId)) {
+                    kpiIdToValues[it.kpiId] = mutableListOf()
+                }
+                kpiIdToValues[it.kpiId]!!.add(it)
+            }
 
             val hierarchy = from(node, kpiIdToValues = kpiIdToValues)
 
@@ -74,7 +77,7 @@ private constructor(
 
         private fun from(
             node: KpiNode,
-            kpiIdToValues: Map<KpiId, List<RawValueKpi>>,
+            kpiIdToValues: Map<String, List<RawValueKpi>>,
         ): KpiHierarchyNode {
 
             val children: MutableList<KpiHierarchyEdge> = mutableListOf()

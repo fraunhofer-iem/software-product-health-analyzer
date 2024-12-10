@@ -26,7 +26,7 @@ class HierarchyValidatorTest {
             KpiHierarchy.create(
                 rootNode =
                     KpiNode(
-                        kpiId = KpiId.ROOT,
+                        kpiId = KpiId.ROOT.name,
                         kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                         edges = emptyList(),
                     )
@@ -42,14 +42,14 @@ class HierarchyValidatorTest {
             KpiHierarchy.create(
                 rootNode =
                     KpiNode(
-                        kpiId = KpiId.ROOT,
+                        kpiId = KpiId.ROOT.name,
                         kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                         edges =
                             listOf(
                                 KpiEdge(
                                     KpiNode(
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         edges = listOf(KpiEdge(target = randomNode(), weight = 1.0)),
                                     ),
                                     weight = 1.0,
@@ -71,14 +71,14 @@ class HierarchyValidatorTest {
             KpiHierarchy.create(
                 rootNode =
                     KpiNode(
-                        kpiId = KpiId.ROOT,
+                        kpiId = KpiId.ROOT.name,
                         kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                         edges =
                             listOf(
                                 KpiEdge(
                                     KpiNode(
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         edges = listOf(),
                                     ),
                                     weight = 1.0,

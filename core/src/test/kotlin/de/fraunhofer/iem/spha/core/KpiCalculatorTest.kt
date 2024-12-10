@@ -29,16 +29,16 @@ class KpiCalculatorTest {
         assertDoesNotThrow {
             val rawValueKpis =
                 listOf(
-                    RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 8),
-                    RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 9),
-                    RawValueKpi(kind = KpiId.CHECKED_IN_BINARIES, score = 100),
-                    RawValueKpi(kind = KpiId.COMMENTS_IN_CODE, score = 80),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 90),
-                    RawValueKpi(kind = KpiId.IS_DEFAULT_BRANCH_PROTECTED, score = 100),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 80),
-                    RawValueKpi(kind = KpiId.SECRETS, score = 80),
-                    RawValueKpi(kind = KpiId.SAST_USAGE, score = 80),
-                    RawValueKpi(kind = KpiId.DOCUMENTATION_INFRASTRUCTURE, score = 80),
+                    RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 8),
+                    RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 9),
+                    RawValueKpi(kpiId = KpiId.CHECKED_IN_BINARIES.name, score = 100),
+                    RawValueKpi(kpiId = KpiId.COMMENTS_IN_CODE.name, score = 80),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 90),
+                    RawValueKpi(kpiId = KpiId.IS_DEFAULT_BRANCH_PROTECTED.name, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 80),
+                    RawValueKpi(kpiId = KpiId.SECRETS.name, score = 80),
+                    RawValueKpi(kpiId = KpiId.SAST_USAGE.name, score = 80),
+                    RawValueKpi(kpiId = KpiId.DOCUMENTATION_INFRASTRUCTURE.name, score = 80),
                 )
             KpiCalculator.calculateKpis(DefaultHierarchy.get(), rawValueKpis)
         }
@@ -48,28 +48,28 @@ class KpiCalculatorTest {
     fun calculateMaxKpis() {
         val rawValueKpis =
             listOf(
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 82),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 90),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 65),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 82),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 90),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 65),
             )
 
         val root =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.MAXIMAL_VULNERABILITY,
+                                    kpiId = KpiId.MAXIMAL_VULNERABILITY.name,
                                     kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE,
+                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE.name,
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = emptyList(),
@@ -98,28 +98,28 @@ class KpiCalculatorTest {
     fun calculateMaxKpisIncomplete() {
         val rawValueKpis =
             listOf(
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 82),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 90),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 65),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 82),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 90),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 65),
             )
 
         val root =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.SECURITY,
+                                    kpiId = KpiId.SECURITY.name,
                                     kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE,
+                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE.name,
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = emptyList(),
@@ -129,7 +129,7 @@ class KpiCalculatorTest {
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.SAST_USAGE,
+                                                        kpiId = KpiId.SAST_USAGE.name,
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = emptyList(),
@@ -158,28 +158,28 @@ class KpiCalculatorTest {
     fun calculateRatioKpisIncomplete() {
         val rawValueKpis =
             listOf(
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 82),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 90),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 65),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 82),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 90),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 65),
             )
 
         val root =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.SIGNED_COMMITS_RATIO,
+                                    kpiId = KpiId.SIGNED_COMMITS_RATIO.name,
                                     kpiStrategyId = KpiStrategyId.WEIGHTED_RATIO_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                                         edges = emptyList(),
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
@@ -189,7 +189,7 @@ class KpiCalculatorTest {
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                                         edges = emptyList(),
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
@@ -203,14 +203,14 @@ class KpiCalculatorTest {
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.SECURITY,
+                                    kpiId = KpiId.SECURITY.name,
                                     kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE,
+                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE.name,
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = emptyList(),
@@ -240,20 +240,20 @@ class KpiCalculatorTest {
     fun calculateAggregation() {
         val rawValueKpis =
             listOf(
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 80),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 90),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 80),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 90),
             )
 
         val root =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.CODE_VULNERABILITY_SCORE,
+                                    kpiId = KpiId.CODE_VULNERABILITY_SCORE.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -274,23 +274,23 @@ class KpiCalculatorTest {
     }
 
     @Test
-    fun calculateAggregationKpisIncompleteMixedKinds() {
+    fun calculateAggregationKpisIncompleteMixedKpiIds() {
         val rawValueKpis =
             listOf(
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 80),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 90),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 80),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 90),
             )
 
         val root =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.CODE_VULNERABILITY_SCORE,
+                                    kpiId = KpiId.CODE_VULNERABILITY_SCORE.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -299,7 +299,7 @@ class KpiCalculatorTest {
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.SAST_USAGE,
+                                    kpiId = KpiId.SAST_USAGE.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -315,10 +315,12 @@ class KpiCalculatorTest {
         if (result is KpiCalculationResult.Incomplete) {
             assertEquals(85, result.score)
             val sastResult =
-                res.rootNode.children.find { it.target.kpiId == KpiId.SAST_USAGE } ?: fail()
+                res.rootNode.children.find { it.target.kpiId == KpiId.SAST_USAGE.name } ?: fail()
             assertEquals(0.0, sastResult.actualWeight)
             val vulnerabilityEdges =
-                res.rootNode.children.filter { it.target.kpiId == KpiId.CODE_VULNERABILITY_SCORE }
+                res.rootNode.children.filter {
+                    it.target.kpiId == KpiId.CODE_VULNERABILITY_SCORE.name
+                }
             assertEquals(2, vulnerabilityEdges.size)
             assertEquals(vulnerabilityEdges.first().actualWeight, 0.5)
             assertEquals(vulnerabilityEdges[1].actualWeight, 0.5)
@@ -328,30 +330,30 @@ class KpiCalculatorTest {
     }
 
     @Test
-    fun calculateAggregationKpisIncompleteMixedKindsNested() {
+    fun calculateAggregationKpisIncompleteMixedkpiIdsNested() {
         val rawValueKpis =
             listOf(
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 80),
-                RawValueKpi(kind = KpiId.CODE_VULNERABILITY_SCORE, score = 90),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 80),
+                RawValueKpi(kpiId = KpiId.CODE_VULNERABILITY_SCORE.name, score = 90),
             )
 
         val root =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.WEIGHTED_AVERAGE_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.MAXIMAL_VULNERABILITY,
+                                    kpiId = KpiId.MAXIMAL_VULNERABILITY.name,
                                     kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
                                     edges =
                                         listOf(
                                             KpiEdge(
                                                 target =
                                                     KpiNode(
-                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE,
+                                                        kpiId = KpiId.CODE_VULNERABILITY_SCORE.name,
                                                         kpiStrategyId =
                                                             KpiStrategyId.RAW_VALUE_STRATEGY,
                                                         edges = listOf(),
@@ -365,7 +367,7 @@ class KpiCalculatorTest {
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.SAST_USAGE,
+                                    kpiId = KpiId.SAST_USAGE.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -381,10 +383,10 @@ class KpiCalculatorTest {
         if (result is KpiCalculationResult.Incomplete) {
             assertEquals(90, result.score)
             val sastResult =
-                res.rootNode.children.find { it.target.kpiId == KpiId.SAST_USAGE } ?: fail()
+                res.rootNode.children.find { it.target.kpiId == KpiId.SAST_USAGE.name } ?: fail()
             assertEquals(0.0, sastResult.actualWeight)
             val vulnerabilityEdges =
-                res.rootNode.children.filter { it.target.kpiId == KpiId.MAXIMAL_VULNERABILITY }
+                res.rootNode.children.filter { it.target.kpiId == KpiId.MAXIMAL_VULNERABILITY.name }
             assertEquals(vulnerabilityEdges.first().actualWeight, 1.0)
             assertEquals(vulnerabilityEdges.first().plannedWeight, 0.5)
         } else {

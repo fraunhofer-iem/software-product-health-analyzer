@@ -38,14 +38,14 @@ class MaximumKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.MAXIMUM_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -54,7 +54,7 @@ class MaximumKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -63,8 +63,8 @@ class MaximumKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 15),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 20),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 15),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 20),
                 ),
             )
 

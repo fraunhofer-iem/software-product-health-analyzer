@@ -8,7 +8,7 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiEdge
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 import kotlin.test.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class AndKPICalculationStrategyTest {
 
@@ -29,14 +29,14 @@ class AndKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -45,7 +45,7 @@ class AndKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -54,8 +54,8 @@ class AndKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 100),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 20),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 20),
                 ),
             )
 
@@ -83,14 +83,14 @@ class AndKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -99,7 +99,7 @@ class AndKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -108,8 +108,8 @@ class AndKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 100),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 100),
                 ),
             )
 

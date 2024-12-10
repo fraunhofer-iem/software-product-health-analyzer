@@ -153,7 +153,7 @@ class TlcAdapterTest {
 
         val rawValueKpi = (kpi as AdapterResult.Success).rawValueKpi
 
-        assertEquals(KpiId.LIB_DAYS_PROD, rawValueKpi.kind)
+        assertEquals(KpiId.LIB_DAYS_PROD.name, rawValueKpi.kpiId)
         assertEquals(100, rawValueKpi.score)
 
         val techLag = (kpi as AdapterResult.Success.KpiTechLag)
