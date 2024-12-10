@@ -9,7 +9,6 @@
 
 package de.fraunhofer.iem.spha.model.kpi.hierarchy
 
-import de.fraunhofer.iem.spha.model.kpi.KpiId
 import de.fraunhofer.iem.spha.model.kpi.KpiStrategyId
 import kotlinx.serialization.Serializable
 
@@ -25,6 +24,6 @@ data class KpiHierarchy private constructor(val rootNode: KpiNode, val schemaVer
 }
 
 @Serializable
-data class KpiNode(val kpiId: KpiId, val kpiStrategyId: KpiStrategyId, val edges: List<KpiEdge>)
+data class KpiNode(val kpiId: String, val kpiStrategyId: KpiStrategyId, val edges: List<KpiEdge>)
 
 @Serializable data class KpiEdge(val target: KpiNode, val weight: Double)

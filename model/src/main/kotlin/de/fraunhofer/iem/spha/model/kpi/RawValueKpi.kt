@@ -11,4 +11,4 @@ package de.fraunhofer.iem.spha.model.kpi
 
 import kotlinx.serialization.Serializable
 
-@Serializable data class RawValueKpi(val kind: KpiId, val score: Int)
+@Serializable data class RawValueKpi(val kpiId: String, val score: Int)

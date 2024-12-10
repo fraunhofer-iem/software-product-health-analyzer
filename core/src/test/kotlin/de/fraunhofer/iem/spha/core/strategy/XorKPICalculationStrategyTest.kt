@@ -8,7 +8,7 @@ import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiCalculationResult
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiEdge
 import de.fraunhofer.iem.spha.model.kpi.hierarchy.KpiNode
 import kotlin.test.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class XorKPICalculationStrategyTest {
 
@@ -28,14 +28,14 @@ class XorKPICalculationStrategyTest {
     fun tooManyEdges() {
         val nodeManyChildren =
             KpiNode(
-                kpiId = KpiId.ROOT,
+                kpiId = KpiId.ROOT.name,
                 kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                 edges =
                     listOf(
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.NUMBER_OF_COMMITS,
+                                    kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -44,7 +44,7 @@ class XorKPICalculationStrategyTest {
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.NUMBER_OF_COMMITS,
+                                    kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -53,7 +53,7 @@ class XorKPICalculationStrategyTest {
                         KpiEdge(
                             target =
                                 KpiNode(
-                                    kpiId = KpiId.NUMBER_OF_COMMITS,
+                                    kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                     kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                     edges = listOf(),
                                 ),
@@ -74,7 +74,7 @@ class XorKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 nodeManyChildren,
-                listOf(RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 15)),
+                listOf(RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 15)),
             )
 
         val relaxed = XorKPICalculationStrategy.calculateKpi(root.hierarchyEdges, strict = false)
@@ -88,14 +88,14 @@ class XorKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -104,7 +104,7 @@ class XorKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -113,8 +113,8 @@ class XorKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 50),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 20),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 50),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 20),
                 ),
             )
 
@@ -142,14 +142,14 @@ class XorKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -158,7 +158,7 @@ class XorKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -167,8 +167,8 @@ class XorKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 100),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 100),
                 ),
             )
 
@@ -193,14 +193,14 @@ class XorKPICalculationStrategyTest {
         val rootZero =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -209,7 +209,7 @@ class XorKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -218,8 +218,8 @@ class XorKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 0),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 0),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 0),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 0),
                 ),
             )
 
@@ -247,14 +247,14 @@ class XorKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.XOR_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -263,7 +263,7 @@ class XorKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -272,8 +272,8 @@ class XorKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 100),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 20),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 100),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 20),
                 ),
             )
 

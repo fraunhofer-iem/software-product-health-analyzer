@@ -64,9 +64,9 @@ object TlcAdapter {
 
                         val rawValueKpi =
                             if (isProductionScope(ecosystem = project.ecosystem, scope = scope)) {
-                                RawValueKpi(score = libyearScore, kind = KpiId.LIB_DAYS_PROD)
+                                RawValueKpi(score = libyearScore, kpiId = KpiId.LIB_DAYS_PROD.name)
                             } else {
-                                RawValueKpi(score = libyearScore, kind = KpiId.LIB_DAYS_DEV)
+                                RawValueKpi(score = libyearScore, kpiId = KpiId.LIB_DAYS_DEV.name)
                             }
 
                         return@map AdapterResult.Success.KpiTechLag(

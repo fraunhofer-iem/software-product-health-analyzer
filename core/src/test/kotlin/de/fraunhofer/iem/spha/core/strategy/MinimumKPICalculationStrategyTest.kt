@@ -38,14 +38,14 @@ class MinimumKPICalculationStrategyTest {
         val root =
             KpiHierarchyNode.from(
                 KpiNode(
-                    kpiId = KpiId.ROOT,
+                    kpiId = KpiId.ROOT.name,
                     kpiStrategyId = KpiStrategyId.MINIMUM_STRATEGY,
                     edges =
                         listOf(
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -54,7 +54,7 @@ class MinimumKPICalculationStrategyTest {
                             KpiEdge(
                                 target =
                                     KpiNode(
-                                        kpiId = KpiId.NUMBER_OF_COMMITS,
+                                        kpiId = KpiId.NUMBER_OF_COMMITS.name,
                                         kpiStrategyId = KpiStrategyId.RAW_VALUE_STRATEGY,
                                         edges = listOf(),
                                     ),
@@ -63,8 +63,8 @@ class MinimumKPICalculationStrategyTest {
                         ),
                 ),
                 listOf(
-                    RawValueKpi(kind = KpiId.NUMBER_OF_SIGNED_COMMITS, score = 15),
-                    RawValueKpi(kind = KpiId.NUMBER_OF_COMMITS, score = 20),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_SIGNED_COMMITS.name, score = 15),
+                    RawValueKpi(kpiId = KpiId.NUMBER_OF_COMMITS.name, score = 20),
                 ),
             )
 

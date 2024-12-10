@@ -48,7 +48,7 @@ object TrufflehogAdapter {
     fun transformDataToKpi(data: Collection<TrufflehogReportDto>): Collection<AdapterResult> {
         return data.map {
             val score = if (it.verifiedSecrets > 0) 0 else 100
-            AdapterResult.Success.Kpi(RawValueKpi(score = score, kind = KpiId.SECRETS))
+            AdapterResult.Success.Kpi(RawValueKpi(score = score, kpiId = KpiId.SECRETS.name))
         }
     }
 }

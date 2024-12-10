@@ -36,7 +36,7 @@ object CveAdapter {
         return data.map {
             return@map if (isValid(it)) {
                 AdapterResult.Success.Kpi(
-                    RawValueKpi(kind = kpiId, score = 100 - (it.severity * 10).toInt())
+                    RawValueKpi(kpiId = kpiId.name, score = 100 - (it.severity * 10).toInt())
                 )
             } else {
                 AdapterResult.Error(ErrorType.DATA_VALIDATION_ERROR)
